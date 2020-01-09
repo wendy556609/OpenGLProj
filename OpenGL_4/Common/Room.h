@@ -1,7 +1,6 @@
 #ifndef ROOM_H
 #define ROOM_H
 #include "RoomController.h"
-#include "Camera.h"
 
 class Room : public RoomController
 {

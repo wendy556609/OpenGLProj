@@ -1,10 +1,11 @@
 #include "Collider.h"
 
-void Collider::Init(float x, float y, float z, vec4 position) {
+void Collider::Init(float x, float y, float z, vec4 position,bool trigger) {
 	DistanceX = x;
 	DistanceY = y;
 	DistanceZ = z;	
 	SetCubeCollider(position);
+	isTrigger = trigger;
 }
 
 void Collider::SetCubeCollider(vec4 position) {
@@ -25,6 +26,6 @@ GLboolean CheckCollider(Collider one, Collider two) {
 	bool collisionZ = (one.leftButtom.z <= two.rightTop.z && one.leftButtom.z >= two.leftButtom.z) ||
 		(one.rightTop.z <= two.rightTop.z && one.rightTop.z >= two.leftButtom.z) ||
 		(two.leftButtom.z <= one.rightTop.z && two.leftButtom.z >= one.leftButtom.z) ||
-		(two.rightTop.z <= one.rightTop.z && two.rightTop.z >= one.leftButtom.z);
+		(two.rightTop.z <= one.rightTop.z && two.rightTop.z >= one.leftButtom.z);//one.left
 	return collisionX&&collisionY&&collisionZ;
 }

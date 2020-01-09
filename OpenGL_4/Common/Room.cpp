@@ -6,22 +6,26 @@ Room::Room()
 	vec4 vT, vColor;
 	// 產生物件的實體
 	vT.x = 0; vT.y = 0; vT.z = 0;
-	_pFloor = new Flat('M', iSize, vT);
+	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0);
 
 	vT.x = 0; vT.y = 50.0f; vT.z = 0;
-	_pTop = new Flat('T', iSize, vT);
+	_pTop = new Flat('T', vec3(100, 1, 100), vT, 180);
 
 	vT.x = -50.0f; vT.y = 25.0f; vT.z = 0;
-	_LeftWall = new Flat('L', iSize, vT);
+	_LeftWall = new Flat('L', vec3(1, 50, 100), vT, -90);
+	_LeftWall->SetTrigger(false);
 
 	vT.x = 50.0f; vT.y = 25.0f; vT.z = 0;
-	_RightWall = new Flat('R', iSize, vT);
+	_RightWall = new Flat('R', vec3(1, 50, 100), vT, 90);
+	_RightWall->SetTrigger(false);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
-	_FrontWall = new Flat('F', iSize, vT);
+	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90);
+	_FrontWall->SetTrigger(false);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
-	_BackWall = new Flat('B', iSize, vT);
+	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90);
+	_BackWall->SetTrigger(false);
 
 	////Model
 
@@ -100,14 +104,25 @@ void Room::Update(LightSource *light, float delta) {
 }
 
 void Room::DetectCollider() {
-	//auto camera = Camera::create();
-	//if (CheckCollider(camera->GetCollider(), _pFloor->GetCollider()))
-	//{
-	//	camera->isTouch = true;
-	//}
-	//else {
-	//	camera->isTouch = false;
-	//}
+	//vec4 wallDirect, cameraDirect, direct, eyepos;
+	auto camera = Camera::create();
+	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
+	{
+		if(!_LeftWall->GetTrigger())camera->isTouch = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), _RightWall->GetCollider()))
+	{
+		if (!_RightWall->GetTrigger())camera->isTouch = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), _FrontWall->GetCollider()))
+	{
+		if (!_FrontWall->GetTrigger())camera->isTouch = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), _BackWall->GetCollider()))
+	{
+		if (!_BackWall->GetTrigger())camera->isTouch = true;
+	}
+	else camera->isTouch = false;
 }
 
 void Room::Draw()

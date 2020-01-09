@@ -2,6 +2,7 @@
 #define CSHAPE_H
 #include "../Header/Angel.h"
 #include "TypeDefine.h"
+#include "Collider.h"
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
@@ -86,6 +87,8 @@ protected:
 	void		DrawingWithoutSetShader();
 
 public:
+	Collider _collider;
+
 	CShape();
 
 	void SetAPI();
@@ -109,6 +112,10 @@ public:
 
 	// For Lighting Calculation
 	void SetShadingMode(int iMode) {m_iMode = iMode;}
+
+	Collider GetCollider() { return _collider; };
+	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };
+	bool GetTrigger() { return _collider.GetTrigger(); };
 
 };
 

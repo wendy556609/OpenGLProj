@@ -9,15 +9,17 @@ class Flat
 {
 private:
 	CQuad *_pSquares;
-	int    _iGridSize;
+	vec3    _iGridSize;
 	GLuint _uiShaderHandle;
 	vec4  _pos;
 
 public:
-	Flat(char direct = 'L', int iSize = 6, vec4 pos = vec4(0.0f), float angle = 0.0f, vec3 normal = vec3(0, 1.0f, 0));
+	Flat(char direct = 'L', vec3 iSize = vec3(0), vec4 pos = vec4(0.0f), float angle = 0.0f);
 	~Flat();
 
-	void SetNormal(vec3 normal);
+	Collider GetCollider() { return _pSquares->GetCollider(); };
+	void SetTrigger(bool trigger);
+	bool GetTrigger() { return _pSquares->GetTrigger(); };
 
 	void SetShader();
 	void SetProjectionMatrix(mat4 &mat);

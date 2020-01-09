@@ -36,15 +36,7 @@ CQuad::CQuad()
 
 	for( int i = 0 ; i < m_iNumVtx ; i++ ) m_pColors[i] = vec4(-1.0f,-1.0f,-1.0f,1.0f);
 
-
 	SetShaderName("vsPerPixelLighting.glsl", "fsPerPixelLighting.glsl"); 
-}
-
-void CQuad::SetNormal(vec3 normal) {
-	for (int i = 0; i < m_iNumVtx; i++)
-	{
-		m_pNormals[i] = normal;
-	}
 }
 
 void CQuad::SetVtxColors(vec4 vLFColor, vec4 vLRColor, vec4 vTRColor, vec4 vTLColor)

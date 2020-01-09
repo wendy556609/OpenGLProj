@@ -88,6 +88,7 @@
     <ClInclude Include="Common\Flat.h" />
     <ClInclude Include="Common\ModelPool.h" />
     <ClInclude Include="Common\Room.h" />
+    <ClInclude Include="Common\RoomController.h" />
     <ClInclude Include="Common\Sphere.h" />
     <ClInclude Include="Common\Sprite.h" />
     <ClInclude Include="Common\Timer.h" />
@@ -112,7 +113,7 @@
     <ClCompile Include="Common\Sphere.cpp" />
     <ClCompile Include="Common\Sprite.cpp" />
     <ClCompile Include="Common\Timer.cpp" />
-    <ClCompile Include="HW2.cpp" />
+    <ClCompile Include="HW3.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
   </ItemGroup>

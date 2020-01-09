@@ -338,9 +338,9 @@ void CShape::Update(const LightSource *Lights, float dt)
 	if (m_bViewUpdated || m_bTRSUpdated) {
 		m_mxMVFinal = m_mxView * m_mxTRS;
 		m_mxMV3X3Final = mat3(	// 只取前面的 3X3 矩陣的內容
-			m_mxMVFinal._m[0].x, m_mxMVFinal._m[1].x, m_mxMVFinal._m[2].x,
-			m_mxMVFinal._m[0].y, m_mxMVFinal._m[1].y, m_mxMVFinal._m[2].y,
-			m_mxMVFinal._m[0].z, m_mxMVFinal._m[1].z, m_mxMVFinal._m[2].z);
+			m_mxView._m[0].x, m_mxView._m[1].x, m_mxView._m[2].x,
+			m_mxView._m[0].y, m_mxView._m[1].y, m_mxView._m[2].y,
+			m_mxView._m[0].z, m_mxView._m[1].z, m_mxView._m[2].z);
 		m_bViewUpdated = m_bTRSUpdated = false;
 	}
 
@@ -356,7 +356,7 @@ void CShape::Update(const LightSource *Lights, float dt)
 		m_DiffuseProduct[i] = m_Material.kd * m_Material.diffuse  * Lights[i].diffuse;
 		m_Diffuse[i] = Lights[i].diffuse;
 		m_SpecularProduct[i] = m_Material.ks * m_Material.specular * Lights[i].specular;
-		m_spotCutoff[i] = Lights[i].spotCutoff;
+		m_spotCutoff[i] = Lights[i].spotCosCutoff;
 		m_iLighting[i] = Lights[i].isLighting;
 	}
 

@@ -14,8 +14,17 @@
 #define HALF_SIZE SCREEN_SIZE /2
 #define VP_HALFWIDTH  20.0f
 #define VP_HALFHEIGHT 20.0f
+#define GRID_SIZE 100
 
-
+enum State
+{
+	Front,
+	Back,
+	Left,
+	Right,
+	Stop
+};
+State _state;
 // For Model View and Projection Matrix
 mat4 g_mxModelView(1.0f);
 mat4 g_mxProjection;
@@ -34,6 +43,8 @@ point4 right;
 
 Room *room;
 
+bool isMove = false;
+
 //----------------------------------------------------------------------------
 // Part 2 : for single light source
 bool g_bAutoRotating = false;
@@ -41,15 +52,15 @@ float g_fElapsedTime = 0;
 float g_fLightRadius = 6;
 float g_fLightTheta = 0;
 
-float g_fLightR = 0.5f;
-float g_fLightG = 0.5f;
-float g_fLightB = 0.5f;
+float g_fLightR = 0.95f;
+float g_fLightG = 0.95f;
+float g_fLightB = 0.95f;
 
 LightSource g_Light1[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
-		color4(0.95f, 0.95f, 0.95f, 1.0f), // diffuse
+		color4(0.55f, 0.55f, 0.55f, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
 		point4(0.0f, 15.0f, 15.0f, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
@@ -127,13 +138,14 @@ mat4  g_2DProj;
 // 函式的原型宣告
 extern void IdleProcess();
 void SetBtn();
+void Move(float);
 
 void init(void)
 {
 
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f, 10.0f, -45.0f, 1.0f);
+	eye = point4(0.0f, 10.0f, -40.0f, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -239,7 +251,45 @@ void onFrameMove(float delta)
 
 	room->Update(g_Light1, delta);
 
+	Move(delta);
+
 	GL_Display();
+}
+
+void Move(float delta) {
+	if (isMove) {
+		auto camera = Camera::getInstance();
+		front = normalize(at - eye);
+		right = normalize(cross(front, g_vUp));
+		if (!camera->isTouch)camera->prePos = eye;
+		switch (_state)
+		{
+		case Front:			
+			eye += point4(front.x, 0.0f, front.z, 0.0f)* 150.0f* delta;
+			break;
+		case Back:
+			eye -= point4(front.x, 0.0f, front.z, 0.0f)* 150.0f* delta;
+			break;
+		case Left:
+			eye -= point4(right.x, 0.0f, right.z, 0.0f)* 150.0f* delta;
+			break;
+		case Right:
+			eye += point4(right.x, 0.0f, right.z, 0.0f)* 150.0f* delta;
+			break;
+		case Stop:
+			break;
+		default:
+			break;
+		}
+		if (camera->isTouch)eye = camera->prePos;
+		if (camera->isTouch)eye = camera->prePos;
+		if (camera->isTouch)eye = camera->prePos;
+		if (camera->isTouch)eye = camera->prePos;
+		at += point4(front.x, 0.0f, front.z, 0.0f);
+		camera->updateViewLookAt(eye, at);
+	}
+	isMove = false;
+	_state = Stop;
 }
 
 //----------------------------------------------------------------------------
@@ -303,28 +353,31 @@ void Win_Mouse(int button, int state, int x, int y) {
 				if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
 				else g_bAutoRotating = false;
 			}
-			if (g_p2DBtn[1]->OnTouches(pt)) {
+			else if (g_p2DBtn[1]->OnTouches(pt)) {
 				if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
 				else g_Light1[1].isLighting = true;
 			}
-			if (g_p2DBtn[2]->OnTouches(pt)) {
+			else if (g_p2DBtn[2]->OnTouches(pt)) {
 				if (g_p2DBtn[2]->getButtonStatus())g_Light1[2].isLighting = false;
 				else g_Light1[2].isLighting = true;
 			}
-			if (g_p2DBtn[3]->OnTouches(pt)) {
+			else if (g_p2DBtn[3]->OnTouches(pt)) {
 				if (g_p2DBtn[3]->getButtonStatus())g_Light1[3].isLighting = false;
 				else g_Light1[3].isLighting = true;
+			}
+			else {
+				eye += g_vUp* 3.0f;
+				if (eye.y > (GRID_SIZE / 2 - 5.0f))eye.y = (GRID_SIZE / 2 - 5.0f);
 			}
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 ，換成 Y 軸
 		if (state == GLUT_UP) {
-			eye += g_vUp* 3.0f;
-			if (eye.y > (GRID_SIZE / 2 - 5.0f))eye.y = (GRID_SIZE / 2 - 5.0f);
+			
 		}; 		  //if ( state == GLUT_DOWN ) ; 
 		break;
 	case GLUT_RIGHT_BUTTON:   // 目前按下的是滑鼠右鍵
-		if (state == GLUT_UP) {
+		if (state == GLUT_DOWN) {
 			eye -= g_vUp* 3.0f;
 			if (eye.y < 5.0f)eye.y = 5.0f;
 		}; 					  //if ( state == GLUT_DOWN ) ;
@@ -337,31 +390,26 @@ void Win_Mouse(int button, int state, int x, int y) {
 }
 //----------------------------------------------------------------------------
 void Win_SpecialKeyboard(int key, int x, int y) {
-	front = normalize(at - eye);
-	right = normalize(cross(front, g_vUp));
 	switch (key) {
 	case GLUT_KEY_UP:
-		eye += point4(front.x, 0.0f, front.z, 0.0f)* 3.0f;
+		_state = Front;		
+		isMove = true;
 		break;
 	case GLUT_KEY_DOWN:
-		eye -= point4(front.x, 0.0f, front.z, 0.0f)* 3.0f;
+		_state = Back;
+		isMove = true;
 		break;
 	case GLUT_KEY_LEFT:		// 目前按下的是向左方向鍵
-		eye -= point4(right.x, 0.0f, right.z, 0.0f)* 3.0f;
+		_state = Left;
+		isMove = true;
 		break;
 	case GLUT_KEY_RIGHT:	// 目前按下的是向右方向鍵
-		eye += point4(right.x, 0.0f, right.z, 0.0f)* 3.0f;
+		_state = Right;
+		isMove = true;
 		break;
 	default:
 		break;
 	}
-	if (eye.x > 45.0f)eye.x = 45.0f;
-	if (eye.x < -45.0f)eye.x = -45.0f;
-	if (eye.z > 45.0f)eye.z = 45.0f;
-	if (eye.z < -45.0f)eye.z = -45.0f;
-	at += point4(front.x, 0.0f, front.z, 0.0f);
-	auto camera = Camera::getInstance();
-	camera->updateViewLookAt(eye, at);
 }
 
 //----------------------------------------------------------------------------

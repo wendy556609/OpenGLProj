@@ -16,8 +16,6 @@ private:
 public:
 	CQuad();
 
-	void SetNormal(vec3 normal);
-
 	GLuint GetShaderHandle() { return m_uiProgram;} 
 	void SetVtxColors(vec4 vLFColor, vec4 vLRColor, vec4 vTRColor, vec4 vTLColor); // four Vertices' Color
 	void SetVtxColors(vec4 vFColor, vec4 vSColor);	// three Vertices' Color with idx as the first 
