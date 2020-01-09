@@ -91,6 +91,7 @@
     <ClInclude Include="Common\RoomController.h" />
     <ClInclude Include="Common\Sphere.h" />
     <ClInclude Include="Common\Sprite.h" />
+    <ClInclude Include="Common\TexturePool.h" />
     <ClInclude Include="Common\Timer.h" />
     <ClInclude Include="Common\TypeDefine.h" />
     <ClInclude Include="Header\Angel.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Header\mat.h" />
     <ClInclude Include="Header\vec.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="PngLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\Camera.cpp" />
@@ -112,16 +114,21 @@
     <ClCompile Include="Common\Room.cpp" />
     <ClCompile Include="Common\Sphere.cpp" />
     <ClCompile Include="Common\Sprite.cpp" />
+    <ClCompile Include="Common\TexturePool.cpp" />
     <ClCompile Include="Common\Timer.cpp" />
     <ClCompile Include="HW3.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="PngLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fsPerPixelLighting.glsl" />
     <None Include="fsVtxColor.glsl" />
     <None Include="vsPerPixelLighting.glsl" />
     <None Include="vsVtxColor.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SOIL\Debug\SOIL.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

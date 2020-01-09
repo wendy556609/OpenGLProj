@@ -1,7 +1,6 @@
 #include "header/Angel.h"
 //#include "Common/TypeDefine.h"
 //#include "Common/Flat.h"
-#include "Common/Camera.h"
 #include "Common/Sprite.h"
 //#include "Common/Cube.h"
 //#include "Common/Sphere.h"
@@ -336,6 +335,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		delete room;
 		for (int i = 0; i < 4; i++) delete g_p2DBtn[i];
 		Camera::getInstance()->destroyInstance();
+		TexturePool::getInstance()->destroyInstance();
 		exit(EXIT_SUCCESS);
 		break;
 	}
