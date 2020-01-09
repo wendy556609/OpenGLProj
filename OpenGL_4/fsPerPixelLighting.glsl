@@ -4,9 +4,19 @@
 //#define SILHOUETTE
 #define PointNum 4
 
+#define NONE_MAP    0
+#define DIFFUSE_MAP 1
+#define LIGHT_MAP   2
+#define NORMAL_MAP  4
+
 in vec3 fN;
 in vec3 fL[PointNum];
 in vec3 fV;
+
+in vec2 DiffuseMapUV;   // 輸入 Diffuse Map 貼圖座標
+in vec2 LightMapUV;   // 輸入 Light Map 貼圖座標
+
+uniform int iTexLayer;
 
 // 以下為新增的部分
 uniform vec4  LightInView[PointNum];        // Light's position in View Space
@@ -21,6 +31,9 @@ uniform float spotCutoff[PointNum];
 uniform int lightType[PointNum];
 uniform vec3 LightDir[PointNum];
 uniform float spotExponent[PointNum];
+
+uniform sampler2D diffuMap; // 貼圖的參數設定
+uniform sampler2D lightMap; // 貼圖的參數設定
 
 void main()
 {
@@ -152,5 +165,16 @@ void main()
 	if( abs(dot(normalize(fN), normalize(fV))) < 0.2)  gl_FragColor = edgeColor;
 #endif
 
+		if( iTexLayer == NONE_MAP ) gl_FragColor = gl_FragColor;
+		else if( iTexLayer == DIFFUSE_MAP || iTexLayer == (DIFFUSE_MAP|NORMAL_MAP) ) gl_FragColor = gl_FragColor * texture2D(diffuMap, DiffuseMapUV);
+		else if (iTexLayer == (DIFFUSE_MAP | LIGHT_MAP))
+			{
+				gl_FragColor = (0.65 * gl_FragColor * texture2D(diffuMap, DiffuseMapUV) + texture2D(diffuMap, DiffuseMapUV) *
+																							   texture2D(lightMap, LightMapUV) * vec4(0.0f, 1.0f, 1.0f, 1.00));
+
+				//			float t = 0.15 + 0.75 * abs(sin(fElapsedTime * 3.1415926 * 0.125));
+				//			gl_FragColor =  ( 0.55 * LightingColor * texture2D(diffuMap, DiffuseMapUV)  + // texture2D(diffuMap, DiffuseMapUV) *
+				//							texture2D(lightMap, LightMapUV) * vec4(0.0f, 1.0f, 1.0f, 1.0) * t);
+			}
 	
 }

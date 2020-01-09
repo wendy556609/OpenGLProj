@@ -20,6 +20,10 @@ CShape::CShape()
 	m_iLighting[1] = 1;
 	m_iLighting[2] = 1;
 	m_iLighting[3] = 1;
+
+	m_iTexLayer = 0;		// 預設有一張 Diffuse 貼圖
+
+	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr;
 }
 
 CShape::~CShape()
@@ -41,12 +45,13 @@ void CShape::CreateBufferObject()
     // Create and initialize a buffer object
     glGenBuffers( 1, &m_uiBuffer );
     glBindBuffer( GL_ARRAY_BUFFER, m_uiBuffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx, NULL, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx + sizeof(vec2)*m_iNumVtx, NULL, GL_STATIC_DRAW );
 	// sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx <- vertices, normal and color
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4)*m_iNumVtx, m_pPoints );  // vertices
 	glBufferSubData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx, sizeof(vec3)*m_iNumVtx, m_pNormals ); // // vertices' normal
 	glBufferSubData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx+sizeof(vec3)*m_iNumVtx, sizeof(vec4)*m_iNumVtx, m_pColors ); // vertcies' Color
+	glBufferSubData( GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex);  //第一張貼圖
 }
 
 void CShape::SetShader(GLuint uiShaderHandle)
@@ -72,23 +77,28 @@ void CShape::SetShader(GLuint uiShaderHandle)
 	glUniformMatrix4fv(m_uiProjection, 1, GL_TRUE, m_mxProjection);
 
 	m_uiColor = glGetUniformLocation(m_uiProgram, "vObjectColor");
-	glUniform4fv(m_uiColor, 1, m_fColor);
-	
+	glUniform4fv(m_uiColor, 1, m_fColor);	
 		
-		GLuint vNormal = glGetAttribLocation(m_uiProgram, "vNormal");
-		glEnableVertexAttribArray(vNormal);
-		glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vec4)*m_iNumVtx));
+	GLuint vNormal = glGetAttribLocation(m_uiProgram, "vNormal");
+	glEnableVertexAttribArray(vNormal);
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vec4)*m_iNumVtx));
 
-		GLuint vColorVtx = glGetAttribLocation(m_uiProgram, "vVtxColor");  // vertices' color 
-		glEnableVertexAttribArray(vColorVtx);
-		glVertexAttribPointer(vColorVtx, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx));
-
-		SetAPI();
-
-		m_uiShininess = glGetUniformLocation(m_uiProgram, "fShininess");
-		glUniform1f(m_uiShininess, m_Material.shininess);
+	GLuint vColorVtx = glGetAttribLocation(m_uiProgram, "vVtxColor");  // vertices' color 
+	glEnableVertexAttribArray(vColorVtx);
+	glVertexAttribPointer(vColorVtx, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx));
 	
+	GLuint vDifMapCoord = glGetAttribLocation(m_uiProgram, "vDiffuseMapCoord");  // vertices' texture coordinates
+	glEnableVertexAttribArray(vDifMapCoord);
+	glVertexAttribPointer(vDifMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx));
+	glUniform1i(glGetUniformLocation(m_uiProgram, "diffuMap"), 0);
 
+	SetAPI();
+
+	m_uiShininess = glGetUniformLocation(m_uiProgram, "fShininess");
+	glUniform1f(m_uiShininess, m_Material.shininess);	
+
+	m_uiTexLayer = glGetUniformLocation(m_uiProgram, "iTexLayer");
+	glUniform1i(m_uiTexLayer, m_iTexLayer);	// 貼圖的個數，預設為 1，直接傳入 pixel shader
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -246,6 +256,7 @@ void CShape::DrawingSetShader()
 			glUniform1i(m_uiLighting[i], m_iLighting[i]);
 		}
 		glUniform1f(m_uiShininess, m_Material.shininess);
+		glUniform1i(m_uiTexLayer, m_iTexLayer);
 #endif
 }
 
@@ -276,6 +287,7 @@ void CShape::DrawingWithoutSetShader()
 			glUniform1i(m_uiLighting[i], m_iLighting[i]);
 		}
 		glUniform1f(m_uiShininess, m_Material.shininess);
+		glUniform1i(m_uiTexLayer, m_iTexLayer);
 #endif
 }
 
@@ -362,6 +374,11 @@ void CShape::Update(const LightSource *Lights, float dt)
 
 }
 
+void CShape::SetTextureLayer(int texlayer)
+{
+	m_iTexLayer = texlayer;
+}
+
 void CShape::Update(float dt)
 {
 	if (m_bViewUpdated || m_bTRSUpdated) { // Model View 的相關矩陣內容有更動
@@ -369,4 +386,13 @@ void CShape::Update(float dt)
 		m_mxITView = InverseTransposeMatrix(m_mxMVFinal);
 		m_bViewUpdated = m_bTRSUpdated = false;
 	}
+}
+
+void CShape::SetTiling(float uTiling, float vTiling)  // 對 U軸 與 V軸 進行拼貼的縮放
+{
+	for (int i = 0; i < m_iNumVtx; i++) {
+		m_pTex[i].x *= uTiling; m_pTex[i].y *= vTiling;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex); // vertcies' Color
 }

@@ -12,6 +12,7 @@ CQuad::CQuad()
 	m_pPoints  = new vec4[m_iNumVtx];
 	m_pNormals = new vec3[m_iNumVtx];
 	m_pColors  = new vec4[m_iNumVtx]; 
+	m_pTex = new vec2[m_iNumVtx];
 
 	m_pPoints[0] = vec4( -0.5f, 0.0f,  0.5f, 1.0f);
 	m_pPoints[1] = vec4(  0.5f, 0.0f,  0.5f, 1.0f);
@@ -33,6 +34,13 @@ CQuad::CQuad()
 	m_pColors[3] = vec4( 1.0f, 1.0f,  1.0f, 1.0f);
 	m_pColors[4] = vec4( 1.0f, 1.0f,  1.0f, 1.0f);
 	m_pColors[5] = vec4( 1.0f, 1.0f,  1.0f, 1.0f);
+
+	m_pTex[0] = vec2(0.0f, 0.0f);
+	m_pTex[1] = vec2(1.0f, 0.0f);
+	m_pTex[2] = vec2(1.0f, 1.0f);
+	m_pTex[3] = vec2(0.0f, 0.0f);
+	m_pTex[4] = vec2(1.0f, 1.0f);
+	m_pTex[5] = vec2(0.0f, 1.0f);
 
 	for( int i = 0 ; i < m_iNumVtx ; i++ ) m_pColors[i] = vec4(-1.0f,-1.0f,-1.0f,1.0f);
 

@@ -7,7 +7,7 @@ Camera::Camera() {
 	_bViewDirty = true;
 	_bProjectionDirty = true;
 	isTouch = false;
-	_collider.Init(5.0f, 5.0f, 5.0f, vec4(0.0f));
+	_collider.Init(1.0f, 1.0f, 1.0f, vec4(0.0f));
 }
 
 void Camera::destroyInstance()

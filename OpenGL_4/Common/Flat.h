@@ -26,14 +26,15 @@ public:
 	void SetViewMatrix(mat4 &mat);
 	void SetTRSMatrix(mat4 &mat);
 	void SetShadingMode(int iMode);
-	void Update(float dt, point4 vLightPos, color4 vLightI);
-	void Update(float dt, const LightSource &Lights);
 	void Update(const LightSource *Lights, float dt);
 	void SetColor(vec4 &vColor);
 	void Draw();
 
 	void SetMaterials(color4 ambient, color4 diffuse, color4 specular);
 	void SetKaKdKsShini(float ka, float kd, float ks, float shininess); // ka kd ks shininess
+
+	void SetTiling(float uTiling, float vTiling);
+	void SetTextureLayer(int texlayer);
 };
 
 #endif

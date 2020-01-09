@@ -21,15 +21,15 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle)
 	mxT = Translate(_pos);
 	if (direct == 'L' || direct == 'l' || direct == 'R' || direct == 'r') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle));
-		_pSquares->_collider.Init(1, iSize.y / 2, iSize.z / 2, pos);
+		_pSquares->_collider.Init(iSize.x, iSize.y / 2, iSize.z / 2, pos);
 	}
 	else if (direct == 'F' || direct == 'f' || direct == 'B' || direct == 'b') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
-		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, 1, pos);
+		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, iSize.z, pos);
 	}
 	else if (direct == 'T' || direct == 't' || direct == 'M' || direct == 'm') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
-		_pSquares->_collider.Init(iSize.x / 2, 1, iSize.z / 2, pos);
+		_pSquares->_collider.Init(iSize.x / 2, iSize.y, iSize.z / 2, pos);
 	}
 
 	SetColor(vec4(0.6f));
@@ -87,4 +87,13 @@ void Flat::SetKaKdKsShini(float ka, float kd, float ks, float shininess) // ka k
 
 void Flat::SetColor(vec4 &vColor) {
 	_pSquares->SetColor(vColor);
+}
+
+void Flat::SetTiling(float uTiling, float vTiling) {
+	_pSquares->SetTiling(uTiling, vTiling);
+}
+
+void Flat::SetTextureLayer(int texlayer)
+{
+	_pSquares->SetTextureLayer(texlayer);
 }

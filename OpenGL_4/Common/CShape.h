@@ -40,6 +40,7 @@ protected:
 	GLuint  m_uiModelView, m_uiProjection, m_uiColor;
 	GLuint  m_uiProgram;
 	GLuint  m_uiBuffer;
+	GLuint  m_uiTexLayer;	// 貼圖的層次，預設就是一層 diffuse
 
 	//API
 	point4  m_vLightInView[LightCount];	 // 光源在世界座標的位置
@@ -57,6 +58,7 @@ protected:
 
 	LightSource m_Light1;
 
+	//Light
 	color4 m_Diffuse[LightCount];
 	color4 m_AmbientProduct[LightCount];
 	color4 m_DiffuseProduct[LightCount];
@@ -66,6 +68,9 @@ protected:
 	float m_spotCutoff[LightCount];
 	int lightType[LightCount]; // 燈光種類
 	int    m_iLighting[LightCount];	// 設定是否要打燈
+
+	//Texure
+	int    m_iTexLayer;		// 設定貼圖的層次，0 表示沒有貼圖
 
 	// For Matrices
 	mat4    m_mxView, m_mxProjection, m_mxTRS;
@@ -112,6 +117,8 @@ public:
 
 	// For Lighting Calculation
 	void SetShadingMode(int iMode) {m_iMode = iMode;}
+	void SetTextureLayer(int texlayer);
+	void SetTiling(float uTiling, float vTiling);
 
 	Collider GetCollider() { return _collider; };
 	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };

@@ -7,9 +7,15 @@ in vec4 vPosition;	  // Vertex Position
 in vec3 vNormal;    // Vertex Normal
 in vec4 vVtxColor;  // Vertex Color
 
+in vec2 vDiffuseMapCoord;
+in vec2 vLightMapCoord;
+
 out vec3 fN;// 輸出 Normal 在鏡頭座標下的方向
 out vec3 fL[PointNum];// 輸出 Light Direction 在鏡頭座標下的方向
 out vec3 fV;// 輸出 View Direction 在鏡頭座標下的方向
+
+out vec2 DiffuseMapUV;  // 輸出貼圖座標
+out vec2 LightMapUV;    // 輸出貼圖座標
 
 uniform mat4  ModelView;   // Model View Matrix
 uniform mat4  Projection;  // Projection Matrix
@@ -31,4 +37,6 @@ void main()
 	}
 
 	gl_Position = Projection * vPosInView;
+	DiffuseMapUV = vDiffuseMapCoord;
+	LightMapUV  = vLightMapCoord;
 }

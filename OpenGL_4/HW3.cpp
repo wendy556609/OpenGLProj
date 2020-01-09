@@ -1,11 +1,5 @@
 #include "header/Angel.h"
-//#include "Common/TypeDefine.h"
-//#include "Common/Flat.h"
 #include "Common/Sprite.h"
-//#include "Common/Cube.h"
-//#include "Common/Sphere.h"
-//#include "Common/Sprite.h"
-//#include "Common/ModelPool.h"
 #include "Common/Room.h"
 
 #define SPACE_KEY 32
@@ -280,9 +274,6 @@ void Move(float delta) {
 		default:
 			break;
 		}
-		if (camera->isTouch)eye = camera->prePos;
-		if (camera->isTouch)eye = camera->prePos;
-		if (camera->isTouch)eye = camera->prePos;
 		if (camera->isTouch)eye = camera->prePos;
 		at += point4(front.x, 0.0f, front.z, 0.0f);
 		camera->updateViewLookAt(eye, at);
