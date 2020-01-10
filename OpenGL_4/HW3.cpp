@@ -258,16 +258,16 @@ void Move(float delta) {
 		switch (_state)
 		{
 		case Front:			
-			eye += point4(front.x, 0.0f, front.z, 0.0f)* 150.0f* delta;
+			eye += point4(front.x, front.y, front.z, 0.0f)* 150.0f* delta;
 			break;
 		case Back:
-			eye -= point4(front.x, 0.0f, front.z, 0.0f)* 150.0f* delta;
+			eye -= point4(front.x, front.y, front.z, 0.0f)* 150.0f* delta;
 			break;
 		case Left:
-			eye -= point4(right.x, 0.0f, right.z, 0.0f)* 150.0f* delta;
+			eye -= point4(right.x, right.y, right.z, 0.0f)* 150.0f* delta;
 			break;
 		case Right:
-			eye += point4(right.x, 0.0f, right.z, 0.0f)* 150.0f* delta;
+			eye += point4(right.x, right.y, right.z, 0.0f)* 150.0f* delta;
 			break;
 		case Stop:
 			break;
@@ -356,10 +356,6 @@ void Win_Mouse(int button, int state, int x, int y) {
 				if (g_p2DBtn[3]->getButtonStatus())g_Light1[3].isLighting = false;
 				else g_Light1[3].isLighting = true;
 			}
-			else {
-				eye += g_vUp* 3.0f;
-				if (eye.y > (GRID_SIZE / 2 - 5.0f))eye.y = (GRID_SIZE / 2 - 5.0f);
-			}
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 ，換成 Y 軸
@@ -369,15 +365,11 @@ void Win_Mouse(int button, int state, int x, int y) {
 		break;
 	case GLUT_RIGHT_BUTTON:   // 目前按下的是滑鼠右鍵
 		if (state == GLUT_DOWN) {
-			eye -= g_vUp* 3.0f;
-			if (eye.y < 5.0f)eye.y = 5.0f;
 		}; 					  //if ( state == GLUT_DOWN ) ;
 		break;
 	default:
 		break;
 	}
-	auto camera = Camera::getInstance();
-	camera->updateViewPosition(eye);
 }
 //----------------------------------------------------------------------------
 void Win_SpecialKeyboard(int key, int x, int y) {

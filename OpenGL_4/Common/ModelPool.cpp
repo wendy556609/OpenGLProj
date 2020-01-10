@@ -2,9 +2,9 @@
 #include "../ObjLoader.h"
 
 ModelPool::ModelPool(const char* path, char type) {
-	std::vector<float> vertices, normals;
+	std::vector<float> vertices, normals, colors;
 	
-	LoadObj(path, &vertices, &normals, type);
+	LoadObj(path, &vertices, &normals, &colors, type);
 
 	m_iNumVtx = vertices.size() / 3;
 	m_pPoints = NULL; m_pNormals = NULL; m_pTex = NULL;
@@ -18,6 +18,7 @@ ModelPool::ModelPool(const char* path, char type) {
 	{
 		m_pPoints[i] = vec4(vertices[i * 3], vertices[ i * 3 + 1 ], vertices[i * 3 + 2], 1.0f);
 		m_pNormals[i] = vec3(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+		m_pTex[i] = vec2(colors[i * 3], colors[i * 3 + 1]);
 		m_pColors[i] = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	}
 	

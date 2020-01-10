@@ -10,9 +10,11 @@ Room::Room()
 	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0);
 	_pFloor->SetTiling(10, 10); // ­ì©l¬° (10, 10)
 	_pFloor->SetTextureLayer(1);
+	_pFloor->SetTrigger(false);
 
 	vT.x = 0; vT.y = 50.0f; vT.z = 0;
 	_pTop = new Flat('T', vec3(100, 1, 100), vT, 180);
+	_pTop->SetTrigger(false);
 
 	vT.x = -50.0f; vT.y = 25.0f; vT.z = 0;
 	_LeftWall = new Flat('L', vec3(1, 50, 100), vT, -90);
@@ -20,11 +22,11 @@ Room::Room()
 
 	vT.x = -49.5f; vT.y = 10.0f; vT.z = 0;
 	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90);
-	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.5f, 0.5f, 0.5f, 1.0f));
+	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[0]->SetTrigger(true);
 	vT.x = -50.5f;
 	_door[1] = new Flat('R', vec3(3, 20, 10), vT, 90);
-	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.5f, 0.5f, 0.5f, 1.0f));
+	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
 	vT.x = 50.0f; vT.y = 25.0f; vT.z = 0;
@@ -145,6 +147,14 @@ void Room::DetectCollider() {
 	else if (CheckCollider(camera->GetCollider(), _BackWall->GetCollider()))
 	{
 		if (!_BackWall->GetTrigger())camera->isTouch = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), _pFloor->GetCollider()))
+	{
+		if (!_pFloor->GetTrigger())camera->isTouch = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), _pTop->GetCollider()))
+	{
+		if (!_pTop->GetTrigger())camera->isTouch = true;
 	}
 	else camera->isTouch = false;
 
