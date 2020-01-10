@@ -68,9 +68,9 @@ bool LoadObj(const char*  path, std::vector<float> *vertices, std::vector<float>
 		vertices->push_back(temp_vertices[(indices[i] - 1) * 3]);
 		vertices->push_back(temp_vertices[(indices[i] - 1) * 3 + 1]);
 		vertices->push_back(temp_vertices[(indices[i] - 1) * 3 + 2]);
-		colors->push_back(temp_normals[(indices[i + 1] - 1) * 3]);
-		colors->push_back(temp_normals[(indices[i + 1] - 1) * 3 + 1]);
-		colors->push_back(temp_normals[(indices[i + 1] - 1) * 3 + 2]);
+		colors->push_back(temp_colors[(indices[i + 1] - 1) * 3]);
+		colors->push_back(temp_colors[(indices[i + 1] - 1) * 3 + 1]);
+		colors->push_back(temp_colors[(indices[i + 1] - 1) * 3 + 2]);
 		normals->push_back(temp_normals[(indices[i + 2] - 1) * 3]);
 		normals->push_back(temp_normals[(indices[i + 2] - 1) * 3 + 1]);
 		normals->push_back(temp_normals[(indices[i + 2] - 1) * 3 + 2]);

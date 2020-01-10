@@ -20,6 +20,7 @@ in vec3 vTangentV;
 out vec3 fN;// 輸出 Normal 在鏡頭座標下的方向
 out vec3 fL[PointNum];// 輸出 Light Direction 在鏡頭座標下的方向
 out vec3 fV;// 輸出 View Direction 在鏡頭座標下的方向
+out vec3 vE[PointNum];
 
 out vec2 DiffuseMapUV;  // 輸出貼圖座標
 out vec2 LightMapUV;    // 輸出貼圖座標
@@ -62,9 +63,10 @@ void main()
 
 		for(int i = 0;i < PointNum; i++){
 			tmpV = vec3(LightInView[i].xyz - vPosInView.xyz);
-			fL[i].x = dot(tmpV, vt);
-			fL[i].y = dot(tmpV, vb);
-			fL[i].z = dot(tmpV, vn);
+			vE[i].x = dot(tmpV, vt);
+			vE[i].y = dot(tmpV, vb);
+			vE[i].z = dot(tmpV, vn);
+			fL[i] = vec3(LightInView[i].xyz - vPosInView.xyz);
 		}	
 
 		tmpV = -vPosInView.xyz;

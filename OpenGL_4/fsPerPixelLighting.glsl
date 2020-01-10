@@ -12,6 +12,7 @@
 in vec3 fN;
 in vec3 fL[PointNum];
 in vec3 fV;
+in vec3 vE[PointNum];
 
 in vec2 DiffuseMapUV;   // 輸入 Diffuse Map 貼圖座標
 in vec2 LightMapUV;   // 輸入 Light Map 貼圖座標
@@ -54,14 +55,23 @@ void main()
 	float RdotV = 0.0f;
 	float fLdotLDir = 0.0f;
 	
+	vec3 vLight = vec3(0.0,0.0,0.0);
 	
 		// 1. 計算 Ambient color : Ia = AmbientProduct = Ka * Material.ambient * La = 
 		// 單位化傳入的 Normal Dir
 	vec3 vN;
-	if(iTexLayer != (DIFFUSE_MAP|NORMAL_MAP))vN = normalize(fN);
-	else vN = normalize(2.0f*texture2D(normalMap, NormalMapUV).xyz - 1.0f); 
+
 	
 	for(int i = 0 ;i < PointNum;i++){
+
+	if(iTexLayer != (DIFFUSE_MAP|NORMAL_MAP)){
+		vN = normalize(fN);
+		vLight = fL[i];
+	}
+	else {
+		vN = normalize(2.0f*texture2D(normalMap, NormalMapUV).xyz - 1.0f); 
+		vLight = vE[i];
+	}
 
 	if( iLighting[i] != 1 ) {
 		ambient = vec4(0.0,0.0,0.0,1.0);
@@ -71,18 +81,15 @@ void main()
 	else {	
 		ambient = AmbientProduct[i]; // m_sMaterial.ka * m_sMaterial.ambient * vLightI;
 
+		if(lightType[i] == 1){		
+		
 		vL = normalize(fL[i]); // normalize light vector
 
 		fLdotN = vL.x*vN.x + vL.y*vN.y + vL.z*vN.z;
 
 		LD = normalize(LightDir[i]);
 
-		fLdotLDir = -(vL.x*LD.x + vL.y*LD.y + vL.z*LD.z);
-
-		if(lightType[i] == 1){		
-			//epsilon = 30.0f - spotCutoff[i];
-
-			//intensity = clamp((fLdotLDir - spotCutoff[i]) / epsilon,0.0, 1.0);	
+		fLdotLDir = -(vL.x*LD.x + vL.y*LD.y + vL.z*LD.z);	
 
 			if( fLdotLDir >= spotCutoff[i] ) { // 該點被光源照到才需要計算
 
@@ -115,6 +122,10 @@ void main()
 			}
 		}
 		else if(lightType[i] == 0){
+
+		vL = normalize(vLight); // normalize light vector
+
+		fLdotN = vL.x*vN.x + vL.y*vN.y + vL.z*vN.z;
 			
 			if( fLdotN >= 0 ) { // 該點被光源照到才需要計算
 				

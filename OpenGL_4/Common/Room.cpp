@@ -38,18 +38,18 @@ Room::Room(vec4 pos)
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
 	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
 	_FrontWall->SetTrigger(false);
-	_FrontWall->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
+	//_FrontWall->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
 	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
 	_BackWall->SetTrigger(false);
 
 	vT.x = 0.0f; vT.y = 10.0f; vT.z = -10;
-	Test = new ModelPool("Model/Cube.obj", Type_3DMax);
+	Test = new ModelPool("Model/Cube1.obj", Type_3DMax);
 	Test->SetTRSMatrix(Translate(vT)*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
 	Test->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	Test->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
-	//Test->SetTextureLayer(DIFFUSE_MAP|NORMAL_MAP);
+	Test->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
 
 	////Model
 
@@ -195,12 +195,7 @@ void Room::Draw()
 	_pTop->Draw();
 	_LeftWall->Draw();
 	_RightWall->Draw();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
-	glActiveTexture(GL_TEXTURE2); // select active texture 0
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
-	_FrontWall->Draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	_FrontWall->Draw();	
 	_BackWall->Draw();
 	//Model
 	_pTeaPot->Draw();
@@ -211,12 +206,12 @@ void Room::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
-	//glActiveTexture(GL_TEXTURE2); // select active texture 0
-	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
+	glActiveTexture(GL_TEXTURE2); // select active texture 0
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
 	Test->Draw();
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Room::~Room() {	
