@@ -34,6 +34,7 @@ public:
 	void SetKaKdKsShini(float ka, float kd, float ks, float shininess); // ka kd ks shininess
 
 	void SetTiling(float uTiling, float vTiling);
+	void SetLightMapTiling(float uTiling, float vTiling);
 	void SetTextureLayer(int texlayer);
 };
 

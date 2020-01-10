@@ -2,6 +2,11 @@
 #define TYPEDEFINE_H
 #include "../Header/Angel.h"
 
+#define NONE_MAP    0x0
+#define DIFFUSE_MAP 0x1
+#define LIGHT_MAP   0x2
+#define NORMAL_MAP  0x4
+
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
 

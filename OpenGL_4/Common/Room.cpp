@@ -1,6 +1,7 @@
 #include "Room.h"
-GLuint g_uiFTexID; // 三個物件分別給不同的貼圖
+GLuint g_uiFTexID[2]; // 三個物件分別給不同的貼圖
 int g_iTexWidth, g_iTexHeight;
+
 Room::Room(vec4 pos)
 {
 	mat4 mxT;
@@ -9,8 +10,8 @@ Room::Room(vec4 pos)
 	// 產生物件的實體
 	vT.x = 0; vT.y = 0; vT.z = 0;
 	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0, roomPos);
-	_pFloor->SetTiling(10, 10); // 原始為 (10, 10)
-	_pFloor->SetTextureLayer(1);
+	_pFloor->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
+	_pFloor->SetTiling(10, 10); // 原始為 (10, 10)	
 	_pFloor->SetTrigger(false);
 
 	vT.x = 0; vT.y = 50.0f; vT.z = 0;
@@ -70,7 +71,8 @@ Room::Room(vec4 pos)
 	_pBench[2]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	auto texturepool = TexturePool::create();
-	g_uiFTexID = texturepool->AddTexture("texture/checker.png");
+	g_uiFTexID[0] = texturepool->AddTexture("texture/checker.png");
+	g_uiFTexID[1] = texturepool->AddTexture("texture/lightMap1.png");
 }
 
 void Room::SetProjectionMatrix(mat4 &mpx)
@@ -168,9 +170,13 @@ void Room::DetectCollider() {
 
 void Room::Draw()
 {
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[0]);
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
 	_pFloor->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 	_pTop->Draw();
 	_LeftWall->Draw();
 	_RightWall->Draw();

@@ -7,7 +7,6 @@
 #include "Cube.h"
 #include "Sphere.h"
 #include "ModelPool.h"
-#include "TexturePool.h"
 
 class RoomController
 {

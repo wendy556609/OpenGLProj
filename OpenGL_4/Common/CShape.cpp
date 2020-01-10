@@ -21,9 +21,10 @@ CShape::CShape()
 	m_iLighting[2] = 1;
 	m_iLighting[3] = 1;
 
-	m_iTexLayer = 0;		// ¹w³]¦³0±i Diffuse ¶K¹Ï
+	m_iTexLayer = NONE_MAP;		// ¹w³]¦³0±i Diffuse ¶K¹Ï
 
-	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr;
+	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr; 
+	m_pLightTex = nullptr;
 }
 
 CShape::~CShape()
@@ -32,6 +33,7 @@ CShape::~CShape()
 	if( m_pNormals != NULL ) delete	[] m_pNormals;
 	if( m_pColors  != NULL ) delete	[] m_pColors;
 	if( m_pTex != NULL ) delete [] m_pTex;
+	if (m_pLightTex != NULL) delete[] m_pLightTex;
 
 	if( m_pVXshader != NULL ) delete [] m_pVXshader;
 	if( m_pFSshader != NULL ) delete [] m_pFSshader;
@@ -45,13 +47,15 @@ void CShape::CreateBufferObject()
     // Create and initialize a buffer object
     glGenBuffers( 1, &m_uiBuffer );
     glBindBuffer( GL_ARRAY_BUFFER, m_uiBuffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx + sizeof(vec2)*m_iNumVtx, NULL, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx + sizeof(vec2)*m_iNumVtx + sizeof(vec2)*m_iNumVtx, NULL, GL_STATIC_DRAW );
 	// sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx <- vertices, normal and color
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4)*m_iNumVtx, m_pPoints );  // vertices
 	glBufferSubData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx, sizeof(vec3)*m_iNumVtx, m_pNormals ); // // vertices' normal
 	glBufferSubData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx+sizeof(vec3)*m_iNumVtx, sizeof(vec4)*m_iNumVtx, m_pColors ); // vertcies' Color
+
 	glBufferSubData( GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex);  //²Ä¤@±i¶K¹Ï
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pLightTex); // ²Ä¤G±i¶K¹Ï
 }
 
 void CShape::SetShader(GLuint uiShaderHandle)
@@ -91,6 +95,11 @@ void CShape::SetShader(GLuint uiShaderHandle)
 	glEnableVertexAttribArray(vDifMapCoord);
 	glVertexAttribPointer(vDifMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx));
 	glUniform1i(glGetUniformLocation(m_uiProgram, "diffuMap"), 0);
+
+	GLuint vLightMapCoord = glGetAttribLocation(m_uiProgram, "vLightMapCoord");  // Light maps' texture coordinates¡A ¥²¶··s¼W¨ì Shader ¤¤
+	glEnableVertexAttribArray(vLightMapCoord);
+	glVertexAttribPointer(vLightMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx));
+	glUniform1i(glGetUniformLocation(m_uiProgram, "lightMap"), 1);
 
 	SetAPI();
 
@@ -395,4 +404,13 @@ void CShape::SetTiling(float uTiling, float vTiling)  // ¹ï U¶b »P V¶b ¶i¦æ«÷¶Kª
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex); // vertcies' Color
+}
+
+void CShape::SetLightMapTiling(float uTiling, float vTiling)
+{
+	for (int i = 0; i < m_iNumVtx; i++) {
+		m_pLightTex[i].x *= uTiling; m_pLightTex[i].y *= vTiling;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pLightTex);
 }

@@ -93,6 +93,11 @@ void Flat::SetTiling(float uTiling, float vTiling) {
 	_pSquares->SetTiling(uTiling, vTiling);
 }
 
+void Flat::SetLightMapTiling(float uTiling, float vTiling)
+{
+	_pSquares->SetLightMapTiling(uTiling, vTiling);
+}
+
 void Flat::SetTextureLayer(int texlayer)
 {
 	_pSquares->SetTextureLayer(texlayer);

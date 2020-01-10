@@ -2,6 +2,7 @@
 #define CSHAPE_H
 #include "../Header/Angel.h"
 #include "TypeDefine.h"
+#include "TexturePool.h"
 #include "Collider.h"
 
 typedef Angel::vec4  color4;
@@ -18,8 +19,6 @@ typedef Angel::vec4  point4;
 #define Type_3DMax 'M'
 #define Type_Blender 'B'
 
-
-
 class CShape 
 {
 protected:
@@ -27,6 +26,7 @@ protected:
 	vec3 *m_pNormals;
 	vec4 *m_pColors;
 	vec2 *m_pTex;
+	vec2 *m_pLightTex;
 	int  m_iNumVtx;
 
 	GLfloat m_fColor[4]; // Object's color
@@ -119,6 +119,7 @@ public:
 	void SetShadingMode(int iMode) {m_iMode = iMode;}
 	void SetTextureLayer(int texlayer);
 	void SetTiling(float uTiling, float vTiling);
+	void SetLightMapTiling(float uTiling, float vTiling);
 
 	Collider GetCollider() { return _collider; };
 	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };
