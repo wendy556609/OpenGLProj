@@ -19,6 +19,8 @@ public:
 	Flat      *_LeftWall, *_RightWall;
 	Flat      *_FrontWall, *_BackWall;
 
+	vec4 roomPos;
+
 	RoomController() {};
 	~RoomController() {
 		if (_pTop != NULL)delete _pTop;

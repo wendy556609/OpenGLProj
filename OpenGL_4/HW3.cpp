@@ -49,15 +49,19 @@ float g_fLightR = 0.95f;
 float g_fLightG = 0.95f;
 float g_fLightB = 0.95f;
 
+float roomY = 0;
+
+vec4 roomPos1=vec4(0, roomY, 0, 1);
+
 LightSource g_Light1[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
 		color4(0.55f, 0.55f, 0.55f, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(0.0f, 15.0f, 15.0f, 1.0f),   // position
+		point4(0.0f + roomPos1.x, 15.0f + roomPos1.y, 15.0f + roomPos1.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
-		vec3(0.0f, 0.0f, 0.0f),			  //spotTarget
+		vec3(0.0f + roomPos1.x, 0.0f + roomPos1.y, 0.0f + roomPos1.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
 		1.0f	,	// spotExponent(parameter e); cos^(e)(phi) 
 		45.0f,	// spotCutoff;	// (range: [0.0, 90.0], 180.0)  spot 的照明範圍
@@ -72,9 +76,9 @@ LightSource g_Light1[LightCount] = {
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
 		color4(g_fLightR, 0, 0, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(25.0f, 10.0f, 25.0f, 1.0f),   // position
+		point4(25.0f + roomPos1.x, 10.0f + roomPos1.y, 25.0f + roomPos1.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
-		vec3(25.0f, 0.0f, 25.0f),			  //spotTarget
+		vec3(25.0f + roomPos1.x, 0.0f + roomPos1.y, 25.0f + roomPos1.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
 		1.0f	,	// spotExponent(parameter e); cos^(e)(phi) 
 		45.0f,	// spotCutoff;	// (range: [0.0, 90.0], 180.0)  spot 的照明範圍
@@ -89,9 +93,9 @@ LightSource g_Light1[LightCount] = {
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
 		color4(0, g_fLightG, 0, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(-25.0f, 10.0f, 25.0f, 1.0f),   // position
+		point4(-25.0f + roomPos1.x, 10.0f + roomPos1.y, 25.0f + roomPos1.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
-		vec3(-25.0f, 0.0f, 25.0f),			  //spotTarget
+		vec3(-25.0f + roomPos1.x, 0.0f + roomPos1.y, 25.0f + roomPos1.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
 		1.0f	,	// spotExponent(parameter e); cos^(e)(phi) 
 		45.0f,	// spotCutoff;	// (range: [0.0, 90.0], 180.0)  spot 的照明範圍
@@ -106,9 +110,9 @@ LightSource g_Light1[LightCount] = {
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
 		color4(0, 0, g_fLightB, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(0.0f, 10.0f, -30.0f, 1.0f),   // position
+		point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -30.0f + roomPos1.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
-		vec3(0.0f, 0.0f, -30.0f),			  //spotTarget
+		vec3(0.0f + roomPos1.x, 0.0f + roomPos1.y, -30.0f + roomPos1.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
 		1.0f	,	// spotExponent(parameter e); cos^(e)(phi) 
 		45.0f,	// spotCutoff;	// (range: [0.0, 90.0], 180.0)  spot 的照明範圍
@@ -138,13 +142,13 @@ void init(void)
 
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f, 10.0f, -40.0f, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -40.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
 	camera->updatePerspective(60.0, (GLfloat)SCREEN_SIZE / (GLfloat)SCREEN_SIZE, 1.0, 1000.0);
 
-	room = new Room;
+	room = new Room(roomPos1);
 
 	for (int i = 0; i < LightCount; i++)
 	{

@@ -5,13 +5,13 @@ Flat::~Flat()
 	delete _pSquares;
 }
 
-Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle)
+Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 {
 	mat4 mxT;
 	// 建立實體
 	_iGridSize = iSize;
 	_pSquares = new CQuad;
-	_pos = pos;
+	_pos = vec4(pos.x + roomPos.x, pos.y + roomPos.y, pos.z + roomPos.z, pos.w);
 
 	SetShader();
 
@@ -21,15 +21,15 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle)
 	mxT = Translate(_pos);
 	if (direct == 'L' || direct == 'l' || direct == 'R' || direct == 'r') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle));
-		_pSquares->_collider.Init(iSize.x, iSize.y / 2, iSize.z / 2, pos);
+		_pSquares->_collider.Init(iSize.x, iSize.y / 2, iSize.z / 2, _pos);
 	}
 	else if (direct == 'F' || direct == 'f' || direct == 'B' || direct == 'b') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
-		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, iSize.z, pos);
+		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, iSize.z, _pos);
 	}
 	else if (direct == 'T' || direct == 't' || direct == 'M' || direct == 'm') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
-		_pSquares->_collider.Init(iSize.x / 2, iSize.y, iSize.z / 2, pos);
+		_pSquares->_collider.Init(iSize.x / 2, iSize.y, iSize.z / 2, _pos);
 	}
 
 	SetColor(vec4(0.6f));

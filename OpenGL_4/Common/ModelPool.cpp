@@ -4,7 +4,7 @@
 ModelPool::ModelPool(const char* path, char type) {
 	std::vector<float> vertices, normals, colors;
 	
-	LoadObj(path, &vertices, &normals, &colors, type);
+	LoadObj(path, &vertices, &colors, &normals, type);
 
 	m_iNumVtx = vertices.size() / 3;
 	m_pPoints = NULL; m_pNormals = NULL; m_pTex = NULL;

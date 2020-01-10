@@ -21,7 +21,7 @@ CShape::CShape()
 	m_iLighting[2] = 1;
 	m_iLighting[3] = 1;
 
-	m_iTexLayer = 0;		// 預設有一張 Diffuse 貼圖
+	m_iTexLayer = 0;		// 預設有0張 Diffuse 貼圖
 
 	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr;
 }

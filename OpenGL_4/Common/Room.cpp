@@ -1,70 +1,71 @@
 #include "Room.h"
 GLuint g_uiFTexID; // 三個物件分別給不同的貼圖
 int g_iTexWidth, g_iTexHeight;
-Room::Room()
+Room::Room(vec4 pos)
 {
 	mat4 mxT;
 	vec4 vT, vColor;
+	roomPos = pos;
 	// 產生物件的實體
 	vT.x = 0; vT.y = 0; vT.z = 0;
-	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0);
+	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0, roomPos);
 	_pFloor->SetTiling(10, 10); // 原始為 (10, 10)
 	_pFloor->SetTextureLayer(1);
 	_pFloor->SetTrigger(false);
 
 	vT.x = 0; vT.y = 50.0f; vT.z = 0;
-	_pTop = new Flat('T', vec3(100, 1, 100), vT, 180);
+	_pTop = new Flat('T', vec3(100, 1, 100), vT, 180, roomPos);
 	_pTop->SetTrigger(false);
 
 	vT.x = -50.0f; vT.y = 25.0f; vT.z = 0;
-	_LeftWall = new Flat('L', vec3(1, 50, 100), vT, -90);
+	_LeftWall = new Flat('L', vec3(1, 50, 100), vT, -90, roomPos);
 	_LeftWall->SetTrigger(false);
 
 	vT.x = -49.5f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90);
+	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
 	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[0]->SetTrigger(true);
 	vT.x = -50.5f;
-	_door[1] = new Flat('R', vec3(3, 20, 10), vT, 90);
+	_door[1] = new Flat('R', vec3(3, 20, 10), vT, 90, roomPos);
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
 	vT.x = 50.0f; vT.y = 25.0f; vT.z = 0;
-	_RightWall = new Flat('R', vec3(1, 50, 100), vT, 90);
+	_RightWall = new Flat('R', vec3(1, 50, 100), vT, 90, roomPos);
 	_RightWall->SetTrigger(false);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
-	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90);
+	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
 	_FrontWall->SetTrigger(false);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
-	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90);
+	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
 	_BackWall->SetTrigger(false);
 
 	////Model
 
 	_pTeaPot = new ModelPool("Model/TeaPot.obj", Type_3DMax);
-	_pTeaPot->SetTRSMatrix(Translate(vec4(0, 5.3f, 0, 1))*Scale(2.0f, 2.0f, 2.0f));
+	_pTeaPot->SetTRSMatrix(Translate(vec4(0, 5.3f, 0, 1))*Translate(roomPos)*Scale(2.0f, 2.0f, 2.0f));
 	_pTeaPot->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pTeaPot->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	_pTable = new ModelPool("Model/table.obj", Type_3DMax);
-	_pTable->SetTRSMatrix(Translate(vec4(0, 0.0f, 0, 1))*Scale(0.5f, 0.5f, 0.5f));
+	_pTable->SetTRSMatrix(Translate(vec4(0, 0.0f, 0, 1))*Translate(roomPos)*Scale(0.5f, 0.5f, 0.5f));
 	_pTable->SetMaterials(vec4(0), vec4(0.72f, 0.45f, 0.2f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pTable->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	_pBench[0] = new ModelPool("Model/Bench.obj", Type_3DMax);
-	_pBench[0]->SetTRSMatrix(Translate(vec4(-25.0f, 0.0f, 25.0f, 1))*RotateY(135.0f)*Scale(1.0f, 1.0f, 1.0f));
+	_pBench[0]->SetTRSMatrix(Translate(vec4(-25.0f, 0.0f, 25.0f, 1))*Translate(roomPos)*RotateY(135.0f)*Scale(1.0f, 1.0f, 1.0f));
 	_pBench[0]->SetMaterials(vec4(0), vec4(1.0f, 1.0f, 1.0f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pBench[0]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	_pBench[1] = new ModelPool("Model/Bench.obj", Type_3DMax);
-	_pBench[1]->SetTRSMatrix(Translate(vec4(25.0f, 0.0f, 25.0f, 1))*RotateY(-135.0f)*Scale(1.0f, 1.0f, 1.0f));
+	_pBench[1]->SetTRSMatrix(Translate(vec4(25.0f, 0.0f, 25.0f, 1))*Translate(roomPos)*RotateY(-135.0f)*Scale(1.0f, 1.0f, 1.0f));
 	_pBench[1]->SetMaterials(vec4(0), vec4(1.0f, 1.0f, 1.0f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pBench[1]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	_pBench[2] = new ModelPool("Model/Bench.obj", Type_3DMax);
-	_pBench[2]->SetTRSMatrix(Translate(vec4(0, 0.0f, -30.0f, 1))*Scale(1.0f, 1.0f, 1.0f));
+	_pBench[2]->SetTRSMatrix(Translate(vec4(0, 0.0f, -30.0f, 1))*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
 	_pBench[2]->SetMaterials(vec4(0), vec4(1.0f, 1.0f, 1.0f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pBench[2]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
@@ -130,7 +131,6 @@ void Room::Update(LightSource *light, float delta) {
 }
 
 void Room::DetectCollider() {
-	//vec4 wallDirect, cameraDirect, direct, eyepos;
 	auto camera = Camera::create();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{

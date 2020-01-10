@@ -13,7 +13,7 @@ private:
 	ModelPool *_pTable;
 	ModelPool *_pBench[3];
 public:
-	Room();
+	Room(vec4 pos = vec4(0, 0, 0, 1));
 	~Room();
 
 	void SetProjectionMatrix(mat4 &mpx);

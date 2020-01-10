@@ -9,9 +9,9 @@ void Collider::Init(float x, float y, float z, vec4 position,bool trigger) {
 }
 
 void Collider::SetCubeCollider(vec4 position) {
-	rightTop = vec4(position.x + DistanceX, position.y + DistanceY, position.z + DistanceZ, 1.0f);
-	leftButtom = vec4(position.x - DistanceX, position.y - DistanceY, position.z - DistanceZ, 1.0f);
 	Pos = position;
+	rightTop = vec4(position.x + DistanceX, position.y + DistanceY, position.z + DistanceZ, 1.0f);
+	leftButtom = vec4(position.x - DistanceX, position.y - DistanceY, position.z - DistanceZ, 1.0f);	
 }
 
 GLboolean CheckCollider(Collider one, Collider two) {
