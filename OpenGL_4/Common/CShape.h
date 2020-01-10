@@ -27,6 +27,8 @@ protected:
 	vec4 *m_pColors;
 	vec2 *m_pTex;
 	vec2 *m_pLightTex;
+	vec2 *m_pNormalTex;
+	vec3 *m_pTangentV;
 	int  m_iNumVtx;
 
 	GLfloat m_fColor[4]; // Object's color
@@ -120,6 +122,7 @@ public:
 	void SetTextureLayer(int texlayer);
 	void SetTiling(float uTiling, float vTiling);
 	void SetLightMapTiling(float uTiling, float vTiling);
+	void SetMirror(bool uAxis, bool vAxis);
 
 	Collider GetCollider() { return _collider; };
 	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };

@@ -1,5 +1,5 @@
 #include "Room.h"
-GLuint g_uiFTexID[2]; // 三個物件分別給不同的貼圖
+GLuint g_uiFTexID[4]; // 三個物件分別給不同的貼圖
 int g_iTexWidth, g_iTexHeight;
 
 Room::Room(vec4 pos)
@@ -10,7 +10,7 @@ Room::Room(vec4 pos)
 	// 產生物件的實體
 	vT.x = 0; vT.y = 0; vT.z = 0;
 	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0, roomPos);
-	_pFloor->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
+	_pFloor->SetTextureLayer(DIFFUSE_MAP);
 	_pFloor->SetTiling(10, 10); // 原始為 (10, 10)	
 	_pFloor->SetTrigger(false);
 
@@ -38,10 +38,18 @@ Room::Room(vec4 pos)
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
 	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
 	_FrontWall->SetTrigger(false);
+	_FrontWall->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
 	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
 	_BackWall->SetTrigger(false);
+
+	vT.x = 0.0f; vT.y = 10.0f; vT.z = -10;
+	Test = new ModelPool("Model/Cube.obj", Type_3DMax);
+	Test->SetTRSMatrix(Translate(vT)*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
+	Test->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	Test->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
+	//Test->SetTextureLayer(DIFFUSE_MAP|NORMAL_MAP);
 
 	////Model
 
@@ -73,6 +81,8 @@ Room::Room(vec4 pos)
 	auto texturepool = TexturePool::create();
 	g_uiFTexID[0] = texturepool->AddTexture("texture/checker.png");
 	g_uiFTexID[1] = texturepool->AddTexture("texture/lightMap1.png");
+	g_uiFTexID[2] = texturepool->AddTexture("texture/Masonry.Brick.png");
+	g_uiFTexID[3] = texturepool->AddTexture("texture/Masonry.Brick.normal1.png");
 }
 
 void Room::SetProjectionMatrix(mat4 &mpx)
@@ -92,6 +102,8 @@ void Room::SetProjectionMatrix(mat4 &mpx)
 
 	_door[0]->SetProjectionMatrix(mpx);
 	_door[1]->SetProjectionMatrix(mpx);
+
+	Test->SetProjectionMatrix(mpx);
 }
 
 void Room::SetViewMatrix(mat4 &mvx) {
@@ -110,6 +122,8 @@ void Room::SetViewMatrix(mat4 &mvx) {
 
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
+
+	Test->SetViewMatrix(mvx);
 }
 
 void Room::Update(LightSource *light, float delta) {
@@ -128,6 +142,8 @@ void Room::Update(LightSource *light, float delta) {
 
 	_door[0]->Update(light, delta);
 	_door[1]->Update(light, delta);
+
+	Test->Update(light, delta);
 
 	DetectCollider();
 }
@@ -176,11 +192,15 @@ void Room::Draw()
 	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
 	_pFloor->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE0);
 	_pTop->Draw();
 	_LeftWall->Draw();
 	_RightWall->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
+	glActiveTexture(GL_TEXTURE2); // select active texture 0
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
 	_FrontWall->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	_BackWall->Draw();
 	//Model
 	_pTeaPot->Draw();
@@ -191,6 +211,12 @@ void Room::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
+	//glActiveTexture(GL_TEXTURE2); // select active texture 0
+	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
+	Test->Draw();
+	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Room::~Room() {	
@@ -201,4 +227,5 @@ Room::~Room() {
 	if (_pBench[2] != NULL)delete _pBench[2];
 	if (_door[0] != NULL)delete _door[0];
 	if (_door[1] != NULL)delete _door[1];
+	if (Test != NULL)delete Test;
 }

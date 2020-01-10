@@ -36,6 +36,7 @@ public:
 	void SetTiling(float uTiling, float vTiling);
 	void SetLightMapTiling(float uTiling, float vTiling);
 	void SetTextureLayer(int texlayer);
+	void SetMirror(bool uAxis, bool vAxis);
 };
 
 #endif

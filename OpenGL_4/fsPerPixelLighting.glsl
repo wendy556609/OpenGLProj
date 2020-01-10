@@ -15,6 +15,7 @@ in vec3 fV;
 
 in vec2 DiffuseMapUV;   // 輸入 Diffuse Map 貼圖座標
 in vec2 LightMapUV;   // 輸入 Light Map 貼圖座標
+in vec2 NormalMapUV;  // 輸入 Normal Map 貼圖座標
 
 uniform int iTexLayer;
 
@@ -34,6 +35,7 @@ uniform float spotExponent[PointNum];
 
 uniform sampler2D diffuMap; // 貼圖的參數設定
 uniform sampler2D lightMap; // 貼圖的參數設定
+uniform sampler2D normalMap; // 貼圖的參數設定
 
 void main()
 {
@@ -51,19 +53,14 @@ void main()
 	float fLdotN = 0.0f;
 	float RdotV = 0.0f;
 	float fLdotLDir = 0.0f;
-
-	vec3 vLight; // 用 vec3 來宣告是為了節省計算, 如果要讓程式寫起來更方便，可改用 vec4 來宣告
-
-	float epsilon = 0.0f;
-	float intensity = 0.0f;
 	
 	
 		// 1. 計算 Ambient color : Ia = AmbientProduct = Ka * Material.ambient * La = 
-		
-
 		// 單位化傳入的 Normal Dir
-		vec3 vN = normalize(fN); 
-
+	vec3 vN;
+	if(iTexLayer != (DIFFUSE_MAP|NORMAL_MAP))vN = normalize(fN);
+	else vN = normalize(2.0f*texture2D(normalMap, NormalMapUV).xyz - 1.0f); 
+	
 	for(int i = 0 ;i < PointNum;i++){
 
 	if( iLighting[i] != 1 ) {
@@ -108,7 +105,7 @@ void main()
 				RdotV = vRefL.x*vV.x + vRefL.y*vV.y + vRefL.z*vV.z;
 
 				// Specular Color : Is = Ks * Material.specular * Ls * (R dot V)^Shininess;
-				if( RdotV > 0 ) specular = SpecularProduct[i]  * fLightI * pow(RdotV, fShininess)*intensity; 
+				if( RdotV > 0 ) specular = SpecularProduct[i]  * fLightI * pow(RdotV, fShininess); 
 				//specular = SpecularProduct[i]  * fLightI * pow(RdotV, fShininess);
 			}
 			else{
@@ -150,20 +147,11 @@ void main()
 		
 	}
 	result += ambient + diffuse + specular;
-}		// 2. 單位化傳入的 Light Dir
-		
-
-		// 5. 計算 L dot N
-		
-		
+}			
 
 		gl_FragColor = vec4(result.xyz, 1.0);  // 計算顏色 ambient + diffuse + specular;
 		gl_FragColor.w = 1.0;	// 設定 alpha 為 1.0
 		// gl_FragColor = vec4((ambient + diffuse + specular).xyz, 1.0);
-#ifdef SILHOUETTE
-	vec4 edgeColor = vec4(1.0, 0.0, 0.0, 1.0);
-	if( abs(dot(normalize(fN), normalize(fV))) < 0.2)  gl_FragColor = edgeColor;
-#endif
 
 		if( iTexLayer == NONE_MAP ) gl_FragColor = gl_FragColor;
 		else if( iTexLayer == DIFFUSE_MAP || iTexLayer == (DIFFUSE_MAP|NORMAL_MAP) ) gl_FragColor = gl_FragColor * texture2D(diffuMap, DiffuseMapUV);

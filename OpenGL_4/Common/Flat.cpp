@@ -102,3 +102,8 @@ void Flat::SetTextureLayer(int texlayer)
 {
 	_pSquares->SetTextureLayer(texlayer);
 }
+
+void Flat::SetMirror(bool uAxis, bool vAxis) // U¶b »P V¶b ¬O§_­nÃè®g
+{
+	_pSquares->SetMirror(uAxis, vAxis);
+}

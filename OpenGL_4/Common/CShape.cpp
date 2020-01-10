@@ -24,7 +24,7 @@ CShape::CShape()
 	m_iTexLayer = NONE_MAP;		// 預設有0張 Diffuse 貼圖
 
 	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr; 
-	m_pLightTex = nullptr;
+	m_pLightTex = nullptr;	 m_pNormalTex = nullptr;	 m_pTangentV = nullptr;
 }
 
 CShape::~CShape()
@@ -34,6 +34,8 @@ CShape::~CShape()
 	if( m_pColors  != NULL ) delete	[] m_pColors;
 	if( m_pTex != NULL ) delete [] m_pTex;
 	if (m_pLightTex != NULL) delete[] m_pLightTex;
+	if (m_pNormalTex != NULL) delete[] m_pNormalTex;
+	if (m_pTangentV != NULL) delete[] m_pTangentV;
 
 	if( m_pVXshader != NULL ) delete [] m_pVXshader;
 	if( m_pFSshader != NULL ) delete [] m_pFSshader;
@@ -47,7 +49,7 @@ void CShape::CreateBufferObject()
     // Create and initialize a buffer object
     glGenBuffers( 1, &m_uiBuffer );
     glBindBuffer( GL_ARRAY_BUFFER, m_uiBuffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx + sizeof(vec2)*m_iNumVtx + sizeof(vec2)*m_iNumVtx, NULL, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2) * 3 + sizeof(vec3))*m_iNumVtx, NULL, GL_STATIC_DRAW );
 	// sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx + sizeof(vec4)*m_iNumVtx <- vertices, normal and color
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4)*m_iNumVtx, m_pPoints );  // vertices
@@ -56,6 +58,9 @@ void CShape::CreateBufferObject()
 
 	glBufferSubData( GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex);  //第一張貼圖
 	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pLightTex); // 第二張貼圖
+
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2) * 2)*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pNormalTex); // 第三張貼圖
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2) * 3)*m_iNumVtx, sizeof(vec3)*m_iNumVtx, m_pTangentV); // 第三張貼圖
 }
 
 void CShape::SetShader(GLuint uiShaderHandle)
@@ -91,15 +96,27 @@ void CShape::SetShader(GLuint uiShaderHandle)
 	glEnableVertexAttribArray(vColorVtx);
 	glVertexAttribPointer(vColorVtx, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vec4)*m_iNumVtx + sizeof(vec3)*m_iNumVtx));
 	
+	// For Diffuse Map
 	GLuint vDifMapCoord = glGetAttribLocation(m_uiProgram, "vDiffuseMapCoord");  // vertices' texture coordinates
 	glEnableVertexAttribArray(vDifMapCoord);
 	glVertexAttribPointer(vDifMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx));
 	glUniform1i(glGetUniformLocation(m_uiProgram, "diffuMap"), 0);
 
+	// For Light Map
 	GLuint vLightMapCoord = glGetAttribLocation(m_uiProgram, "vLightMapCoord");  // Light maps' texture coordinates， 必須新增到 Shader 中
 	glEnableVertexAttribArray(vLightMapCoord);
 	glVertexAttribPointer(vLightMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx));
 	glUniform1i(glGetUniformLocation(m_uiProgram, "lightMap"), 1);
+
+	// For Normal Map
+	GLuint vNormalMapCoord = glGetAttribLocation(m_uiProgram, "vNormalMapCoord");  // Light maps' texture coordinates， 必須新增到 Shader 中
+	glEnableVertexAttribArray(vNormalMapCoord);
+	glVertexAttribPointer(vNormalMapCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2) * 2)*m_iNumVtx));
+	glUniform1i(glGetUniformLocation(m_uiProgram, "normalMap"), 2);
+
+	GLuint vTangentVec = glGetAttribLocation(m_uiProgram, "vTangentV");  // vertices' color 
+	glEnableVertexAttribArray(vTangentVec);
+	glVertexAttribPointer(vTangentVec, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET((sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2) * 3)*m_iNumVtx));
 
 	SetAPI();
 
@@ -413,4 +430,30 @@ void CShape::SetLightMapTiling(float uTiling, float vTiling)
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4) + sizeof(vec2))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pLightTex);
+}
+
+// For controlling texture mapping ----------------
+void CShape::SetMirror(bool uAxis, bool vAxis) // U軸 與 V軸 是否要鏡射
+{
+	if (uAxis) {
+		if (vAxis) { // U V 軸同時鏡射
+			for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
+				m_pTex[i].x -= 1.0f; m_pTex[i].y -= 1.0f;
+			}
+		}
+		else { // 只有 U 軸鏡射
+			for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
+				m_pTex[i].x -= 1.0f; // x 就是 U 軸
+			}
+		}
+	}
+	else if (vAxis) { // 只有 V 軸鏡射
+		for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
+			m_pTex[i].y -= 1.0f; // y 為 V 軸
+		}
+	}
+	else;
+	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex); // vertcies' Color
+
 }
