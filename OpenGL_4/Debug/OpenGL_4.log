@@ -1,3 +1,11 @@
 ﻿  Room.cpp
+  正在產生程式碼...
+  正在編譯...
+  HW3.cpp
+  正在產生程式碼...
+SOIL.lib(image_DXT.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SOIL.lib(image_DXT.obj)' 或位於 'D:\Program\OpenGL_HW3\Debug\vc110.pdb')，當做沒有偵錯資訊，連結物件
+SOIL.lib(image_helper.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SOIL.lib(image_helper.obj)' 或位於 'D:\Program\OpenGL_HW3\Debug\vc110.pdb')，當做沒有偵錯資訊，連結物件
+SOIL.lib(SOIL.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SOIL.lib(SOIL.obj)' 或位於 'D:\Program\OpenGL_HW3\Debug\vc110.pdb')，當做沒有偵錯資訊，連結物件
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SOIL.lib(stb_image_aug.obj)' 或位於 'D:\Program\OpenGL_HW3\Debug\vc110.pdb')，當做沒有偵錯資訊，連結物件
   OpenGL_4.vcxproj -> D:\Program\OpenGL_HW3\Debug\OpenGL_4.exe
   OpenGL_4.vcxproj -> D:\Program\OpenGL_HW3\Debug\OpenGL_4.pdb (Full PDB)

@@ -1,13 +1,16 @@
 #include "Room.h"
-GLuint g_uiFTexID[4]; // 三個物件分別給不同的貼圖
-int g_iTexWidth, g_iTexHeight;
 
 Room::Room(vec4 pos)
 {
-	mat4 mxT;
-	vec4 vT, vColor;
 	roomPos = pos;
 	// 產生物件的實體
+
+	Create();
+}
+
+void Room::Create() {
+	vec4 vT;
+
 	vT.x = 0; vT.y = 0; vT.z = 0;
 	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0, roomPos);
 	_pFloor->SetTextureLayer(DIFFUSE_MAP);
@@ -77,12 +80,6 @@ Room::Room(vec4 pos)
 	_pBench[2]->SetTRSMatrix(Translate(vec4(0, 0.0f, -30.0f, 1))*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
 	_pBench[2]->SetMaterials(vec4(0), vec4(1.0f, 1.0f, 1.0f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	_pBench[2]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
-
-	auto texturepool = TexturePool::create();
-	g_uiFTexID[0] = texturepool->AddTexture("texture/checker.png");
-	g_uiFTexID[1] = texturepool->AddTexture("texture/lightMap1.png");
-	g_uiFTexID[2] = texturepool->AddTexture("texture/Masonry.Brick.png");
-	g_uiFTexID[3] = texturepool->AddTexture("texture/Masonry.Brick.normal1.png");
 }
 
 void Room::SetProjectionMatrix(mat4 &mpx)

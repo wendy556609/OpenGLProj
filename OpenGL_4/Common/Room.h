@@ -17,6 +17,8 @@ public:
 	Room(vec4 pos = vec4(0, 0, 0, 1));
 	~Room();
 
+	void Create();
+
 	void SetProjectionMatrix(mat4 &mpx);
 	void SetViewMatrix(mat4 &mvx);
 	void Update(LightSource *light, float delta);

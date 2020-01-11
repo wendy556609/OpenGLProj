@@ -7,7 +7,8 @@
 CQuad::CQuad()
 {
 	m_iNumVtx = QUAD_NUM;
-	m_pPoints = NULL; m_pNormals = NULL; m_pTex = NULL; m_pLightTex = NULL;
+	m_pPoints = NULL; m_pNormals = NULL; m_pTex = NULL;
+	m_pLightTex = NULL; m_pNormalTex = NULL; m_pTangentV = NULL;
 
 	m_pPoints  = new vec4[m_iNumVtx];
 	m_pNormals = new vec3[m_iNumVtx];

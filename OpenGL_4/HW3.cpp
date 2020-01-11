@@ -203,12 +203,16 @@ void SetBtn() {
 void GL_Display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the window
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	room->Draw();
 
 	glDisable(GL_DEPTH_TEST);
 	for (int i = 0; i < 4; i++) g_p2DBtn[i]->Draw();
 	glEnable(GL_DEPTH_TEST);
+
+	glDisable(GL_BLEND);
 
 	glutSwapBuffers();	// ец┤л Frame Buffer
 }
