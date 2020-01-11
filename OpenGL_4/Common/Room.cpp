@@ -2,10 +2,25 @@
 
 Room::Room(vec4 pos)
 {
+	vec4 vT;
 	roomPos = pos;
 	// 產生物件的實體
+	g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 
 	Create();
+
+	auto camera = Camera::getInstance();
+	vT.x = 0.0f; vT.y = 10.0f; vT.z = -10;
+	Test = new ModelPool("Model/Sphere.obj", Type_3DMax);
+	Test->SetCubeMapTexName(1);
+	Test->SetViewPosition(camera->getViewPosition());
+	Test->SetShaderName("vsCubeMapping.glsl", "fsCubeMapping.glsl");
+	Test->SetShader();
+	Test->SetTRSMatrix(Translate(vT)*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
+	Test->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.85f, 0.85f, 0.85f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	Test->SetKaKdKsShini(0, 0.8f, 0.5f, 1);
+	Test->SetColor(vec4(0.9f, 0.9f, 0.9f, 1.0f));
+	Test->SetTextureLayer(DIFFUSE_MAP);
 }
 
 void Room::Create() {
@@ -46,13 +61,6 @@ void Room::Create() {
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
 	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
 	_BackWall->SetTrigger(false);
-
-	vT.x = 0.0f; vT.y = 10.0f; vT.z = -10;
-	Test = new ModelPool("Model/Cube1.obj", Type_3DMax);
-	Test->SetTRSMatrix(Translate(vT)*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
-	Test->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	Test->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
-	Test->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
 
 	////Model
 
@@ -120,6 +128,8 @@ void Room::SetViewMatrix(mat4 &mvx) {
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
 
+	auto camera = Camera::getInstance();
+	Test->SetViewPosition(camera->getViewPosition());
 	Test->SetViewMatrix(mvx);
 }
 
@@ -203,10 +213,10 @@ void Room::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[2]);
-	glActiveTexture(GL_TEXTURE2); // select active texture 0
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[3]);
+	glActiveTexture(GL_TEXTURE0); // select active texture 0
+	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[6]); // 與 Diffuse Map 結合
+	glActiveTexture(GL_TEXTURE1); // select active texture 1
+	glBindTexture(GL_TEXTURE_CUBE_MAP, g_uiSphereCubeMap);
 	Test->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

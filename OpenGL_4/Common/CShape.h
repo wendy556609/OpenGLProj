@@ -43,6 +43,8 @@ protected:
 	GLuint  m_uiProgram;
 	GLuint  m_uiBuffer;
 	GLuint  m_uiTexLayer;	// 貼圖的層次，預設就是一層 diffuse
+	GLuint	m_uiCubeMap, m_uiViewPos, m_uiTRS;
+	GLuint  m_uiCubeMapTexName;  // 傳入 pixel shader 中的 Cube map 的貼圖編號， 
 
 	//API
 	point4  m_vLightInView[LightCount];	 // 光源在世界座標的位置
@@ -60,6 +62,7 @@ protected:
 
 	LightSource m_Light1;
 
+	point4  m_v4Eye;
 	//Light
 	color4 m_Diffuse[LightCount];
 	color4 m_AmbientProduct[LightCount];
@@ -128,6 +131,12 @@ public:
 	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };
 	bool GetTrigger() { return _collider.GetTrigger(); };
 
+	void SetCubeMapTexName(GLuint uiTexName) {
+		m_uiCubeMapTexName = uiTexName;
+	}
+	void SetViewPosition(point4 vEye) {
+		m_v4Eye = vEye;
+	}
 };
 
 #endif

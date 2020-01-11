@@ -126,6 +126,15 @@ void CShape::SetShader(GLuint uiShaderHandle)
 	m_uiTexLayer = glGetUniformLocation(m_uiProgram, "iTexLayer");
 	glUniform1i(m_uiTexLayer, m_iTexLayer);	// 貼圖的個數，預設為 1，直接傳入 pixel shader
 
+	m_uiCubeMap = glGetUniformLocation(m_uiProgram, "cubeMap");
+	glUniform1i(m_uiCubeMap, m_uiCubeMapTexName);
+
+	m_uiViewPos = glGetUniformLocation(m_uiProgram, "ViewPos");
+	glUniform4fv(m_uiViewPos, 1, m_v4Eye);
+
+	m_uiTRS = glGetUniformLocation(m_uiProgram, "TRSMatrix");
+	glUniformMatrix4fv(m_uiTRS, 1, GL_TRUE, m_mxTRS);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -283,6 +292,9 @@ void CShape::DrawingSetShader()
 		}
 		glUniform1f(m_uiShininess, m_Material.shininess);
 		glUniform1i(m_uiTexLayer, m_iTexLayer);
+
+		glUniform4fv(m_uiViewPos, 1, m_v4Eye);
+		glUniformMatrix4fv(m_uiTRS, 1, GL_TRUE, m_mxTRS);
 #endif
 }
 
@@ -314,6 +326,9 @@ void CShape::DrawingWithoutSetShader()
 		}
 		glUniform1f(m_uiShininess, m_Material.shininess);
 		glUniform1i(m_uiTexLayer, m_iTexLayer);
+
+		glUniform4fv(m_uiViewPos, 1, m_v4Eye);
+		glUniformMatrix4fv(m_uiTRS, 1, GL_TRUE, m_mxTRS);
 #endif
 }
 

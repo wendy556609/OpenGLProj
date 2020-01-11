@@ -122,8 +122,10 @@
     <ClCompile Include="PngLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fsCubeMapping.glsl" />
     <None Include="fsPerPixelLighting.glsl" />
     <None Include="fsVtxColor.glsl" />
+    <None Include="vsCubeMapping.glsl" />
     <None Include="vsPerPixelLighting.glsl" />
     <None Include="vsVtxColor.glsl" />
   </ItemGroup>

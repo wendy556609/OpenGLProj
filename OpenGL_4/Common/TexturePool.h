@@ -5,6 +5,7 @@
 #define CC_SAFE_DELETE_ARRAY(p)     do { if(p) { delete[] (p); (p) = nullptr; } } while(0)
 
 #include "../header/Angel.h"
+#include "../PngLoader.h"
 
 #define	TEXTUREPOOL_MAX 100
 

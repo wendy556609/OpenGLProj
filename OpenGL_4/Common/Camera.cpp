@@ -117,3 +117,8 @@ Camera::Type Camera::getProjectionType()
 {
 	return _type;
 }
+
+const vec4& Camera::getViewPosition() const	// ¨úªº VP ¯x°}
+{
+	return _viewPosition;
+}

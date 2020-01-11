@@ -157,6 +157,12 @@
     <None Include="vsVtxColor.glsl">
       <Filter>原始程式檔</Filter>
     </None>
+    <None Include="vsCubeMapping.glsl">
+      <Filter>原始程式檔</Filter>
+    </None>
+    <None Include="fsCubeMapping.glsl">
+      <Filter>原始程式檔</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SOIL\Debug\SOIL.lib">

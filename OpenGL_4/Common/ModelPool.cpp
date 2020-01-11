@@ -25,7 +25,7 @@ ModelPool::ModelPool(const char* path, char type) {
 		m_pTex[i] = vec2(colors[i * 3], colors[i * 3 + 1]);
 		m_pLightTex[i] = vec2(colors[i * 3], colors[i * 3 + 1]);
 		m_pNormalTex[i] = vec2(colors[i * 3], colors[i * 3 + 1]);
-		m_pColors[i] = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		m_pColors[i] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	for (int i = 0; i < m_iNumVtx; i += 3) { // 三個 vertex 一組
@@ -50,7 +50,7 @@ ModelPool::ModelPool(const char* path, char type) {
 	
 	SetShaderName("vsPerPixelLighting.glsl", "fsPerPixelLighting.glsl");
 
-	SetMaterials(vec4(0), vec4(1.0f, 1.0, 1.0, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	SetMaterials(vec4(0,0,0,1), vec4(1.0f, 1.0, 1.0, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 
 	SetShader();

@@ -1,5 +1,4 @@
 #include "TexturePool.h"
-#include "../PngLoader.h"
 
 TexturePool* TexturePool::_pTexturePool = nullptr;
 

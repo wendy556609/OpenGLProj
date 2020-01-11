@@ -31,6 +31,7 @@ public:
 	const mat4& getProjectionMatrix(bool &bProj) const;	// 取得投影矩陣
 	const mat4& getViewMatrix(bool &bView) const;			// 取得 View Matrix
 	const mat4& getViewProjectionMatrix() const;	// 取的 VP 矩陣
+	const vec4& getViewPosition() const;	// 取的 VP 矩陣
 
 	Collider GetCollider() { return _collider; };
 

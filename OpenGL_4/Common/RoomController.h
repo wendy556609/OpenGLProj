@@ -13,7 +13,8 @@ class RoomController
 private:
 	
 public:
-	GLuint g_uiFTexID[6]; // 三個物件分別給不同的貼圖
+	GLuint g_uiFTexID[7]; // 三個物件分別給不同的貼圖
+	GLuint g_uiSphereCubeMap;
 	int g_iTexWidth, g_iTexHeight;
 	// For Objects
 	Flat      *_pFloor, *_pTop;
@@ -41,6 +42,7 @@ public:
 		g_uiFTexID[3] = texturepool->AddTexture("texture/Masonry.Brick.normal1.png");
 		g_uiFTexID[4] = texturepool->AddTexture("texture/wi_tata.png");
 		g_uiFTexID[5] = texturepool->AddTexture("texture/wi_tata_normal.png");
+		g_uiFTexID[6] = texturepool->AddTexture("texture/metal.png");
 	};
 
 	virtual void SetProjectionMatrix(mat4 &mpx) = 0;
