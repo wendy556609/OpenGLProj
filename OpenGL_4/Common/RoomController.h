@@ -43,6 +43,8 @@ public:
 		g_uiFTexID[4] = texturepool->AddTexture("texture/wi_tata.png");
 		g_uiFTexID[5] = texturepool->AddTexture("texture/wi_tata_normal.png");
 		g_uiFTexID[6] = texturepool->AddTexture("texture/metal.png");
+
+		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	};
 
 	virtual void SetProjectionMatrix(mat4 &mpx) = 0;

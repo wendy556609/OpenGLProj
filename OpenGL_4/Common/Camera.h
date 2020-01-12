@@ -17,8 +17,15 @@ public:
 	};
 
 	Collider _collider;
-	bool isTouch;
+	bool Room1isTouch;
+	bool Room2isTouch;
+	bool Room3isTouch;
+	bool Room4isTouch;
+	bool Room5isTouch;
+	bool Room6isTouch;
 	vec4 prePos;
+
+	vec4 _front;
 
 	void updatePerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
 	void updateOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);

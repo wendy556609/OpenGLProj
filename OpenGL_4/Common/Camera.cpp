@@ -6,7 +6,12 @@ Camera::Camera() {
 	_type = Type::PERSPECTIVE;
 	_bViewDirty = true;
 	_bProjectionDirty = true;
-	isTouch = false;
+	Room1isTouch = false;
+	Room2isTouch = false;
+	Room3isTouch = false;
+	Room4isTouch = false;
+	Room5isTouch = false;
+	Room6isTouch = false;
 	_collider.Init(1.0f, 1.0f, 1.0f, vec4(0.0f));
 }
 

@@ -99,6 +99,11 @@ protected:
 public:
 	Collider _collider;
 
+	bool isTurn;
+	mat4 turn;
+
+	vec4 _normal;
+
 	CShape();
 
 	void SetAPI();

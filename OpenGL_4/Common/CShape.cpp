@@ -23,6 +23,9 @@ CShape::CShape()
 
 	m_iTexLayer = NONE_MAP;		// 預設有0張 Diffuse 貼圖
 
+	isTurn = false;
+	turn = mat4{ 0,0,0,1 };
+
 	m_pPoints = nullptr; 	m_pNormals = nullptr; 	m_pColors = nullptr; 	m_pTex = nullptr; 
 	m_pLightTex = nullptr;	 m_pNormalTex = nullptr;	 m_pTangentV = nullptr;
 }
@@ -348,12 +351,25 @@ void CShape::SetViewMatrix(mat4 &mat)
 {
 	m_mxView = mat;
 	m_bViewUpdated = true;
+	//if (isTurn) {
+	//	turn[0][0] = -mat[0][0];
+	//	turn[2][0] = -mat[2][0];
+	//	turn[1][1] = 1;
+	//	turn[0][2] = -mat[0][2];
+	//	turn[2][2] = -mat[2][2];
+	//	//turn[0][1] = -mat[0][1];
+	//	//turn[1][2] = -mat[1][2];
+	//	//turn[2][1] = -mat[2][1];
+	//	//turn[3][2] = -mat[3][2];
+	//}
 }
 
 void CShape::SetTRSMatrix(mat4 &mat)
 {
 	m_mxTRS = mat;
 	m_bTRSUpdated = true;
+
+	_normal = normalize(mat * _normal);
 }
 
 void CShape::SetProjectionMatrix(mat4 &mat)
@@ -396,8 +412,6 @@ void CShape::Update(const LightSource *Lights, float dt)
 			m_mxView._m[0].z, m_mxView._m[1].z, m_mxView._m[2].z);
 		m_bViewUpdated = m_bTRSUpdated = false;
 	}
-
-	
 
 	for (int i = 0; i < LightCount; i++)
 	{

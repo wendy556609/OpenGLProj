@@ -88,6 +88,11 @@
     <ClInclude Include="Common\Flat.h" />
     <ClInclude Include="Common\ModelPool.h" />
     <ClInclude Include="Common\Room.h" />
+    <ClInclude Include="Common\Room1.h" />
+    <ClInclude Include="Common\Room2.h" />
+    <ClInclude Include="Common\Room3.h" />
+    <ClInclude Include="Common\Room4.h" />
+    <ClInclude Include="Common\Room5.h" />
     <ClInclude Include="Common\RoomController.h" />
     <ClInclude Include="Common\Sphere.h" />
     <ClInclude Include="Common\Sprite.h" />
@@ -112,6 +117,11 @@
     <ClCompile Include="Common\Flat.cpp" />
     <ClCompile Include="Common\ModelPool.cpp" />
     <ClCompile Include="Common\Room.cpp" />
+    <ClCompile Include="Common\Room1.cpp" />
+    <ClCompile Include="Common\Room2.cpp" />
+    <ClCompile Include="Common\Room3.cpp" />
+    <ClCompile Include="Common\Room4.cpp" />
+    <ClCompile Include="Common\Room5cpp.cpp" />
     <ClCompile Include="Common\Sphere.cpp" />
     <ClCompile Include="Common\Sprite.cpp" />
     <ClCompile Include="Common\TexturePool.cpp" />

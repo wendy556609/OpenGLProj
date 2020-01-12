@@ -1,23 +1,19 @@
-#ifndef ROOM_H
-#define ROOM_H
+#ifndef ROOM3_H
+#define ROOM3_H
 #include "RoomController.h"
 
-#define DoorCount 2
+#define DoorCount 3
 
-class Room : public RoomController
+class Room3 : public RoomController
 {
 private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
-	ModelPool *Test;
 	ModelPool *_pTeaPot;
 	ModelPool *_pTable;
-	ModelPool *_pBench[3];
-
-	Flat  *Aimal;
 public:
-	Room(vec4 pos = vec4(0, 0, 0, 1));
-	~Room();
+	Room3(vec4 pos = vec4(0, 0, 0, 1));
+	~Room3();
 
 	void Create();
 

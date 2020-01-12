@@ -87,6 +87,21 @@
     <ClInclude Include="Common\TexturePool.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Room1.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Room2.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Room3.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Room4.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Room5.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\CLineSegment.cpp">
@@ -141,6 +156,21 @@
       <Filter>Loader</Filter>
     </ClCompile>
     <ClCompile Include="Common\TexturePool.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Room1.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Room2.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Room3.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Room4.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Room5cpp.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>

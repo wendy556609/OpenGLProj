@@ -91,6 +91,11 @@ for(int i = 0 ;i < PointNum;i++){
 			// Specular Color : Is = Ks * Material.specular * Ls * (R dot V)^Shininess;
 			if( RdotV > 0 ) specular = SpecularProduct[i] * pow(RdotV, fShininess) ;
 		}
+		else{
+			ambient = vec4(0.0,0.0,0.0,1.0);
+			diffuse =  vec4(0.0,0.0,0.0,1.0);
+			specular =  vec4(0.0,0.0,0.0,1.0);
+		}
 		}
 	}
 		LightingColor = ambient + diffuse + specular;  // ≠p∫‚√C¶‚ ambient + diffuse + specular;

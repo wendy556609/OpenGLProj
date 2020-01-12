@@ -10,14 +10,16 @@ class Flat
 private:
 	CQuad *_pSquares;
 	vec3    _iGridSize;
-	GLuint _uiShaderHandle;
-	vec4  _pos;
+	GLuint _uiShaderHandle;	
 
 public:
 	Flat(char direct = 'L', vec3 iSize = vec3(0), vec4 pos = vec4(0.0f), float angle = 0.0f, vec4 roomPos = vec4(0.0f));
 	~Flat();
 
+	vec4  _pos;
+
 	Collider GetCollider() { return _pSquares->GetCollider(); };
+	vec4 GetNormal() { return _pSquares->_normal; };
 	void SetTrigger(bool trigger);
 	bool GetTrigger() { return _pSquares->GetTrigger(); };
 
