@@ -131,6 +131,7 @@ public:
 	void SetTiling(float uTiling, float vTiling);
 	void SetLightMapTiling(float uTiling, float vTiling);
 	void SetMirror(bool uAxis, bool vAxis);
+	void SetTurn(int angle);
 
 	Collider GetCollider() { return _collider; };
 	void SetTrigger(bool trigger) { _collider.SetTrigger(trigger); };

@@ -12,6 +12,8 @@ private:
 	vec3    _iGridSize;
 	GLuint _uiShaderHandle;	
 
+	mat4 mT;
+
 public:
 	Flat(char direct = 'L', vec3 iSize = vec3(0), vec4 pos = vec4(0.0f), float angle = 0.0f, vec4 roomPos = vec4(0.0f));
 	~Flat();
@@ -39,6 +41,7 @@ public:
 	void SetLightMapTiling(float uTiling, float vTiling);
 	void SetTextureLayer(int texlayer);
 	void SetMirror(bool uAxis, bool vAxis);
+	void SetTurn(int angle);
 };
 
 #endif

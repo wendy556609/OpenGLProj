@@ -46,7 +46,6 @@ TexturePool* TexturePool::getInstance()
 
 GLuint TexturePool::AddTexture(char *texName)
 {
-	Print(_iNumTextures);
 	// 先將 texName 複製一份到 _pool 中
 	int len = strlen(texName);
 	_Pool[_iNumTextures].TextureName = new char[len + 1];

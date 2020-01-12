@@ -103,7 +103,7 @@ LightSource g_Light1[LightCount] = {
 		1	,	// constantAttenuation	(a + bd + cd^2)^-1 中的 a, d 為光源到被照明點的距離
 		0	,	// linearAttenuation	    (a + bd + cd^2)^-1 中的 b
 		0	,	// quadraticAttenuation (a + bd + cd^2)^-1 中的 c
-		1
+		0
 	},
 	{
 		1,
@@ -120,7 +120,7 @@ LightSource g_Light1[LightCount] = {
 		1	,	// constantAttenuation	(a + bd + cd^2)^-1 中的 a, d 為光源到被照明點的距離
 		0	,	// linearAttenuation	    (a + bd + cd^2)^-1 中的 b
 		0	,	// quadraticAttenuation (a + bd + cd^2)^-1 中的 c
-		1
+		0
 	},
 	{
 		1,
@@ -137,7 +137,7 @@ LightSource g_Light1[LightCount] = {
 		1	,	// constantAttenuation	(a + bd + cd^2)^-1 中的 a, d 為光源到被照明點的距離
 		0	,	// linearAttenuation	    (a + bd + cd^2)^-1 中的 b
 		0	,	// quadraticAttenuation (a + bd + cd^2)^-1 中的 c
-		1
+		0
 	}
 };
 

@@ -17,19 +17,22 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 
 	SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.5f, 0.5f, 0.5f, 1), vec4(0.5f, 0.5f, 0.5f, 1.0f));
 	SetKaKdKsShini(0, 0.8f, 0.5f, 1);
-
+	mT = 1;
 	mxT = Translate(_pos);
 	if (direct == 'L' || direct == 'l' || direct == 'R' || direct == 'r') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle));
 		_pSquares->_collider.Init(iSize.x, iSize.y / 2, iSize.z / 2, _pos);
+		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle);
 	}
 	else if (direct == 'F' || direct == 'f' || direct == 'B' || direct == 'b') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
 		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, iSize.z, _pos);
+		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
 	}
 	else if (direct == 'T' || direct == 't' || direct == 'M' || direct == 'm') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
 		_pSquares->_collider.Init(iSize.x / 2, iSize.y, iSize.z / 2, _pos);
+		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
 	}
 
 	SetColor(vec4(0.6f));
@@ -106,4 +109,8 @@ void Flat::SetTextureLayer(int texlayer)
 void Flat::SetMirror(bool uAxis, bool vAxis) // U¶b »P V¶b ¬O§_­nÃè®g
 {
 	_pSquares->SetMirror(uAxis, vAxis);
+}
+
+void Flat::SetTurn(int angle) {
+	_pSquares->SetTurn(angle);
 }

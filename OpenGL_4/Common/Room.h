@@ -9,12 +9,8 @@ class Room : public RoomController
 private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
-	ModelPool *Test;
-	ModelPool *_pTeaPot;
-	ModelPool *_pTable;
-	ModelPool *_pBench[3];
 
-	Flat  *Aimal;
+	ModelPool *babyCot;
 public:
 	Room(vec4 pos = vec4(0, 0, 0, 1));
 	~Room();

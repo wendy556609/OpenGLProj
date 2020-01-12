@@ -468,21 +468,51 @@ void CShape::SetMirror(bool uAxis, bool vAxis) // U軸 與 V軸 是否要鏡射
 		if (vAxis) { // U V 軸同時鏡射
 			for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
 				m_pTex[i].x -= 1.0f; m_pTex[i].y -= 1.0f;
+				m_pTex[i].x *= -1; m_pTex[i].y *= -1;
 			}
 		}
 		else { // 只有 U 軸鏡射
 			for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
 				m_pTex[i].x -= 1.0f; // x 就是 U 軸
+				m_pTex[i].x *= -1;
 			}
 		}
 	}
 	else if (vAxis) { // 只有 V 軸鏡射
 		for (int i = 0; i < m_iNumVtx; i++) { // 將每一個 vertex 的貼圖座標用 1 去減
 			m_pTex[i].y -= 1.0f; // y 為 V 軸
+			m_pTex[i].y *= -1;
 		}
 	}
-	else;
 	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
 	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex); // vertcies' Color
 
+}
+
+void CShape::SetTurn(int angle) {
+	vec2 temp;
+	if (angle == 90) {//順時針轉
+		for (int i = 0; i < m_iNumVtx; i+=6) { // 將每一個 vertex 的貼圖座標用 1 去減
+			temp = m_pTex[i];
+			m_pTex[i] = m_pTex[i + 1];
+			m_pTex[i + 1] = m_pTex[i + 2];
+			m_pTex[i + 2] = m_pTex[i + 5];
+			m_pTex[i + 3] = m_pTex[i + 0];
+			m_pTex[i + 4] = m_pTex[i + 2];
+			m_pTex[i + 5] = temp;
+		}
+	}
+	else if (angle == -90) {//逆時針轉
+		for (int i = 0; i < m_iNumVtx; i += 6) { // 將每一個 vertex 的貼圖座標用 1 去減
+			temp = m_pTex[i + 5];
+			m_pTex[i + 5] = m_pTex[i + 2];
+			m_pTex[i + 4] = m_pTex[i + 1];
+			m_pTex[i + 3] = temp;
+			m_pTex[i + 2] = m_pTex[i + 4];
+			m_pTex[i + 1] = m_pTex[i];
+			m_pTex[i] = m_pTex[i + 3];
+		}
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, m_uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec4) + sizeof(vec3) + sizeof(vec4))*m_iNumVtx, sizeof(vec2)*m_iNumVtx, m_pTex); // vertcies' Color
 }
