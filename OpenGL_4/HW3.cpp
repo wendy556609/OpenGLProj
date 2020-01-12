@@ -14,6 +14,8 @@
 #define VP_HALFHEIGHT 20.0f
 #define GRID_SIZE 300
 
+
+
 enum State
 {
 	Front,
@@ -509,7 +511,8 @@ void Move(float);
 
 void init(void)
 {
-
+	auto texture = Texture::create();
+	texture->SetTexture();
 	// 產生所需之 Model View 與 Projection Matrix
 
 	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -40.0f + roomPos1.z, 1.0f);
@@ -743,6 +746,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		for (int i = 0; i < 4; i++) delete g_p2DBtn[i];
 		Camera::getInstance()->destroyInstance();
 		TexturePool::getInstance()->destroyInstance();
+		Texture::getInstance()->destroyInstance();
 		exit(EXIT_SUCCESS);
 		break;
 	}

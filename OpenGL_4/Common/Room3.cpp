@@ -154,8 +154,9 @@ void Room3::DetectCollider() {
 
 void Room3::Draw()
 {
+	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[0]);
+	glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[0]);
 	//glActiveTexture(GL_TEXTURE1);
 	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
 	_pFloor->Draw();

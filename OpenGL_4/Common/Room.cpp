@@ -208,8 +208,9 @@ void Room::DetectCollider() {
 
 void Room::Draw()
 {
+	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[0]);
+	glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[0]);
 	//glActiveTexture(GL_TEXTURE1);
 	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
 	_pFloor->Draw();
@@ -230,13 +231,13 @@ void Room::Draw()
 	_door[1]->Draw();
 
 	glActiveTexture(GL_TEXTURE0); // select active texture 0
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[4]); // 與 Diffuse Map 結合
+	glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[4]); // 與 Diffuse Map 結合
 	Aimal->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0); // select active texture 0
-	glBindTexture(GL_TEXTURE_2D, g_uiFTexID[6]); // 與 Diffuse Map 結合
+	glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[6]); // 與 Diffuse Map 結合
 	glActiveTexture(GL_TEXTURE1); // select active texture 1
-	glBindTexture(GL_TEXTURE_CUBE_MAP, g_uiSphereCubeMap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture->g_uiSphereCubeMap);
 	Test->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

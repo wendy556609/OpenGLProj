@@ -7,14 +7,13 @@
 #include "Cube.h"
 #include "Sphere.h"
 #include "ModelPool.h"
+#include "Texture.h"
 
 class RoomController
 {
 private:
 	
 public:
-	GLuint g_uiFTexID[7]; // 三個物件分別給不同的貼圖
-	GLuint g_uiSphereCubeMap;
 	int g_iTexWidth, g_iTexHeight;
 	// For Objects
 	Flat      *_pFloor, *_pTop;
@@ -23,7 +22,7 @@ public:
 
 	vec4 roomPos;
 
-	RoomController() { SetTexture(); };
+	RoomController() {};
 	~RoomController() {
 		if (_pTop != NULL)delete _pTop;
 		if(_pFloor != NULL)delete _pFloor;
@@ -34,18 +33,6 @@ public:
 	};
 
 	virtual void Create() = 0;
-	void SetTexture() {
-		auto texturepool = TexturePool::create();
-		g_uiFTexID[0] = texturepool->AddTexture("texture/checker.png");
-		g_uiFTexID[1] = texturepool->AddTexture("texture/lightMap1.png");
-		g_uiFTexID[2] = texturepool->AddTexture("texture/Masonry.Brick.png");
-		g_uiFTexID[3] = texturepool->AddTexture("texture/Masonry.Brick.normal1.png");
-		g_uiFTexID[4] = texturepool->AddTexture("texture/wi_tata.png");
-		g_uiFTexID[5] = texturepool->AddTexture("texture/wi_tata_normal.png");
-		g_uiFTexID[6] = texturepool->AddTexture("texture/metal.png");
-
-		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
-	};
 
 	virtual void SetProjectionMatrix(mat4 &mpx) = 0;
 	virtual void SetViewMatrix(mat4 &mvx) = 0;

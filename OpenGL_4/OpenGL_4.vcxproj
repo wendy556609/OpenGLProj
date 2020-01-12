@@ -97,6 +97,7 @@
     <ClInclude Include="Common\Sphere.h" />
     <ClInclude Include="Common\Sprite.h" />
     <ClInclude Include="Common\TexturePool.h" />
+    <ClInclude Include="Common\Texture.h" />
     <ClInclude Include="Common\Timer.h" />
     <ClInclude Include="Common\TypeDefine.h" />
     <ClInclude Include="Header\Angel.h" />
@@ -121,9 +122,10 @@
     <ClCompile Include="Common\Room2.cpp" />
     <ClCompile Include="Common\Room3.cpp" />
     <ClCompile Include="Common\Room4.cpp" />
-    <ClCompile Include="Common\Room5cpp.cpp" />
+    <ClCompile Include="Common\Room5.cpp" />
     <ClCompile Include="Common\Sphere.cpp" />
     <ClCompile Include="Common\Sprite.cpp" />
+    <ClCompile Include="Common\Texture.cpp" />
     <ClCompile Include="Common\TexturePool.cpp" />
     <ClCompile Include="Common\Timer.cpp" />
     <ClCompile Include="HW3.cpp" />
