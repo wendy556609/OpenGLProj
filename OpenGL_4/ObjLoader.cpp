@@ -1,6 +1,6 @@
 #include "ObjLoader.h"
 
-bool LoadObj(const char*  path, std::vector<float> *vertices, std::vector<float> *colors, std::vector<float> *normals, char type) {
+bool LoadObj(const char*  path, std::vector<float> *vertices, std::vector<float> *colors, std::vector<float> *normals) {
 	char lineHeader[1000];
 	std::vector<float> temp_vertices;
 	std::vector<float> temp_colors;
@@ -35,22 +35,12 @@ bool LoadObj(const char*  path, std::vector<float> *vertices, std::vector<float>
 			temp_normals.push_back(normal[2]);
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
-			if (type == 'M') {
-				int matches = fscanf(objfile, "%u/%u/%u %u/%u/%u %u/%u/%u", &index[0][0], &index[1][0], &index[2][0], &index[0][1], &index[1][1], &index[2][1], &index[0][2], &index[1][2], &index[2][2]);
-				//printf("matches=%d,f=%u\n", matches, f++);
-				if (matches != 9) {
-					printf("Type of file is different !\n");
-					return false;
-				}
+			int matches = fscanf(objfile, "%u/%u/%u %u/%u/%u %u/%u/%u", &index[0][0], &index[1][0], &index[2][0], &index[0][1], &index[1][1], &index[2][1], &index[0][2], &index[1][2], &index[2][2]);
+			//printf("matches=%d,f=%u\n", matches, f++);
+			if (matches != 9) {
+				printf("Type of file is different !\n");
+				return false;
 			}
-			//else if(type == 'B') {
-			//	int matches = fscanf(objfile, "%u//%u %u//%u %u//%u", &index[0][0], &index[2][0], &index[0][1], &index[2][1], &index[0][2], &index[2][2]);
-			//	//printf("matches=%d,f=%u\n", matches, f++);
-			//	if (matches != 6) {
-			//		printf("Type of file is different !\n");
-			//		return false;
-			//	}
-			//}
 			
 			indices.push_back(index[0][0]);
 			indices.push_back(index[1][0]);

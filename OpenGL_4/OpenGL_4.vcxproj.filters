@@ -105,6 +105,9 @@
     <ClInclude Include="Common\Texture.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Model.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\CLineSegment.cpp">
@@ -177,6 +180,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Common\Room5.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Model.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>

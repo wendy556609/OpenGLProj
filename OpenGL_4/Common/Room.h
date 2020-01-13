@@ -10,8 +10,8 @@ private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
 
-	ModelPool *babyCot;
-	ModelPool *drawer[3];
+	Model *babyCot;
+	Model *drawer[3];
 	Flat *parant;
 	Flat *babyUse[4];
 public:

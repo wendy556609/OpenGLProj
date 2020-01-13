@@ -57,6 +57,7 @@ void Room1::Create() {
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
+	auto modelNum = ModelNum::getInstance();
 	////Model
 	board = new Flat('R', vec3(1, 25, 40), vec4(49.5f, 20.0f, 0, 1), 90, roomPos);
 	board->SetTextureLayer(DIFFUSE_MAP);
@@ -73,22 +74,22 @@ void Room1::Create() {
 	teacher->SetTiling(1, 1);
 	teacher->SetTurn(90);
 
-	desk[0] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[0] = new Model(modelNum->desk);
 	desk[0]->SetTextureLayer(DIFFUSE_MAP);
 	desk[0]->SetTiling(1, 1);
 	desk[0]->SetTRSMatrix(Translate(vec4(0, 0, 15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
 
-	desk[1] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[1] = new Model(modelNum->desk);
 	desk[1]->SetTextureLayer(DIFFUSE_MAP);
 	desk[1]->SetTiling(1, 1);
 	desk[1]->SetTRSMatrix(Translate(vec4(0, 0, -15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
 
-	desk[2] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[2] = new Model(modelNum->desk);
 	desk[2]->SetTextureLayer(DIFFUSE_MAP);
 	desk[2]->SetTiling(1, 1);
 	desk[2]->SetTRSMatrix(Translate(vec4(-20, 0, 15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
 	
-	desk[3] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[3] = new Model(modelNum->desk);
 	desk[3]->SetTextureLayer(DIFFUSE_MAP);
 	desk[3]->SetTiling(1, 1);
 	desk[3]->SetTRSMatrix(Translate(vec4(-20, 0, -15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));

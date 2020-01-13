@@ -84,29 +84,30 @@ void Room::Create() {
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
+	auto modelNum = ModelNum::getInstance();
 	//Model
-	babyCot = new ModelPool("Model/BabyCot.obj", Type_3DMax);
+	babyCot = new Model(modelNum->babyCot);
 	babyCot->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Translate(roomPos)*Scale(0.5f, 0.5f, 0.5f));
 	babyCot->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	babyCot->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	babyCot->SetTextureLayer(DIFFUSE_MAP);
 	babyCot->SetTiling(1, 1);
 
-	drawer[0] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[0] = new Model(modelNum->drawer);
 	drawer[0]->SetTRSMatrix(Translate(vec4(0, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
 	drawer[0]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	drawer[0]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	drawer[0]->SetTextureLayer(DIFFUSE_MAP);
 	drawer[0]->SetTiling(1, 1);
 
-	drawer[1] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[1] = new Model(modelNum->drawer);
 	drawer[1]->SetTRSMatrix(Translate(vec4(35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
 	drawer[1]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	drawer[1]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	drawer[1]->SetTextureLayer(DIFFUSE_MAP);
 	drawer[1]->SetTiling(1, 1);
 
-	drawer[2] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[2] = new Model(modelNum->drawer);
 	drawer[2]->SetTRSMatrix(Translate(vec4(-35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
 	drawer[2]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	drawer[2]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);

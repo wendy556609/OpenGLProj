@@ -10,7 +10,7 @@ private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
 
-	ModelPool *workDesk;
+	Model *workDesk;
 	Flat *computer, *printer;
 	Flat *file[4];
 public:

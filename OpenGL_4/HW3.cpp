@@ -511,9 +511,12 @@ void init(void)
 {
 	auto texture = Texture::create();
 	texture->SetTexture();
+
+	auto modelNum = ModelNum::create();
+	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos3.x, 10.0f + roomPos3.y, -20.0f + roomPos3.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -745,6 +748,8 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		Camera::getInstance()->destroyInstance();
 		TexturePool::getInstance()->destroyInstance();
 		Texture::getInstance()->destroyInstance();
+		ModelNum::getInstance()->destroyInstance();
+		ModelPool::getInstance()->destroyInstance();
 		exit(EXIT_SUCCESS);
 		break;
 	}

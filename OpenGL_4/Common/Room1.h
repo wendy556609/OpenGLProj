@@ -11,7 +11,7 @@ private:
 	Flat *_door[DoorCount];
 
 	Flat *board, *stand, *teacher;
-	ModelPool *desk[4];
+	Model *desk[4];
 public:
 	Room1(vec4 pos = vec4(0, 0, 0, 1));
 	~Room1();

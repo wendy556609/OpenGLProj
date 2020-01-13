@@ -61,6 +61,7 @@ void Room2::Create() {
 	_door[2]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[2]->SetTrigger(true);
 
+	auto modelNum = ModelNum::getInstance();
 	////Model
 	computer = new Flat('F', vec3(10, 5, 1), vec4(0, 12.5f, 5.0f, 1), -90, roomPos);
 	computer->SetMirror(true, true);
@@ -92,7 +93,7 @@ void Room2::Create() {
 	file[3]->SetTextureLayer(DIFFUSE_MAP);
 	file[3]->SetTiling(1, 1);
 
-	workDesk = new ModelPool("Model/workDesk.obj", Type_3DMax);
+	workDesk = new Model(modelNum->workDesk);
 	workDesk->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Translate(roomPos)*RotateY(-90)*Scale(25.0f, 25.0f, 25.0f));
 	workDesk->SetMaterials(vec4(0.95f, 0.95f, 0.95f, 1), vec4(0.85f, 0.85f, 0.85f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	workDesk->SetKaKdKsShini(0, 0.8f, 0.5f, 1);

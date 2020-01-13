@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "Cube.h"
 #include "Sphere.h"
-#include "ModelPool.h"
+#include "Model.h"
 #include "Texture.h"
 
 class RoomController
