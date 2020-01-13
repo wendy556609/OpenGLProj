@@ -24,6 +24,29 @@ void Room1::Create() {
 	vT.x = -50.0f; vT.y = 25.0f; vT.z = 0;
 	_LeftWall = new Flat('L', vec3(1, 50, 100), vT, -90, roomPos);
 	_LeftWall->SetTrigger(false);
+	_LeftWall->SetTextureLayer(DIFFUSE_MAP);
+	_LeftWall->SetTiling(1, 1);
+	_LeftWall->SetTurn(-90);
+
+	vT.x = 50.0f; vT.y = 25.0f; vT.z = 0;
+	_RightWall = new Flat('R', vec3(1, 50, 100), vT, 90, roomPos);
+	_RightWall->SetTrigger(false);
+	_RightWall->SetTextureLayer(DIFFUSE_MAP);
+	_RightWall->SetTiling(1, 1);
+	_RightWall->SetTurn(90);
+
+	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
+	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
+	_FrontWall->SetTrigger(false);
+	_FrontWall->SetTextureLayer(DIFFUSE_MAP);
+	_FrontWall->SetTiling(5, 1);
+	_FrontWall->SetMirror(false, true);
+
+	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
+	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
+	_BackWall->SetTrigger(false);
+	_BackWall->SetTextureLayer(DIFFUSE_MAP);
+	_BackWall->SetTiling(5, 1);
 
 	vT.x = -49.5f; vT.y = 10.0f; vT.z = 0;
 	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
@@ -34,21 +57,40 @@ void Room1::Create() {
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
-	vT.x = 50.0f; vT.y = 25.0f; vT.z = 0;
-	_RightWall = new Flat('R', vec3(1, 50, 100), vT, 90, roomPos);
-	_RightWall->SetTrigger(false);
-
-	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
-	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
-	_FrontWall->SetTrigger(false);
-	//_FrontWall->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
-
-	vT.x = 0.0f; vT.y = 25.0f; vT.z = -50.0f;
-	_BackWall = new Flat('B', vec3(100, 50, 1), vT, 90, roomPos);
-	_BackWall->SetTrigger(false);
-
 	////Model
+	board = new Flat('R', vec3(1, 25, 40), vec4(49.5f, 20.0f, 0, 1), 90, roomPos);
+	board->SetTextureLayer(DIFFUSE_MAP);
+	board->SetTiling(1, 1);
+	board->SetTurn(90);
+
+	stand = new Flat('R', vec3(1, 15, 10), vec4(25.0f, 7.5f, 0, 1), 90, roomPos);
+	stand->SetTextureLayer(DIFFUSE_MAP);
+	stand->SetTiling(1, 1);
+	stand->SetTurn(90);
+
+
+	desk[0] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[0]->SetTextureLayer(DIFFUSE_MAP);
+	desk[0]->SetTiling(1, 1);
+	desk[0]->SetTRSMatrix(Translate(vec4(0, 0, 15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
+
+	desk[1] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[1]->SetTextureLayer(DIFFUSE_MAP);
+	desk[1]->SetTiling(1, 1);
+	desk[1]->SetTRSMatrix(Translate(vec4(0, 0, -15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
+
+	desk[2] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[2]->SetTextureLayer(DIFFUSE_MAP);
+	desk[2]->SetTiling(1, 1);
+	desk[2]->SetTRSMatrix(Translate(vec4(-20, 0, 15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
+	
+	desk[3] = new ModelPool("Model/Desk.obj", Type_3DMax);
+	desk[3]->SetTextureLayer(DIFFUSE_MAP);
+	desk[3]->SetTiling(1, 1);
+	desk[3]->SetTRSMatrix(Translate(vec4(-20, 0, -15, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.5f, 1.5f, 1.5f));
+
 }
+
 void Room1::SetProjectionMatrix(mat4 &mpx)
 {
 	_pFloor->SetProjectionMatrix(mpx);
@@ -57,10 +99,18 @@ void Room1::SetProjectionMatrix(mat4 &mpx)
 	_RightWall->SetProjectionMatrix(mpx);
 	_FrontWall->SetProjectionMatrix(mpx);
 	_BackWall->SetProjectionMatrix(mpx);
-	//Model
 
 	_door[0]->SetProjectionMatrix(mpx);
 	_door[1]->SetProjectionMatrix(mpx);
+	//Model
+	board->SetProjectionMatrix(mpx);
+	stand->SetProjectionMatrix(mpx);
+
+	for (int i = 0; i < 4; i++)
+	{
+		desk[i]->SetProjectionMatrix(mpx);
+	}
+
 }
 
 void Room1::SetViewMatrix(mat4 &mvx) {
@@ -70,9 +120,17 @@ void Room1::SetViewMatrix(mat4 &mvx) {
 	_RightWall->SetViewMatrix(mvx);
 	_FrontWall->SetViewMatrix(mvx);
 	_BackWall->SetViewMatrix(mvx);
-	//Model
+
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
+	//Model
+	board->SetViewMatrix(mvx);
+	stand->SetViewMatrix(mvx);
+
+	for (int i = 0; i < 4; i++)
+	{
+		desk[i]->SetViewMatrix(mvx);
+	}
 }
 
 void Room1::Update(LightSource *light, float delta) {
@@ -82,10 +140,17 @@ void Room1::Update(LightSource *light, float delta) {
 	_RightWall->Update(light, delta);
 	_FrontWall->Update(light, delta);
 	_BackWall->Update(light, delta);
-	//Model
 
 	_door[0]->Update(light, delta);
 	_door[1]->Update(light, delta);
+	//Model
+	board->Update(light, delta);
+	stand->Update(light, delta);
+
+	for (int i = 0; i < 4; i++)
+	{
+		desk[i]->Update(light, delta);
+	}
 
 	DetectCollider();
 }
@@ -130,23 +195,47 @@ void Room1::Draw()
 {
 	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[0]);
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
+	glBindTexture(GL_TEXTURE_2D, texture->Wood);
 	_pFloor->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_pTop->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->clock);
 	_LeftWall->Draw();
 	_RightWall->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->window);
 	_FrontWall->Draw();
 	_BackWall->Draw();
-	//Model
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 	_door[0]->Draw();
 	_door[1]->Draw();
+	//Model
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->board);
+	board->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->stand);
+	stand->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->desk);
+	for (int i = 0; i < 4; i++)
+	{
+		desk[i]->Draw();
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Room1::~Room1() {
 	if (_door[0] != NULL)delete _door[0];
 	if (_door[1] != NULL)delete _door[1];
+
+	if (board != NULL)delete board;
+	if (stand != NULL)delete stand;
+	for (int i = 0; i < 4; i++)
+	{
+		if (desk[i] != NULL)delete desk[i];
+	}
 }

@@ -143,9 +143,9 @@ LightSource g_Light2[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
-		color4(0.55f, 0.55f, 0.55f, 1.0f), // diffuse
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(0.0f + roomPos2.x, 15.0f + roomPos2.y, 15.0f + roomPos2.z, 1.0f),   // position
+		point4(0.0f + roomPos2.x, 15.0f + roomPos2.y, 0.0f + roomPos2.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
 		vec3(0.0f + roomPos2.x, 0.0f + roomPos2.y, 0.0f + roomPos2.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
@@ -513,7 +513,7 @@ void init(void)
 	texture->SetTexture();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
+	eye = point4(0.0f + roomPos2.x, 10.0f + roomPos2.y, -20.0f + roomPos2.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);

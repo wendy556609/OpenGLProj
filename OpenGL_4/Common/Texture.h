@@ -18,7 +18,8 @@ private:
 public:
 	GLuint g_uiFTexID[7]; // 三個物件分別給不同的貼圖
 	GLuint g_uiSphereCubeMap;
-	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant;
+	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant;//room1
+	GLuint board, stand, desk, window, clock;
 
 	static Texture* create();		// 建立 TexturePool 的實體
 	static Texture *getInstance();	// 取得  TexturePool 的實體
@@ -43,6 +44,11 @@ public:
 		babyUse[2] = texturepool->AddTexture("texture/naizei.png");
 		babyUse[3] = texturepool->AddTexture("texture/toy.png");
 		parant = texturepool->AddTexture("texture/parant.png");
+		board = texturepool->AddTexture("texture/board.png");
+		stand = texturepool->AddTexture("texture/stand.png");
+		desk = texturepool->AddTexture("texture/Desk.png");
+		window = texturepool->AddTexture("texture/schoolWall.png");
+		clock = texturepool->AddTexture("texture/clock.png");
 
 		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}
