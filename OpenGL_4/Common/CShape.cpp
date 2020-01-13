@@ -417,7 +417,7 @@ void CShape::Update(const LightSource *Lights, float dt)
 	{
 		m_AmbientProduct[i] = m_Material.ka * m_Material.ambient  * Lights[i].ambient;
 		lightType[i] = Lights[i].type;
-		m_LightDir[i] = m_mxMV3X3Final * Lights[i].spotDirection;
+		m_LightDir[i] = m_mxMV3X3Final * normalize(Lights[i].spotDirection);
 		m_SpotExponent[i] = Lights[i].spotExponent;
 		m_vLightInView[i] = m_mxView * Lights[i].position;
 		m_DiffuseProduct[i] = m_Material.kd * m_Material.diffuse  * Lights[i].diffuse;

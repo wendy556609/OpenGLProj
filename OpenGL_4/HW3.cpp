@@ -14,8 +14,6 @@
 #define VP_HALFHEIGHT 20.0f
 #define GRID_SIZE 300
 
-
-
 enum State
 {
 	Front,
@@ -74,9 +72,9 @@ LightSource g_Light1[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
-		color4(0.55f, 0.55f, 0.55f, 1.0f), // diffuse
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(0.0f + roomPos1.x, 15.0f + roomPos1.y, 15.0f + roomPos1.z, 1.0f),   // position
+		point4(0.0f + roomPos1.x, 15.0f + roomPos1.y, 0.0f + roomPos1.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
 		vec3(0.0f + roomPos1.x, 0.0f + roomPos1.y, 0.0f + roomPos1.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
@@ -515,7 +513,7 @@ void init(void)
 	texture->SetTexture();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -40.0f + roomPos1.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -530,15 +528,15 @@ void init(void)
 	room5 = new Room4(roomPos5);
 	room6 = new Room5(roomPos6);
 
-	for (int i = 0; i < LightCount; i++)
-	{
-		g_Light1[i].UpdateDirection();
-		g_Light2[i].UpdateDirection();
-		g_Light3[i].UpdateDirection();
-		g_Light4[i].UpdateDirection();
-		g_Light5[i].UpdateDirection();
-		g_Light6[i].UpdateDirection();
-	}
+	//for (int i = 0; i < LightCount; i++)
+	//{
+	//	g_Light1[i].UpdateDirection();
+	//	g_Light2[i].UpdateDirection();
+	//	g_Light3[i].UpdateDirection();
+	//	g_Light4[i].UpdateDirection();
+	//	g_Light5[i].UpdateDirection();
+	//	g_Light6[i].UpdateDirection();
+	//}
 
 	SetBtn();
 

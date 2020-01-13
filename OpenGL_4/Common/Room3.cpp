@@ -52,16 +52,6 @@ void Room3::Create() {
 	_BackWall->SetTrigger(false);
 
 	////Model
-
-	_pTeaPot = new ModelPool("Model/TeaPot.obj", Type_3DMax);
-	_pTeaPot->SetTRSMatrix(Translate(vec4(0, 5.3f, 0, 1))*Translate(roomPos)*Scale(2.0f, 2.0f, 2.0f));
-	_pTeaPot->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_pTeaPot->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
-
-	_pTable = new ModelPool("Model/table.obj", Type_3DMax);
-	_pTable->SetTRSMatrix(Translate(vec4(0, 0.0f, 0, 1))*Translate(roomPos)*Scale(0.5f, 0.5f, 0.5f));
-	_pTable->SetMaterials(vec4(0), vec4(0.72f, 0.45f, 0.2f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	_pTable->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 }
 void Room3::SetProjectionMatrix(mat4 &mpx)
 {
@@ -72,8 +62,6 @@ void Room3::SetProjectionMatrix(mat4 &mpx)
 	_FrontWall->SetProjectionMatrix(mpx);
 	_BackWall->SetProjectionMatrix(mpx);
 	//Model
-	_pTeaPot->SetProjectionMatrix(mpx);
-	_pTable->SetProjectionMatrix(mpx);
 
 	_door[0]->SetProjectionMatrix(mpx);
 	_door[1]->SetProjectionMatrix(mpx);
@@ -88,8 +76,6 @@ void Room3::SetViewMatrix(mat4 &mvx) {
 	_FrontWall->SetViewMatrix(mvx);
 	_BackWall->SetViewMatrix(mvx);
 	//Model
-	_pTeaPot->SetViewMatrix(mvx);
-	_pTable->SetViewMatrix(mvx);
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
 	_door[2]->SetViewMatrix(mvx);
@@ -103,8 +89,6 @@ void Room3::Update(LightSource *light, float delta) {
 	_FrontWall->Update(light, delta);
 	_BackWall->Update(light, delta);
 	//Model
-	_pTeaPot->Update(light, delta);
-	_pTable->Update(light, delta);
 
 	_door[0]->Update(light, delta);
 	_door[1]->Update(light, delta);
@@ -167,8 +151,6 @@ void Room3::Draw()
 	_FrontWall->Draw();
 	_BackWall->Draw();
 	//Model
-	_pTeaPot->Draw();
-	_pTable->Draw();
 
 	_door[0]->Draw();
 	_door[1]->Draw();
@@ -176,8 +158,6 @@ void Room3::Draw()
 }
 
 Room3::~Room3() {
-	if (_pTeaPot != NULL)delete _pTeaPot;
-	if (_pTable != NULL)delete _pTable;
 	if (_door[0] != NULL)delete _door[0];
 	if (_door[1] != NULL)delete _door[1];
 	if (_door[2] != NULL)delete _door[2];

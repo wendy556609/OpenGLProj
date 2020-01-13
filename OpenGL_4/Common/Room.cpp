@@ -85,12 +85,57 @@ void Room::Create() {
 	_door[1]->SetTrigger(true);
 
 	//Model
-	babyCot= new ModelPool("Model/BabyCot.obj", Type_3DMax);
+	babyCot = new ModelPool("Model/BabyCot.obj", Type_3DMax);
 	babyCot->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Translate(roomPos)*Scale(0.5f, 0.5f, 0.5f));
 	babyCot->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	babyCot->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	babyCot->SetTextureLayer(DIFFUSE_MAP);
 	babyCot->SetTiling(1, 1);
+
+	drawer[0] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[0]->SetTRSMatrix(Translate(vec4(0, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
+	drawer[0]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	drawer[0]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
+	drawer[0]->SetTextureLayer(DIFFUSE_MAP);
+	drawer[0]->SetTiling(1, 1);
+
+	drawer[1] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[1]->SetTRSMatrix(Translate(vec4(35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
+	drawer[1]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	drawer[1]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
+	drawer[1]->SetTextureLayer(DIFFUSE_MAP);
+	drawer[1]->SetTiling(1, 1);
+
+	drawer[2] = new ModelPool("Model/Drawer.obj", Type_3DMax);
+	drawer[2]->SetTRSMatrix(Translate(vec4(-35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
+	drawer[2]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	drawer[2]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
+	drawer[2]->SetTextureLayer(DIFFUSE_MAP);
+	drawer[2]->SetTiling(1, 1);
+
+	parant = new Flat('F', vec3(10, 20, 3), vec4(0, 10, 40.0f, 1), -90, roomPos);
+	parant->SetMirror(true, true);
+	parant->SetTextureLayer(DIFFUSE_MAP);
+	parant->SetTiling(1, 1);
+
+	babyUse[0] = new Flat('R', vec3(1, 10, 10), vec4(30, 5, -20.0f, 1), 90, roomPos);
+	babyUse[0]->SetTextureLayer(DIFFUSE_MAP);
+	babyUse[0]->SetTiling(1, 1);
+	babyUse[0]->SetTurn(90);
+
+	babyUse[1] = new Flat('L', vec3(1, 10, 10), vec4(-35, 5, 0.0f, 1), -90, roomPos);
+	babyUse[1]->SetTextureLayer(DIFFUSE_MAP);
+	babyUse[1]->SetTiling(1, 1);
+	babyUse[1]->SetMirror(true, true);
+
+	babyUse[2] = new Flat('R', vec3(1, 10, 10), vec4(30, 5, 30.0f, 1), 90, roomPos);
+	babyUse[2]->SetTextureLayer(DIFFUSE_MAP);
+	babyUse[2]->SetTiling(1, 1);
+
+	babyUse[3] = new Flat('L', vec3(1, 10, 15), vec4(-30, 5, 25.0f, 1), -90, roomPos);
+	babyUse[3]->SetTextureLayer(DIFFUSE_MAP);
+	babyUse[3]->SetTiling(1, 1);
+	babyUse[3]->SetTurn(-90);
 }
 
 void Room::SetProjectionMatrix(mat4 &mpx)
@@ -106,6 +151,16 @@ void Room::SetProjectionMatrix(mat4 &mpx)
 	_door[1]->SetProjectionMatrix(mpx);
 	//Model
 	babyCot->SetProjectionMatrix(mpx);
+	drawer[0]->SetProjectionMatrix(mpx);
+	drawer[1]->SetProjectionMatrix(mpx);
+	drawer[2]->SetProjectionMatrix(mpx);
+
+	parant->SetProjectionMatrix(mpx);
+
+	for (int i = 0; i < 4; i++)
+	{
+		babyUse[i]->SetProjectionMatrix(mpx);
+	}
 }
 
 void Room::SetViewMatrix(mat4 &mvx) {
@@ -120,8 +175,16 @@ void Room::SetViewMatrix(mat4 &mvx) {
 	_door[1]->SetViewMatrix(mvx);
 	//Model
 	babyCot->SetViewMatrix(mvx);
+	drawer[0]->SetViewMatrix(mvx);
+	drawer[1]->SetViewMatrix(mvx);
+	drawer[2]->SetViewMatrix(mvx);
 
+	parant->SetViewMatrix(mvx);
 
+	for (int i = 0; i < 4; i++)
+	{
+		babyUse[i]->SetViewMatrix(mvx);
+	}
 	//auto camera = Camera::getInstance();
 	//Test->SetViewPosition(camera->getViewPosition());
 	//Test->SetViewMatrix(mvx);
@@ -141,7 +204,16 @@ void Room::Update(LightSource *light, float delta) {
 	_door[1]->Update(light, delta);
 	//Model
 	babyCot->Update(light, delta);
+	drawer[0]->Update(light, delta);
+	drawer[1]->Update(light, delta);
+	drawer[2]->Update(light, delta);
 
+	parant->Update(light, delta);
+
+	for (int i = 0; i < 4; i++)
+	{
+		babyUse[i]->Update(light, delta);
+	}
 
 	DetectCollider();
 }
@@ -204,10 +276,32 @@ void Room::Draw()
 	_door[1]->Draw();
 	//Model
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->cotWood);
+	glBindTexture(GL_TEXTURE_2D, texture->Wood);
 	babyCot->Draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	drawer[0]->Draw();
+	drawer[1]->Draw();
+	drawer[2]->Draw();
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->parant);
+	parant->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->babyUse[0]);
+	babyUse[0]->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->babyUse[1]);
+	babyUse[1]->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->babyUse[2]);
+	babyUse[2]->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->babyUse[3]);
+	babyUse[3]->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	//glActiveTexture(GL_TEXTURE0); // select active texture 0
 	//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[4]); // »P Diffuse Map µ²¦X
@@ -226,5 +320,15 @@ Room::~Room() {
 	if (_door[1] != NULL)delete _door[1];
 
 	if (babyCot != NULL)delete babyCot;
+	if(drawer[0] != NULL)delete drawer[0];
+	if (drawer[1] != NULL)delete drawer[1];
+	if (drawer[2] != NULL)delete drawer[2];
+
+	if (parant != NULL)delete parant;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (babyUse[i] != NULL)delete babyUse[i];
+	}
 	
 }

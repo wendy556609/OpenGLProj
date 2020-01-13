@@ -11,6 +11,9 @@ private:
 	Flat *_door[DoorCount];
 
 	ModelPool *babyCot;
+	ModelPool *drawer[3];
+	Flat *parant;
+	Flat *babyUse[4];
 public:
 	Room(vec4 pos = vec4(0, 0, 0, 1));
 	~Room();
