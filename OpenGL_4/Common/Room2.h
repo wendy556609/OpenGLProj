@@ -9,6 +9,10 @@ class Room2 : public RoomController
 private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
+
+	ModelPool *workDesk;
+	Flat *computer, *printer;
+	Flat *file[4];
 public:
 	Room2(vec4 pos = vec4(0, 0, 0, 1));
 	~Room2();

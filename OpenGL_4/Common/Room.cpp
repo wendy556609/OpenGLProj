@@ -281,7 +281,6 @@ void Room::Draw()
 	drawer[0]->Draw();
 	drawer[1]->Draw();
 	drawer[2]->Draw();
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->parant);
 	parant->Draw();
@@ -302,7 +301,6 @@ void Room::Draw()
 	glBindTexture(GL_TEXTURE_2D, texture->babyUse[3]);
 	babyUse[3]->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 	//glActiveTexture(GL_TEXTURE0); // select active texture 0
 	//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[4]); // »P Diffuse Map µ²¦X
 	//Aimal->Draw();

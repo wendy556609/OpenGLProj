@@ -68,6 +68,10 @@ void Room1::Create() {
 	stand->SetTiling(1, 1);
 	stand->SetTurn(90);
 
+	teacher = new Flat('R', vec3(1, 20, 15), vec4(30.0f, 10.0f, 15, 1), 90, roomPos);
+	teacher->SetTextureLayer(DIFFUSE_MAP);
+	teacher->SetTiling(1, 1);
+	teacher->SetTurn(90);
 
 	desk[0] = new ModelPool("Model/Desk.obj", Type_3DMax);
 	desk[0]->SetTextureLayer(DIFFUSE_MAP);
@@ -105,6 +109,7 @@ void Room1::SetProjectionMatrix(mat4 &mpx)
 	//Model
 	board->SetProjectionMatrix(mpx);
 	stand->SetProjectionMatrix(mpx);
+	teacher->SetProjectionMatrix(mpx);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -126,6 +131,7 @@ void Room1::SetViewMatrix(mat4 &mvx) {
 	//Model
 	board->SetViewMatrix(mvx);
 	stand->SetViewMatrix(mvx);
+	teacher->SetViewMatrix(mvx);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -146,6 +152,7 @@ void Room1::Update(LightSource *light, float delta) {
 	//Model
 	board->Update(light, delta);
 	stand->Update(light, delta);
+	teacher->Update(light, delta);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -212,20 +219,26 @@ void Room1::Draw()
 	_door[1]->Draw();
 	//Model
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->board);
-	board->Draw();
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->stand);
-	stand->Draw();
-
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->desk);
 	for (int i = 0; i < 4; i++)
 	{
 		desk[i]->Draw();
 	}
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->board);
+	board->Draw();
+
+	glDepthMask(GL_FALSE);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->teacher);
+	teacher->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->stand);
+	stand->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glDepthMask(GL_TRUE);
 }
 
 Room1::~Room1() {
@@ -234,6 +247,8 @@ Room1::~Room1() {
 
 	if (board != NULL)delete board;
 	if (stand != NULL)delete stand;
+
+	if(teacher != NULL)delete teacher;
 	for (int i = 0; i < 4; i++)
 	{
 		if (desk[i] != NULL)delete desk[i];
