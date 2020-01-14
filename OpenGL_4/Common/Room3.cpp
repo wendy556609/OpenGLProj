@@ -67,19 +67,29 @@ void Room3::Create() {
 	churchStand->SetTextureLayer(DIFFUSE_MAP);
 	churchStand->SetTurn(-90);
 
-	chair[0] = new Flat('B', vec3(10, 10, 1), vec4(25.0f, 5.0f, -25.0f, 1), 90, roomPos);
+	chair[0] = new Flat('B', vec3(10, 10, 1), vec4(40.0f, 5.0f, -25.0f, 1), 90, roomPos);
 	chair[0]->SetTextureLayer(DIFFUSE_MAP);	
 	chair[0]->SetMirror(true, false);
-	chair[1] = new Flat('B', vec3(10, 10, 1), vec4(10.0f, 5.0f, -25.0f, 1), 90, roomPos);
+
+	chair[1] = new Flat('B', vec3(10, 10, 1), vec4(25.0f, 5.0f, -25.0f, 1), 90, roomPos);
 	chair[1]->SetTextureLayer(DIFFUSE_MAP);
 	chair[1]->SetMirror(true, false);
 
-	chair[2] = new Flat('F', vec3(10, 10, 3), vec4(25.0f, 5.0f, 25.0f, 1), -90, roomPos);
+	chair[2] = new Flat('B', vec3(10, 10, 1), vec4(10.0f, 5.0f, -25.0f, 1), 90, roomPos);
 	chair[2]->SetTextureLayer(DIFFUSE_MAP);	
-	chair[2]->SetMirror(true, true);
-	chair[3] = new Flat('F', vec3(10, 10, 3), vec4(10.0f, 5.0f, 25.0f, 1), -90, roomPos);
-	chair[3]->SetTextureLayer(DIFFUSE_MAP);	
+	chair[2]->SetMirror(true, false);
+
+	chair[3] = new Flat('F', vec3(10, 10, 3), vec4(40.0f, 5.0f, 25.0f, 1), -90, roomPos);
+	chair[3]->SetTextureLayer(DIFFUSE_MAP);
 	chair[3]->SetMirror(true, true);
+
+	chair[4] = new Flat('F', vec3(10, 10, 3), vec4(25.0f, 5.0f, 25.0f, 1), -90, roomPos);
+	chair[4]->SetTextureLayer(DIFFUSE_MAP);
+	chair[4]->SetMirror(true, true);
+
+	chair[5] = new Flat('F', vec3(10, 10, 3), vec4(10.0f, 5.0f, 25.0f, 1), -90, roomPos);
+	chair[5]->SetTextureLayer(DIFFUSE_MAP);
+	chair[5]->SetMirror(true, true);
 	
 	mushi = new Flat('L', vec3(3, 20, 8), vec4(-35.0f, 10, 0.0f, 1), -90, roomPos);
 	mushi->SetTextureLayer(DIFFUSE_MAP);
@@ -104,7 +114,7 @@ void Room3::SetProjectionMatrix(mat4 &mpx)
 	//Model
 	churchStand->SetProjectionMatrix(mpx);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		chair[i]->SetProjectionMatrix(mpx);
 	}
@@ -128,7 +138,7 @@ void Room3::SetViewMatrix(mat4 &mvx) {
 	//Model
 	churchStand->SetViewMatrix(mvx);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		chair[i]->SetViewMatrix(mvx);
 	}
@@ -152,7 +162,7 @@ void Room3::Update(LightSource *light, float delta) {
 	//Model
 	churchStand->Update(light, delta);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		chair[i]->Update(light, delta);
 	}
@@ -243,6 +253,8 @@ void Room3::Draw()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->weddingChair);
+	chair[5]->Draw();
+	chair[4]->Draw();
 	chair[3]->Draw();
 	chair[2]->Draw();
 	chair[1]->Draw();
@@ -258,7 +270,7 @@ Room3::~Room3() {
 
 	if(churchStand != NULL)delete churchStand;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (chair[i] != NULL)delete chair[i];
 	}

@@ -11,7 +11,7 @@ private:
 	Flat *_door[DoorCount];
 
 	Flat *churchStand;
-	Flat *chair[4];
+	Flat *chair[6];
 	Flat *mushi, *husband;
 public:
 	Room3(vec4 pos = vec4(0, 0, 0, 1));
