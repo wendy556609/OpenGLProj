@@ -34,6 +34,7 @@ void Room4::Create() {
 	_RightWall->SetTextureLayer(DIFFUSE_MAP);	
 	_RightWall->SetTurn(90);
 	_RightWall->SetTiling(3, 1);
+	_RightWall->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
 	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
@@ -216,7 +217,6 @@ void Room4::Draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->hospitalWindow);
 	_LeftWall->Draw();
-	_RightWall->Draw();
 	_FrontWall->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->hospitalDoor);
@@ -225,11 +225,20 @@ void Room4::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
+
+
 	//Model
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->metal);
 	hospitalBed->Draw();
 
+}
+
+void Room4::AlphaDraw() {
+	auto texture = Texture::getInstance();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->hospitalWindow);
+	_RightWall->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->diandi);
 	diandi->Draw();
@@ -242,7 +251,6 @@ void Room4::Draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->hospitalCarbine);
 	hospitalCarbine->Draw();
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->medcine);
 	medcine[1]->Draw();

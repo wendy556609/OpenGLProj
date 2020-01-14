@@ -38,6 +38,7 @@ public:
 	virtual void SetViewMatrix(mat4 &mvx) = 0;
 	virtual void Update(LightSource *light, float delta) = 0;
 	virtual void Draw() = 0;
+	virtual void AlphaDraw() = 0;
 };
 
 #endif

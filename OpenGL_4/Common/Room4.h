@@ -23,6 +23,7 @@ public:
 	void SetViewMatrix(mat4 &mvx);
 	void Update(LightSource *light, float delta);
 	void Draw();
+	void AlphaDraw();
 
 	void DetectCollider();
 };

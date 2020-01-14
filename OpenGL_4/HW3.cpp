@@ -427,7 +427,7 @@ LightSource g_Light6[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
-		color4(0.55f, 0.55f, 0.55f, 1.0f), // diffuse
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
 		point4(0.0f + roomPos6.x, 15.0f + roomPos6.y, 15.0f + roomPos6.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
@@ -516,7 +516,7 @@ void init(void)
 	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos5.x, 10.0f + roomPos5.y, -20.0f + roomPos5.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -604,6 +604,10 @@ void GL_Display(void)
 	room5->Draw();
 	room6->Draw();
 
+	glDepthMask(GL_FALSE);
+	room5->AlphaDraw();
+	room4->AlphaDraw();
+	glDepthMask(GL_TRUE);
 	glDisable(GL_DEPTH_TEST);
 	for (int i = 0; i < 4; i++) g_p2DBtn[i]->Draw();
 	glEnable(GL_DEPTH_TEST);
