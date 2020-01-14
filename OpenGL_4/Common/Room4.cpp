@@ -34,7 +34,7 @@ void Room4::Create() {
 	_RightWall->SetTextureLayer(DIFFUSE_MAP);	
 	_RightWall->SetTurn(90);
 	_RightWall->SetTiling(3, 1);
-	_RightWall->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_RightWall->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 0.5f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
 	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);

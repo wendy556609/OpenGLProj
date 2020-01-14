@@ -95,10 +95,11 @@ void Room::Create() {
 
 	drawer[0] = new Model(modelNum->drawer);
 	drawer[0]->SetTRSMatrix(Translate(vec4(0, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
-	drawer[0]->SetMaterials(vec4(0), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	drawer[0]->SetMaterials(vec4(1.0f), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	drawer[0]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	drawer[0]->SetTextureLayer(DIFFUSE_MAP);
-	drawer[0]->SetTiling(1, 1);
+	//Print(drawer[0]->m_iNumVtx);
+	//drawer[0]->SetTiling(1, 1);
 
 	drawer[1] = new Model(modelNum->drawer);
 	drawer[1]->SetTRSMatrix(Translate(vec4(35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
@@ -260,13 +261,11 @@ void Room::Draw()
 	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->babyFloor);
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
 	_pFloor->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_pTop->Draw();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->babyWall);
+	glBindTexture(GL_TEXTURE_2D, texture->babyWall); 
 	_LeftWall->Draw();	
 	_RightWall->Draw();
 	_FrontWall->Draw();	
@@ -277,7 +276,7 @@ void Room::Draw()
 	_door[1]->Draw();
 	//Model
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->Wood);
+	glBindTexture(GL_TEXTURE_2D, texture->Wood);	
 	babyCot->Draw();
 	drawer[0]->Draw();
 	drawer[1]->Draw();
@@ -329,5 +328,4 @@ Room::~Room() {
 	{
 		if (babyUse[i] != NULL)delete babyUse[i];
 	}
-	
 }

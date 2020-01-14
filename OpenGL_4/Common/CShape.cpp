@@ -368,8 +368,6 @@ void CShape::SetTRSMatrix(mat4 &mat)
 {
 	m_mxTRS = mat;
 	m_bTRSUpdated = true;
-
-	_normal = normalize(mat * _normal);
 }
 
 void CShape::SetProjectionMatrix(mat4 &mat)

@@ -82,8 +82,6 @@ CQuad::CQuad()
 		
 	for( int i = 0 ; i < m_iNumVtx ; i++ ) m_pColors[i] = vec4(-1.0f,-1.0f,-1.0f,1.0f);
 
-	_normal = vec4(0, 1.0f, 0, 0);
-
 	SetShaderName("vsPerPixelLighting.glsl", "fsPerPixelLighting.glsl"); 
 }
 

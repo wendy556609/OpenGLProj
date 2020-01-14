@@ -29,7 +29,7 @@ protected:
 	vec2 *m_pLightTex;
 	vec2 *m_pNormalTex;
 	vec3 *m_pTangentV;
-	int  m_iNumVtx;
+	
 
 	GLfloat m_fColor[4]; // Object's color
 	// For shaders' name
@@ -97,6 +97,7 @@ protected:
 	void		DrawingWithoutSetShader();
 
 public:
+	int  m_iNumVtx;
 	Collider _collider;
 
 	bool isTurn;

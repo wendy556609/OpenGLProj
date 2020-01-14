@@ -13,7 +13,7 @@ void Room3::Create() {
 
 	vT.x = 0; vT.y = 0; vT.z = 0;
 	_pFloor = new Flat('M', vec3(100, 1, 100), vT, 0, roomPos);
-	_pFloor->SetTextureLayer(DIFFUSE_MAP);	
+	_pFloor->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 	_pFloor->SetTrigger(false);
 	_pFloor->SetMirror(true, true);
 
@@ -95,7 +95,7 @@ void Room3::Create() {
 	mushi->SetTextureLayer(DIFFUSE_MAP);
 	mushi->SetTurn(-90);
 
-	husband = new Flat('F', vec3(3, 20, 10), vec4(-20.0f, 10.0f, 5, 1), -90, roomPos);
+	husband = new Flat('F', vec3(3, 20, 10), vec4(-20.0f, 10.0f, 5, 1), -90, roomPos);//Light=vec4(-20.0f, 10.0f, -5, 1)
 	husband->SetTextureLayer(DIFFUSE_MAP);
 	husband->SetMirror(true, true);
 }
@@ -218,8 +218,8 @@ void Room3::Draw()
 	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->weddingFloor);
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, g_uiFTexID[1]);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->Light);
 	_pFloor->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_pTop->Draw();

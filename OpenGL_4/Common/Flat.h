@@ -21,7 +21,6 @@ public:
 	vec4  _pos;
 
 	Collider GetCollider() { return _pSquares->GetCollider(); };
-	vec4 GetNormal() { return _pSquares->_normal; };
 	void SetTrigger(bool trigger);
 	bool GetTrigger() { return _pSquares->GetTrigger(); };
 
@@ -42,6 +41,18 @@ public:
 	void SetTextureLayer(int texlayer);
 	void SetMirror(bool uAxis, bool vAxis);
 	void SetTurn(int angle);
+
+	void SetShaderName(const char vxShader[], const char fsShader[]) {
+		_pSquares->SetShaderName(vxShader, fsShader);
+	}
+	void SetCubeMapTexName(GLuint uiTexName) {
+		_pSquares->SetCubeMapTexName(uiTexName);
+	}
+	void SetViewPosition(point4 vEye) {
+		_pSquares->SetViewPosition(vEye);
+	}
+
+	void SetPosition(mat4 &mat);
 };
 
 #endif

@@ -516,7 +516,7 @@ void init(void)
 	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
+	eye = point4(0.0f + roomPos6.x, 10.0f + roomPos6.y, -20.0f + roomPos6.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -605,8 +605,8 @@ void GL_Display(void)
 	room6->Draw();
 
 	glDepthMask(GL_FALSE);
-	room5->AlphaDraw();
-	room4->AlphaDraw();
+	room6->AlphaDraw();
+	room5->AlphaDraw();	
 	glDepthMask(GL_TRUE);
 	glDisable(GL_DEPTH_TEST);
 	for (int i = 0; i < 4; i++) g_p2DBtn[i]->Draw();

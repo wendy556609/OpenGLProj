@@ -22,20 +22,24 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 	if (direct == 'L' || direct == 'l' || direct == 'R' || direct == 'r') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle));
 		_pSquares->_collider.Init(iSize.x, iSize.y / 2, iSize.z / 2, _pos);
-		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle);
+		mT = Translate(roomPos)*Scale(iSize.x, iSize.y, iSize.z)*RotateZ(angle);
 	}
 	else if (direct == 'F' || direct == 'f' || direct == 'B' || direct == 'b') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
 		_pSquares->_collider.Init(iSize.x / 2, iSize.y / 2, iSize.z, _pos);
-		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
+		mT = Translate(roomPos)*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
 	}
 	else if (direct == 'T' || direct == 't' || direct == 'M' || direct == 'm') {
 		SetTRSMatrix(mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle));
 		_pSquares->_collider.Init(iSize.x / 2, iSize.y, iSize.z / 2, _pos);
-		mT = mxT*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
+		mT = Translate(roomPos)*Scale(iSize.x, iSize.y, iSize.z)*RotateX(angle);
 	}
 
 	SetColor(vec4(0.6f));
+}
+
+void Flat::SetPosition(mat4 &mat) {
+	_pSquares->SetTRSMatrix(mat*mT);
 }
 
 void Flat::SetTrigger(bool trigger) {

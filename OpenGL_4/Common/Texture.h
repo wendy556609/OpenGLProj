@@ -17,13 +17,14 @@ private:
 
 public:
 	GLuint g_uiFTexID; // 三個物件分別給不同的貼圖
-	//GLuint g_uiSphereCubeMap;
+	GLuint Light, NormalMap;
+	GLuint g_uiSphereCubeMap;
 	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant;//room1
 	GLuint board, stand, desk, window, clock, teacher;
 	GLuint workWall, workBook, printer, computer, file;
 	GLuint weddingChair, weddingFW, weddingWall, weddingDoor, weddingFloor, churchStand, mushi, husband;
 	GLuint heart, hospitalCarbine, hospitalChair, hospitalDoor, hospitalWindow, diandi, medcine, metal;
-	GLuint grassland;
+	GLuint grassland, Sunny_NZ, ladder, RIP, butterfly;
 
 	static Texture* create();		// 建立 TexturePool 的實體
 	static Texture *getInstance();	// 取得  TexturePool 的實體
@@ -70,8 +71,14 @@ public:
 		hospitalWindow = texturepool->AddTexture("texture/hospitalWindow.png");
 		medcine = texturepool->AddTexture("texture/medcine.png");
 		metal = texturepool->AddTexture("texture/metal.png");
+		Light = texturepool->AddTexture("texture/Light.png");
+		NormalMap = texturepool->AddTexture("texture/NormalMap.png");
+		Sunny_NZ = texturepool->AddTexture("texture/Sunny_NZ.png");
+		ladder = texturepool->AddTexture("texture/ladder.png");
+		RIP = texturepool->AddTexture("texture/RIP.png");
+		butterfly = texturepool->AddTexture("texture/butterfly.png");
 
-		//g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
+		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}
 };
 
