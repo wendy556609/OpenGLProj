@@ -421,6 +421,7 @@ void CShape::Update(const LightSource *Lights, float dt)
 		m_SpotExponent[i] = Lights[i].spotExponent;
 		m_vLightInView[i] = m_mxView * Lights[i].position;
 		m_DiffuseProduct[i] = m_Material.kd * m_Material.diffuse  * Lights[i].diffuse;
+		m_DiffuseProduct[0].w = m_Material.diffuse.w;
 		m_Diffuse[i] = Lights[i].diffuse;
 		m_SpecularProduct[i] = m_Material.ks * m_Material.specular * Lights[i].specular;
 		m_spotCutoff[i] = Lights[i].spotCosCutoff;

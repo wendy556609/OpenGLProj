@@ -99,7 +99,7 @@ for(int i = 0 ;i < PointNum;i++){
 		}
 	}
 		LightingColor = ambient + diffuse + specular;  // 計算顏色 ambient + diffuse + specular;
-		LightingColor.w = 1.0;	// 設定為傳入材質的 alpha,	DiffuseProduct.w
+		LightingColor.w = DiffuseProduct[0].w;	// 設定為傳入材質的 alpha,	DiffuseProduct.w
 		//LightingColor.w = 1.0;	// 設定 alpha 為 1.0
 
 		gl_FragColor = LightingColor * (0.325 *texture2D(diffuMap, DiffuseMapUV) + 0.675 * textureCube(cubeMap, ReflView));

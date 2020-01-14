@@ -101,8 +101,8 @@ Model::Model(int modelNum) {
 	
 	SetShaderName("vsPerPixelLighting.glsl", "fsPerPixelLighting.glsl");
 	
-	SetMaterials(vec4(0, 0, 0, 1), vec4(1.0f, 1.0, 1.0, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
+	SetMaterials(vec4(0, 0, 0, 1.0f), vec4(1.0f, 1.0, 1.0, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	SetKaKdKsShini(0.15f, 1, 0.2f, 2);
 	
 	SetShader();
 }

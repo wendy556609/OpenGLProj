@@ -21,6 +21,9 @@ public:
 	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant;//room1
 	GLuint board, stand, desk, window, clock, teacher;
 	GLuint workWall, workBook, printer, computer, file;
+	GLuint weddingChair, weddingFW, weddingWall, weddingDoor, weddingFloor, churchStand, mushi, husband;
+	GLuint heart, hospitalCarbine, hospitalChair, hospitalDoor, hospitalWindow, diandi, medcine;
+	GLuint grassland;
 
 	static Texture* create();		// 建立 TexturePool 的實體
 	static Texture *getInstance();	// 取得  TexturePool 的實體
@@ -31,12 +34,6 @@ public:
 	void SetTexture() {
 		auto texturepool = TexturePool::create();
 		g_uiFTexID = texturepool->AddTexture("texture/checker.png");
-		//g_uiFTexID[1] = texturepool->AddTexture("texture/lightMap1.png");
-		//g_uiFTexID[2] = texturepool->AddTexture("texture/Masonry.Brick.png");
-		//g_uiFTexID[3] = texturepool->AddTexture("texture/Masonry.Brick.normal1.png");
-		//g_uiFTexID[4] = texturepool->AddTexture("texture/wi_tata.png");
-		//g_uiFTexID[5] = texturepool->AddTexture("texture/wi_tata_normal.png");
-		//g_uiFTexID[6] = texturepool->AddTexture("texture/metal.png");
 		babyWall = texturepool->AddTexture("texture/BabyRoomWall.png");
 		babyFloor = texturepool->AddTexture("texture/babyFloor.png");
 		Wood = texturepool->AddTexture("texture/Wood.png");
@@ -56,6 +53,22 @@ public:
 		printer = texturepool->AddTexture("texture/printer.png");
 		computer = texturepool->AddTexture("texture/computer.png");
 		file = texturepool->AddTexture("texture/file.png");
+		weddingChair = texturepool->AddTexture("texture/weddingChair.png");
+		weddingFW = texturepool->AddTexture("texture/weddingFW.png");
+		weddingWall = texturepool->AddTexture("texture/weddingWall.png");
+		grassland = texturepool->AddTexture("texture/grassland.png");
+		weddingDoor = texturepool->AddTexture("texture/weddingDoor.png");
+		weddingFloor = texturepool->AddTexture("texture/weddingFloor.png");
+		churchStand = texturepool->AddTexture("texture/churchStand.png");
+		mushi = texturepool->AddTexture("texture/mushi.png");
+		husband = texturepool->AddTexture("texture/husband.png");
+		heart = texturepool->AddTexture("texture/heart.png");
+		hospitalCarbine = texturepool->AddTexture("texture/hospitalCarbine.png");
+		diandi = texturepool->AddTexture("texture/diandi.png");
+		hospitalChair = texturepool->AddTexture("texture/hospitalChair.png");
+		hospitalDoor = texturepool->AddTexture("texture/hospitalDoor.png");
+		hospitalWindow = texturepool->AddTexture("texture/hospitalWindow.png");
+		medcine = texturepool->AddTexture("texture/medcine.png");
 
 		//g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}

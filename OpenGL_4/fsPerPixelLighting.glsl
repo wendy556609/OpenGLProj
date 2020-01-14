@@ -161,7 +161,7 @@ void main()
 }			
 
 		gl_FragColor = vec4(result.xyz, 1.0);  // 計算顏色 ambient + diffuse + specular;
-		gl_FragColor.w = 1.0;	// 設定 alpha 為 1.0
+		gl_FragColor.w = DiffuseProduct[0].w;	// 設定 alpha 為 1.0
 		// gl_FragColor = vec4((ambient + diffuse + specular).xyz, 1.0);
 
 		if( iTexLayer == NONE_MAP ) gl_FragColor = gl_FragColor;

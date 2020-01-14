@@ -33,6 +33,8 @@ public:
 	int babyCot, drawer;
 	int desk;
 	int workDesk;
+	int hospitalBed;
+	int RIP;
 
 
 	static ModelNum* create();		// 建立 TexturePool 的實體
@@ -46,6 +48,8 @@ public:
 		drawer = modelpool->AddModel("Model/Drawer.obj");
 		desk = modelpool->AddModel("Model/Desk.obj");
 		workDesk = modelpool->AddModel("Model/workDesk.obj");
+		hospitalBed = modelpool->AddModel("Model/hospitalBed.obj");
+		RIP = modelpool->AddModel("Model/RIP.obj");
 	};
 
 };

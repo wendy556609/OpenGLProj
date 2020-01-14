@@ -4,6 +4,7 @@ d:\program\opengl_hw3\opengl_4\debug\cshape.obj
 d:\program\opengl_hw3\opengl_4\debug\cube.obj
 d:\program\opengl_hw3\opengl_4\debug\flat.obj
 d:\program\opengl_hw3\opengl_4\debug\model.obj
+d:\program\opengl_hw3\opengl_4\debug\modelpool.obj
 d:\program\opengl_hw3\opengl_4\debug\room.obj
 d:\program\opengl_hw3\opengl_4\debug\room1.obj
 d:\program\opengl_hw3\opengl_4\debug\room2.obj
@@ -24,6 +25,12 @@ d:\program\opengl_hw3\opengl_4\debug\clinesegment.obj
 d:\program\opengl_hw3\opengl_4\debug\collider.obj
 d:\program\opengl_hw3\opengl_4\debug\common.obj
 d:\program\opengl_hw3\opengl_4\debug\cquad.obj
+d:\program\opengl_hw3\debug\opengl_4.ilk
+d:\program\opengl_hw3\debug\opengl_4.exe
+d:\program\opengl_hw3\debug\opengl_4.pdb
 d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\cl.command.1.tlog
 d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\cl.read.1.tlog
 d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\cl.write.1.tlog
+d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\link.command.1.tlog
+d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\link.read.1.tlog
+d:\program\opengl_hw3\opengl_4\debug\opengl_4.tlog\link.write.1.tlog

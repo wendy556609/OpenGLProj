@@ -16,7 +16,7 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 	SetShader();
 
 	SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.5f, 0.5f, 0.5f, 1), vec4(0.5f, 0.5f, 0.5f, 1.0f));
-	SetKaKdKsShini(0, 0.8f, 0.5f, 1);
+	SetKaKdKsShini(0, 0.8f, 0.5f, 2);
 	mT = 1;
 	mxT = Translate(_pos);
 	if (direct == 'L' || direct == 'l' || direct == 'R' || direct == 'r') {
