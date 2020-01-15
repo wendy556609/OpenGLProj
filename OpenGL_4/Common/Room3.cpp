@@ -98,6 +98,9 @@ void Room3::Create() {
 	husband = new Flat('F', vec3(3, 20, 10), vec4(-20.0f, 10.0f, 5, 1), -90, roomPos);//Light=vec4(-20.0f, 10.0f, -5, 1)
 	husband->SetTextureLayer(DIFFUSE_MAP);
 	husband->SetMirror(true, true);
+
+	collider = new Flat('F', vec3(4, 25, 2), vec4(-20.0f, 12.5f, -5, 1), -90, roomPos);
+	collider->SetTrigger(true);
 }
 void Room3::SetProjectionMatrix(mat4 &mpx)
 {
@@ -122,6 +125,8 @@ void Room3::SetProjectionMatrix(mat4 &mpx)
 	mushi->SetProjectionMatrix(mpx);
 
 	husband->SetProjectionMatrix(mpx);
+
+	//collider->SetProjectionMatrix(mpx);
 }
 
 void Room3::SetViewMatrix(mat4 &mvx) {
@@ -149,6 +154,17 @@ void Room3::SetViewMatrix(mat4 &mvx) {
 }
 
 void Room3::Update(LightSource *light, float delta) {
+	auto camera = Camera::getInstance();
+	if (isClear) {
+		light[0].isLighting = 1;
+		light[1].isLighting = 0;
+	}
+	else {
+		vec4 direct;
+		direct = vec4(camera->_pos.x, 0, camera->_pos.z, 1) - light[1].position;
+		light[1].spotDirection = vec3(direct.x, direct.y, direct.z);
+	}
+
 	_pFloor->Update(light, delta);
 	_pTop->Update(light, delta);
 	_LeftWall->Update(light, delta);
@@ -210,6 +226,10 @@ void Room3::DetectCollider() {
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[2]->GetCollider())) {
 		if (_door[2]->GetTrigger())camera->Room4isTouch = false;
+	}
+	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
+		Print("a");
+		isClear = true;
 	}
 }
 
@@ -278,4 +298,6 @@ Room3::~Room3() {
 	if(mushi != NULL)delete mushi;
 
 	if(husband != NULL)delete husband;
+
+	if(collider != NULL)delete collider;
 }

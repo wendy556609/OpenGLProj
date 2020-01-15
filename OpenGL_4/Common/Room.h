@@ -14,9 +14,12 @@ private:
 	Model *drawer[3];
 	Flat *parant;
 	Flat *babyUse[4];
+	CQuad *bullet;
 public:
 	Room(vec4 pos = vec4(0, 0, 0, 1));
 	~Room();
+
+	vec4 bulletPos;
 
 	void Create();
 
@@ -25,6 +28,7 @@ public:
 	void Update(LightSource *light, float delta);
 	void Draw();
 	void AlphaDraw() {};
+	void Shoot(vec4 front);
 
 	void DetectCollider();
 };

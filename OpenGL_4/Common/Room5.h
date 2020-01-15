@@ -9,12 +9,13 @@ class Room5 : public RoomController
 private:
 	int iSize = 100;
 	Flat *_door[DoorCount];
-	Flat *butterfly;
+	Flat *butterfly[2];
 
 	Model *RIP;
 	Model *cube[2];
 
-	vec4 _pos;
+	vec4 _pos[2];
+	vec4 _direct;
 	int turn = 1;
 public:
 	Room5(vec4 pos = vec4(0, 0, 0, 1));

@@ -24,6 +24,7 @@ public:
 	bool Room5isTouch;
 	bool Room6isTouch;
 	vec4 prePos;
+	vec4 _pos = 0;
 
 	vec4 _front;
 

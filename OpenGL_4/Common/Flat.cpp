@@ -12,7 +12,7 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 	_iGridSize = iSize;
 	_pSquares = new CQuad;
 	_pos = vec4(pos.x + roomPos.x, pos.y + roomPos.y, pos.z + roomPos.z, pos.w);
-
+	_roomPos = roomPos;
 	SetShader();
 
 	SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.5f, 0.5f, 0.5f, 1), vec4(0.5f, 0.5f, 0.5f, 1.0f));
@@ -38,8 +38,10 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 	SetColor(vec4(0.6f));
 }
 
-void Flat::SetPosition(mat4 &mat) {
+void Flat::SetPosition(vec4 &vec) {
+	mat4 mat = Translate(vec);
 	_pSquares->SetTRSMatrix(mat*mT);
+	_pSquares->_collider.SetCubeCollider(vec + _roomPos);
 }
 
 void Flat::SetTrigger(bool trigger) {

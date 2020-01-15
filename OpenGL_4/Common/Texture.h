@@ -19,7 +19,7 @@ public:
 	GLuint g_uiFTexID; // 三個物件分別給不同的貼圖
 	GLuint Light, NormalMap;
 	GLuint g_uiSphereCubeMap;
-	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant;//room1
+	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant, bullet;//room1
 	GLuint board, stand, desk, window, clock, teacher;
 	GLuint workWall, workBook, printer, computer, file;
 	GLuint weddingChair, weddingFW, weddingWall, weddingDoor, weddingFloor, churchStand, mushi, husband;
@@ -77,6 +77,7 @@ public:
 		ladder = texturepool->AddTexture("texture/ladder.png");
 		RIP = texturepool->AddTexture("texture/RIP.png");
 		butterfly = texturepool->AddTexture("texture/butterfly.png");
+		bullet = texturepool->AddTexture("texture/bullet.png");
 
 		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}

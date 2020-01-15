@@ -19,6 +19,7 @@ public:
 	~Flat();
 
 	vec4  _pos;
+	vec4 _roomPos;
 
 	Collider GetCollider() { return _pSquares->GetCollider(); };
 	void SetTrigger(bool trigger);
@@ -52,7 +53,7 @@ public:
 		_pSquares->SetViewPosition(vEye);
 	}
 
-	void SetPosition(mat4 &mat);
+	void SetPosition(vec4 &vec);
 };
 
 #endif

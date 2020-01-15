@@ -47,6 +47,7 @@ Room4 *room5;
 Room5 *room6;
 
 bool isMove = false;
+bool isShoot = false;
 
 //----------------------------------------------------------------------------
 // Part 2 : for single light source
@@ -297,24 +298,24 @@ LightSource g_Light4[LightCount] = {
 		1	,	// constantAttenuation	(a + bd + cd^2)^-1 中的 a, d 為光源到被照明點的距離
 		0	,	// linearAttenuation	    (a + bd + cd^2)^-1 中的 b
 		0	,	// quadraticAttenuation (a + bd + cd^2)^-1 中的 c
-		1
+		0
 	},
 	{
 		1,
-		color4(0, 0, 0, 1.0f), // ambient 
-		color4(0, 0, 0, 1.0f), // diffuse
-		color4(0, 0, 0, 1.0f), // specular
-		point4(25.0f + roomPos4.x, 10.0f + roomPos4.y, 25.0f + roomPos4.z, 1.0f),   // position
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // diffuse
+		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
+		point4(0.0f + roomPos4.x, 25 + roomPos4.y, 0.0f + roomPos4.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
 		vec3(25.0f + roomPos4.x, 0.0f + roomPos4.y, 25.0f + roomPos4.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
 		1.0f	,	// spotExponent(parameter e); cos^(e)(phi) 
 		45.0f,	// spotCutoff;	// (range: [0.0, 90.0], 180.0)  spot 的照明範圍
-		0.707f	,	// spotCosCutoff; // (range: [1.0,0.0],-1.0), 照明方向與被照明點之間的角度取 cos 後, cut off 的值
+		0.8f	,	// spotCosCutoff; // (range: [1.0,0.0],-1.0), 照明方向與被照明點之間的角度取 cos 後, cut off 的值
 		1	,	// constantAttenuation	(a + bd + cd^2)^-1 中的 a, d 為光源到被照明點的距離
 		0	,	// linearAttenuation	    (a + bd + cd^2)^-1 中的 b
 		0	,	// quadraticAttenuation (a + bd + cd^2)^-1 中的 c
-		0
+		1
 	},
 	{
 		1,
@@ -516,13 +517,14 @@ void init(void)
 	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos6.x, 10.0f + roomPos6.y, -20.0f + roomPos6.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
 	camera->updatePerspective(60.0, (GLfloat)SCREEN_SIZE / (GLfloat)SCREEN_SIZE, 1.0, 1000.0);
 	front = normalize(at - eye);
 	camera->_front = front;
+	camera->_pos = eye;
 
 	room1 = new Room(roomPos1);
 	room2 = new Room1(roomPos2);
@@ -664,6 +666,13 @@ void onFrameMove(float delta)
 
 	Move(delta);
 
+	front = normalize(at - eye);
+	camera->_front = front;
+	if (isShoot) {
+		room1->Shoot(front);
+		isShoot = false;
+	}	
+
 	GL_Display();
 }
 
@@ -695,6 +704,7 @@ void Move(float delta) {
 		}
 		if (camera->Room1isTouch || camera->Room2isTouch || camera->Room3isTouch || camera->Room4isTouch || camera->Room5isTouch || camera->Room6isTouch)eye = camera->prePos;
 		at += point4(front.x, 0.0f, front.z, 0.0f);
+		camera->_pos = eye;
 		camera->updateViewLookAt(eye, at);
 	}
 	isMove = false;
@@ -783,11 +793,13 @@ void Win_Mouse(int button, int state, int x, int y) {
 				if (g_p2DBtn[3]->getButtonStatus())g_Light1[3].isLighting = false;
 				else g_Light1[3].isLighting = true;
 			}
+			else {
+				isShoot = true;
+			}
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 ，換成 Y 軸
 		if (state == GLUT_UP) {
-			
 		}; 		  //if ( state == GLUT_DOWN ) ; 
 		break;
 	case GLUT_RIGHT_BUTTON:   // 目前按下的是滑鼠右鍵
@@ -832,14 +844,13 @@ void Win_PassiveMotion(int x, int y) {
 
 	auto camera = Camera::getInstance();
 	camera->updateLookAt(at);
-
 	front = normalize(at - eye);
 	camera->_front = front;
 }
 
 // The motion callback for a window is called when the mouse moves within the window while one or more mouse buttons are pressed.
 void Win_MouseMotion(int x, int y) {
-	g_fPhi = (float)-M_PI*(x - HALF_SIZE) / (HALF_SIZE);  // 轉換成 g_fPhi 介於 -PI 到 PI 之間 (-180 ~ 180 之間)
+	g_fPhi = (float)-M_PI*(x - HALF_SIZE) / (HALF_SIZE); // 轉換成 g_fPhi 介於 -PI 到 PI 之間 (-180 ~ 180 之間)
 	g_fTheta = (float)M_PI*(float)y / SCREEN_SIZE;
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 

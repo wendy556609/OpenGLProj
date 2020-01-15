@@ -138,6 +138,14 @@ void Room::Create() {
 	babyUse[3]->SetTextureLayer(DIFFUSE_MAP);
 	babyUse[3]->SetTiling(1, 1);
 	babyUse[3]->SetTurn(-90);
+
+	bullet = new CQuad;
+	bullet->SetTextureLayer(DIFFUSE_MAP);
+	bullet->SetShader();
+	bullet->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(0.5f, 0.5f, 0.5f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//bullet->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Scale(vec3(1, 1, 1)));
+	bullet->_collider.Init(0.5f, 0.5f, 0.5f);
+	bulletPos = vec4(0, 0, 0, 1);
 }
 
 void Room::SetProjectionMatrix(mat4 &mpx)
@@ -163,6 +171,8 @@ void Room::SetProjectionMatrix(mat4 &mpx)
 	{
 		babyUse[i]->SetProjectionMatrix(mpx);
 	}
+
+	bullet->SetProjectionMatrix(mpx);
 }
 
 void Room::SetViewMatrix(mat4 &mvx) {
@@ -187,6 +197,8 @@ void Room::SetViewMatrix(mat4 &mvx) {
 	{
 		babyUse[i]->SetViewMatrix(mvx);
 	}
+
+	bullet->SetViewMatrix(mvx);
 	//auto camera = Camera::getInstance();
 	//Test->SetViewPosition(camera->getViewPosition());
 	//Test->SetViewMatrix(mvx);
@@ -216,6 +228,8 @@ void Room::Update(LightSource *light, float delta) {
 	{
 		babyUse[i]->Update(light, delta);
 	}
+
+	bullet->Update(light, delta);
 
 	DetectCollider();
 }
@@ -256,6 +270,39 @@ void Room::DetectCollider() {
 	}
 }
 
+void Room::Shoot(vec4 front) {
+	mat4 mat;
+	bulletPos = front * 100.5f;
+	bulletPos.w = 1;
+	Print(bulletPos);
+	if (bulletPos.x <= -50) {
+		bulletPos.x = -49.8f;
+		mat = RotateZ(-90);
+	}
+	if (bulletPos.x >= 50) {
+		bulletPos.x = 49.8f;
+		mat = RotateZ(90);
+	}
+	if (bulletPos.z >= 50) {
+		bulletPos.z = 49.8f;
+		mat = RotateX(-90);
+	}
+	if (bulletPos.z <= -50) {
+		bulletPos.z = -49.8f;
+		mat = RotateX(90);
+	}
+	if (bulletPos.y >= 50) {
+		bulletPos.y = 49.8f;
+		mat = RotateX(180);
+	}
+	if (bulletPos.y <= 0) {
+		bulletPos.y = 0.2f;
+		mat = RotateX(0);
+	}
+	Print(bulletPos);
+	bullet->SetTRSMatrix(Translate(bulletPos) * Translate(vec4(0, 0, 0, 1))*Scale(1, 1, 1) * mat);
+}
+
 void Room::Draw()
 {
 	auto texture = Texture::getInstance();
@@ -281,6 +328,11 @@ void Room::Draw()
 	drawer[0]->Draw();
 	drawer[1]->Draw();
 	drawer[2]->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->bullet);
+	bullet->Draw();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->parant);
 	parant->Draw();
@@ -328,4 +380,6 @@ Room::~Room() {
 	{
 		if (babyUse[i] != NULL)delete babyUse[i];
 	}
+
+	if (bullet != NULL)delete bullet;
 }

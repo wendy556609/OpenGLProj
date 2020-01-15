@@ -13,9 +13,13 @@ private:
 	Flat *churchStand;
 	Flat *chair[6];
 	Flat *mushi, *husband;
+
+	Flat *collider;
 public:
 	Room3(vec4 pos = vec4(0, 0, 0, 1));
 	~Room3();
+
+	bool isClear = false;
 
 	void Create();
 

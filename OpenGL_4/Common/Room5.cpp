@@ -79,12 +79,22 @@ void Room5::Create() {
 	cube[1]->SetTextureLayer(DIFFUSE_MAP);
 
 	vT.x = 30.0f; vT.y = 25; vT.z = 0;
-	butterfly = new Flat('R', vec3(1, 5, 5), vT, 90, roomPos);
-	butterfly->SetTrigger(false);
-	butterfly->SetTextureLayer(DIFFUSE_MAP);
-	butterfly->SetTurn(90);
-	butterfly->SetMirror(true, false);
-	_pos = vec4(30, 25, 0, 1);
+	butterfly[0] = new Flat('R', vec3(1, 5, 5), vT, 90, roomPos);
+	butterfly[0]->SetTrigger(false);
+	butterfly[0]->SetTextureLayer(DIFFUSE_MAP);
+	butterfly[0]->SetTurn(90);
+	butterfly[0]->SetMirror(true, false);
+	_pos[0] = vec4(30, 25, 0, 1);
+
+	vT.x = 35.0f; vT.y = 25; vT.z = 0;
+	butterfly[1] = new Flat('R', vec3(1, 5, 5), vT, 90, roomPos);
+	butterfly[1]->SetTrigger(false);
+	butterfly[1]->SetTextureLayer(DIFFUSE_MAP);
+	butterfly[1]->SetTurn(90);
+	butterfly[1]->SetMirror(true, false);
+	butterfly[1]->SetTrigger(true);
+	_pos[1] = vec4(30, 25, 0, 1);
+	_direct = vec4(0, 1, -1, 1);
 }
 void Room5::SetProjectionMatrix(mat4 &mpx)
 {
@@ -103,7 +113,8 @@ void Room5::SetProjectionMatrix(mat4 &mpx)
 	cube[0]->SetProjectionMatrix(mpx);
 	cube[1]->SetProjectionMatrix(mpx);
 
-	butterfly->SetProjectionMatrix(mpx);
+	butterfly[0]->SetProjectionMatrix(mpx);
+	butterfly[1]->SetProjectionMatrix(mpx);
 }
 
 void Room5::SetViewMatrix(mat4 &mvx) {
@@ -125,7 +136,8 @@ void Room5::SetViewMatrix(mat4 &mvx) {
 	cube[1]->SetViewPosition(camera->getViewPosition());
 	cube[1]->SetViewMatrix(mvx);
 
-	butterfly->SetViewMatrix(mvx);
+	butterfly[0]->SetViewMatrix(mvx);
+	butterfly[1]->SetViewMatrix(mvx);
 	//auto camera = Camera::getInstance();
 	//Test->SetViewPosition(camera->getViewPosition());
 	//Test->SetViewMatrix(mvx);
@@ -147,54 +159,60 @@ void Room5::Update(LightSource *light, float delta) {
 	cube[0]->Update(light, delta);
 	cube[1]->Update(light, delta);
 
-	butterfly->Update(light, delta);
-	Fly(delta);
+	butterfly[0]->Update(light, delta);
+	butterfly[1]->Update(light, delta);
 
 	DetectCollider();
+
+	Fly(delta);
+
 }
 
 void Room5::Fly(float delta) {
 	switch (turn)
 	{
 	case 1:
-		_pos.z -= 10.0f *delta;
-		if (_pos.z <= -10.0f) {
-			_pos.z = -10.0f;
+		_pos[0].z -= 10.0f *delta;
+		if (_pos[0].z <= -10.0f) {
+			_pos[0].z = -10.0f;
 			turn = 2;
-			butterfly->SetMirror(true, false);
+			butterfly[0]->SetMirror(true, false);
 		}
-		_pos.y = 25.0f + (-3.0f / 25.0f)*(_pos.z + 5.0f)*(_pos.z + 5.0f) + 3.0f;
+		_pos[0].y = 25.0f + (-3.0f / 25.0f)*(_pos[0].z + 5.0f)*(_pos[0].z + 5.0f) + 3.0f;
 		break;
 	case 2:
-		_pos.z += 10.0f *delta;
-		if (_pos.z >= 0.0f) {
-			_pos.z = 0.0f;
+		_pos[0].z += 10.0f *delta;
+		if (_pos[0].z >= 0.0f) {
+			_pos[0].z = 0.0f;
 			turn = 3;			
 		}
-		_pos.y = 25.0f + (3.0f / 25.0f)*(_pos.z + 5.0f)*(_pos.z + 5.0f) - 3.0f;
+		_pos[0].y = 25.0f + (3.0f / 25.0f)*(_pos[0].z + 5.0f)*(_pos[0].z + 5.0f) - 3.0f;
 		break;
 	case 3:
-		_pos.z += 10.0f*delta;
-		if (_pos.z >= 10.0f) {
-			_pos.z = 10.0f;
+		_pos[0].z += 10.0f*delta;
+		if (_pos[0].z >= 10.0f) {
+			_pos[0].z = 10.0f;
 			turn = 4;			
-			butterfly->SetMirror(true, false);
+			butterfly[0]->SetMirror(true, false);
 		}
-		_pos.y = 25.0f + (-3.0f / 25.0f)*(_pos.z - 5.0f)*(_pos.z - 5.0f) + 3.0f;
+		_pos[0].y = 25.0f + (-3.0f / 25.0f)*(_pos[0].z - 5.0f)*(_pos[0].z - 5.0f) + 3.0f;
 		break;
 	case 4:
-		_pos.z -= 10.0f*delta;
-		if (_pos.z <= 0.0f) {
-			_pos.z = 0.0f;
+		_pos[0].z -= 10.0f*delta;
+		if (_pos[0].z <= 0.0f) {
+			_pos[0].z = 0.0f;
 			turn = 1;			
 		}
-		_pos.y = 25.0f + (3.0f / 25.0f)*(_pos.z - 5.0f)*(_pos.z - 5.0f) - 3.0f;
+		_pos[0].y = 25.0f + (3.0f / 25.0f)*(_pos[0].z - 5.0f)*(_pos[0].z - 5.0f) - 3.0f;
 		break;
 	default:
 		break;
 	}
 
-	butterfly->SetPosition(Translate(_pos));
+	butterfly[0]->SetPosition(_pos[0]);
+
+	_pos[1] += _direct *delta*5.0f;
+	butterfly[1]->SetPosition(_pos[1]);
 }
 
 void Room5::DetectCollider() {
@@ -231,6 +249,37 @@ void Room5::DetectCollider() {
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room6isTouch = false;
 	}
+
+
+	if (CheckCollider(butterfly[1]->GetCollider(), _pFloor->GetCollider())) {
+		if (butterfly[1]->GetTrigger()) {
+			_direct.y *= -1;
+			butterfly[1]->SetTrigger(false);
+		}
+	}
+	else if (CheckCollider(butterfly[1]->GetCollider(), _FrontWall->GetCollider())) {
+		if (butterfly[1]->GetTrigger()) {
+			_direct.z *= -1;
+			butterfly[1]->SetMirror(true, false);
+			butterfly[1]->SetTrigger(false);
+		}	
+	}
+	else if (CheckCollider(butterfly[1]->GetCollider(), _BackWall->GetCollider())) {
+		if (butterfly[1]->GetTrigger()) {
+			_direct.z *= -1;
+			butterfly[1]->SetMirror(true, false);
+			butterfly[1]->SetTrigger(false);
+		}
+	}
+	else if (CheckCollider(butterfly[1]->GetCollider(), _pTop->GetCollider())) {
+		if (butterfly[1]->GetTrigger()) {
+			_direct.y *= -1;
+			butterfly[1]->SetTrigger(false);
+		}
+	}
+	else {
+		butterfly[1]->SetTrigger(true);
+	}
 }
 
 void Room5::Draw()
@@ -264,6 +313,7 @@ void Room5::Draw()
 	cube[1]->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	glDepthMask(GL_FALSE);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->ladder);
 	_RightWall->Draw();
@@ -272,8 +322,10 @@ void Room5::Draw()
 	_FrontWall->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->butterfly);
-	butterfly->Draw();
+	butterfly[1]->Draw();
+	butterfly[0]->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glDepthMask(GL_TRUE);
 		//glActiveTexture(GL_TEXTURE0); // select active texture 0
 		//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[6]); // »P Diffuse Map µ²¦X
 		//glActiveTexture(GL_TEXTURE1); // select active texture 1
@@ -297,5 +349,6 @@ Room5::~Room5() {
 	if(cube[0] != NULL)delete cube[0];
 	if (cube[1] != NULL)delete cube[1];
 
-	if (butterfly != NULL)delete butterfly;
+	if (butterfly[0] != NULL)delete butterfly[0];
+	if (butterfly[1] != NULL)delete butterfly[1];
 }
