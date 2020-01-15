@@ -20,7 +20,7 @@ public:
 	GLuint Light, NormalMap;
 	GLuint g_uiSphereCubeMap;
 	GLuint babyWall, babyFloor,	Wood, babyUse[4], parant, bullet;//room1
-	GLuint board, stand, desk, window, clock, teacher;
+	GLuint board, stand, desk, window, clock, teacher, zero, one, two;
 	GLuint workWall, workBook, printer, computer, file, breakfile;
 	GLuint weddingChair, weddingFW, weddingWall, weddingDoor, weddingFloor, churchStand, mushi, husband;
 	GLuint heart, hospitalCarbine, hospitalChair, hospitalDoor, hospitalWindow, diandi, medcine, metal;
@@ -79,6 +79,9 @@ public:
 		butterfly = texturepool->AddTexture("texture/butterfly.png");
 		bullet = texturepool->AddTexture("texture/bullet.png");
 		breakfile = texturepool->AddTexture("texture/breakfile.png");
+		zero = texturepool->AddTexture("texture/0.png");
+		one = texturepool->AddTexture("texture/1.png");
+		two = texturepool->AddTexture("texture/2.png");
 
 		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}

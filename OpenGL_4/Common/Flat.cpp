@@ -38,6 +38,10 @@ Flat::Flat(char direct, vec3 iSize, vec4 pos, float angle, vec4 roomPos)
 	SetColor(vec4(0.6f));
 }
 
+void Flat::SetNormal(mat4 &mat) {
+	_pSquares->_normal = normalize(mat*vec4(0, 1, 0, 1));
+}
+
 void Flat::SetPosition(vec4 &vec) {
 	mat4 mat = Translate(vec);
 	_pSquares->SetTRSMatrix(mat*mT);

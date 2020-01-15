@@ -13,9 +13,13 @@ private:
 	Flat *diandi, *hospitalChair, *heart, *hospitalCarbine;
 	Flat *medcine[3];
 	Model *hospitalBed;
+
+	Flat *collider;
 public:
 	Room4(vec4 pos = vec4(0, 0, 0, 1));
 	~Room4();
+
+	bool isTurn = false;
 
 	void Create();
 

@@ -52,8 +52,12 @@ public:
 	void SetViewPosition(point4 vEye) {
 		_pSquares->SetViewPosition(vEye);
 	}
+	vec4 GetNormal() {
+		return _pSquares->_normal;
+	}
 
 	void SetPosition(vec4 &vec);
+	void SetNormal(mat4 &mat);
 };
 
 #endif

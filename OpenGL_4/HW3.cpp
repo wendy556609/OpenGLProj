@@ -357,9 +357,9 @@ LightSource g_Light5[LightCount] = {
 	{
 		0,
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // ambient 
-		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // diffuse
+		color4(0.5f, 0.5f, 0.5f, 1.0f), // diffuse
 		color4(g_fLightR, g_fLightG, g_fLightB, 1.0f), // specular
-		point4(0.0f + roomPos5.x, 25.0f + roomPos5.y, 0.0f + roomPos5.z, 1.0f),   // position
+		point4(0.0f + roomPos5.x, 25.0f + roomPos5.y, 15.0f + roomPos5.z, 1.0f),   // position
 		point4(0.0f, 0.0f, 0.0f, 1.0f),   // halfVector
 		vec3(0.0f + roomPos5.x, 0.0f + roomPos5.y, 0.0f + roomPos5.z),			  //spotTarget
 		vec3(0.0f, 0.0f, 0.0f),			  //spotDirection
@@ -496,7 +496,7 @@ LightSource g_Light6[LightCount] = {
 };
 
 //Buttom
-Sprite *g_p2DBtn[4];
+Sprite *g_p2DBtn[3];
 mat4  g_2DView;
 mat4  g_2DProj;
 //CWireSphere *_pLight;
@@ -517,7 +517,7 @@ void init(void)
 	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
 
-	eye = point4(0.0f + roomPos3.x, 10.0f + roomPos3.y, -20.0f + roomPos3.z, 1.0f);
+	eye = point4(0.0f + roomPos6.x, 10.0f + roomPos6.y, -20.0f + roomPos6.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -567,29 +567,25 @@ void SetBtn() {
 	vColor.x = 1; vColor.y = 1; vColor.z = 1; g_p2DBtn[0]->SetDefaultColor(vColor);
 	mxT = Translate(0.90f, -0.90f, 0);
 	g_p2DBtn[0]->SetBtnTRSMatrix(mxT*mxS);
+	g_p2DBtn[0]->SetTextureLayer(DIFFUSE_MAP);
 	g_p2DBtn[0]->SetViewMatrix(g_2DView);
 	g_p2DBtn[0]->SetViewMatrix(g_2DProj);
 
 	g_p2DBtn[1] = new Sprite;
-	vColor.x = 1; vColor.y = 0; vColor.z = 0; g_p2DBtn[1]->SetDefaultColor(vColor);
+	vColor.x = 1; vColor.y = 1; vColor.z = 1; g_p2DBtn[1]->SetDefaultColor(vColor);
 	mxT = Translate(0.75f, -0.90f, 0);
 	g_p2DBtn[1]->SetBtnTRSMatrix(mxT*mxS);
+	g_p2DBtn[1]->SetTextureLayer(DIFFUSE_MAP);
 	g_p2DBtn[1]->SetViewMatrix(g_2DView);
 	g_p2DBtn[1]->SetViewMatrix(g_2DProj);
 
 	g_p2DBtn[2] = new Sprite;
-	vColor.x = 0; vColor.y = 1; vColor.z = 0; g_p2DBtn[2]->SetDefaultColor(vColor);
+	vColor.x = 1; vColor.y = 1; vColor.z = 1; g_p2DBtn[2]->SetDefaultColor(vColor);
 	mxT = Translate(0.60f, -0.90f, 0);
 	g_p2DBtn[2]->SetBtnTRSMatrix(mxT*mxS);
+	g_p2DBtn[2]->SetTextureLayer(DIFFUSE_MAP);
 	g_p2DBtn[2]->SetViewMatrix(g_2DView);
 	g_p2DBtn[2]->SetViewMatrix(g_2DProj);
-
-	g_p2DBtn[3] = new Sprite;
-	vColor.x = 0; vColor.y = 0; vColor.z = 1; g_p2DBtn[3]->SetDefaultColor(vColor);
-	mxT = Translate(0.45f, -0.90f, 0);
-	g_p2DBtn[3]->SetBtnTRSMatrix(mxT*mxS);
-	g_p2DBtn[3]->SetViewMatrix(g_2DView);
-	g_p2DBtn[3]->SetViewMatrix(g_2DProj);
 }
 
 //----------------------------------------------------------------------------
@@ -611,7 +607,17 @@ void GL_Display(void)
 	room5->AlphaDraw();	
 	glDepthMask(GL_TRUE);
 	glDisable(GL_DEPTH_TEST);
-	for (int i = 0; i < 4; i++) g_p2DBtn[i]->Draw();
+	auto texture = Texture::getInstance();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->zero);
+	g_p2DBtn[0]->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->one);
+	g_p2DBtn[1]->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->two);
+	g_p2DBtn[2]->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glEnable(GL_DEPTH_TEST);
 
 	glDisable(GL_BLEND);
@@ -631,9 +637,9 @@ void UpdateLightPosition(float dt)
 		g_fLightTheta -= (float)M_PI*2.0f;
 		g_fElapsedTime -= 4.0f;
 	}
-	g_Light1[0].position.x = 15.0f * sinf(g_fLightTheta);
-	g_Light1[0].position.z = 15.0f * cosf(g_fLightTheta);
-	mxT = Translate(g_Light1[0].position);
+	g_Light5[0].position.x = roomPos5.x+15.0f  *sinf(g_fLightTheta);
+	g_Light5[0].position.z = roomPos5.z+15.0f * cosf(g_fLightTheta);
+	mxT = Translate(g_Light5[0].position);
 }
 //----------------------------------------------------------------------------
 
@@ -652,7 +658,7 @@ void onFrameMove(float delta)
 		room6->SetViewMatrix(mvx);
 	}
 
-	if (g_bAutoRotating) { // Part 2 : 重新計算 Light 的位置
+	if (room5->isTurn) { // Part 2 : 重新計算 Light 的位置
 		UpdateLightPosition(delta);
 	}
 	// 如果需要重新計算時，在這邊計算每一個物件的顏色
@@ -723,7 +729,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		// Part 2 : for single light source
 	case 65: // A key
 	case 97: // a key
-		room3->SetSolve(true);
+		room3->SetSolve();
 		break;
 	case 82: // R key
 		if (g_fLightR <= 0.95f) g_fLightR += 0.05f;
@@ -758,7 +764,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		delete room4;
 		delete room5;
 		delete room6;
-		for (int i = 0; i < 4; i++) delete g_p2DBtn[i];
+		for (int i = 0; i < 3; i++) delete g_p2DBtn[i];
 		Camera::getInstance()->destroyInstance();
 		TexturePool::getInstance()->destroyInstance();
 		Texture::getInstance()->destroyInstance();
@@ -778,20 +784,16 @@ void Win_Mouse(int button, int state, int x, int y) {
 			pt.x = 2.0f*(float)x / SCREEN_SIZE - 1.0f;
 			pt.y = 2.0f*(float)(SCREEN_SIZE - y) / SCREEN_SIZE - 1.0f;
 			if (g_p2DBtn[0]->OnTouches(pt)) {
-				if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
-				else g_bAutoRotating = false;
+				//if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
+				//else g_bAutoRotating = false;
 			}
 			else if (g_p2DBtn[1]->OnTouches(pt)) {
-				if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
-				else g_Light1[1].isLighting = true;
+				//if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
+				//else g_Light1[1].isLighting = true;
 			}
 			else if (g_p2DBtn[2]->OnTouches(pt)) {
-				if (g_p2DBtn[2]->getButtonStatus())g_Light1[2].isLighting = false;
-				else g_Light1[2].isLighting = true;
-			}
-			else if (g_p2DBtn[3]->OnTouches(pt)) {
-				if (g_p2DBtn[3]->getButtonStatus())g_Light1[3].isLighting = false;
-				else g_Light1[3].isLighting = true;
+				//if (g_p2DBtn[2]->getButtonStatus())g_Light1[2].isLighting = false;
+				//else g_Light1[2].isLighting = true;
 			}
 			else {
 				isShoot = true;

@@ -25,6 +25,8 @@ public:
 	void AlphaDraw() {};
 
 	void DetectCollider();
+
+	void test();
 };
 
 #endif

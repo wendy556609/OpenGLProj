@@ -92,6 +92,9 @@ void Room4::Create() {
 	medcine[2] = new Flat('B', vec3(10, 10, 1), vec4(-25.0f, 5.0f, -30.0f, 1), 90, roomPos);
 	medcine[2]->SetTextureLayer(DIFFUSE_MAP);
 	medcine[2]->SetMirror(true, false);
+
+	collider = new Flat('F', vec3(4, 25, 2), vec4(0, 0, 35, 1), -90, roomPos);
+	collider->SetTrigger(true);
 }
 void Room4::SetProjectionMatrix(mat4 &mpx)
 {
@@ -202,6 +205,9 @@ void Room4::DetectCollider() {
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room5isTouch = false;
 	}
+	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
+		isTurn = true;
+	}
 }
 
 void Room4::Draw()
@@ -273,4 +279,6 @@ Room4::~Room4() {
 	if (medcine[0] != NULL)delete medcine[0];
 	if (medcine[1] != NULL)delete medcine[1];
 	if (medcine[2] != NULL)delete medcine[2];
+
+	if (collider != NULL)delete collider;
 }

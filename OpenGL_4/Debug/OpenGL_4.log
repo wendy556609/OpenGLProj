@@ -1,3 +1,9 @@
-﻿  Room2.cpp
+﻿  HW3.cpp
+d:\program\opengl_hw3\opengl_4\common\room2.h(5): warning C4005: 'DoorCount': 巨集重複定義
+  d:\program\opengl_hw3\opengl_4\common\room.h(5): note: 請參閱 'DoorCount' 之前的定義
+d:\program\opengl_hw3\opengl_4\common\room4.h(5): warning C4005: 'DoorCount': 巨集重複定義
+  d:\program\opengl_hw3\opengl_4\common\room2.h(5): note: 請參閱 'DoorCount' 之前的定義
+  Room5.cpp
+  正在產生程式碼...
   OpenGL_4.vcxproj -> D:\Program\OpenGL_HW3\Debug\OpenGL_4.exe
   OpenGL_4.vcxproj -> D:\Program\OpenGL_HW3\Debug\OpenGL_4.pdb (Full PDB)

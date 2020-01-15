@@ -228,7 +228,6 @@ void Room3::DetectCollider() {
 		if (_door[2]->GetTrigger())camera->Room4isTouch = false;
 	}
 	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
-		Print("a");
 		isClear = true;
 	}
 }

@@ -198,7 +198,7 @@ void Room2::Update(LightSource *light, float delta) {
 	DetectCollider();
 }
 
-void  Room2::SetSolve(bool solve) {
+void  Room2::SetSolve() {
 	auto camera = Camera::getInstance();
 	if (CheckCollider(camera->GetCollider(), file[0]->GetCollider())) {
 		isSolve[0] = true;

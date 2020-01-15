@@ -26,7 +26,7 @@ public:
 	void Update(LightSource *light, float delta);
 	void Draw();
 	void AlphaDraw() {};
-	void SetSolve(bool solve);
+	void SetSolve();
 
 	void DetectCollider();
 };

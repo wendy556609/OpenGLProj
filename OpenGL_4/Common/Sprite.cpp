@@ -4,10 +4,12 @@ Sprite::Sprite()
 {
 	m_iNumVtx = QUAD_NUM;
 	m_pPoints = NULL; m_pNormals = NULL; m_pTex = NULL;
+	m_pLightTex = NULL; m_pNormalTex = NULL; m_pTangentV = NULL;
 
 	m_pPoints = new vec4[m_iNumVtx];
 	m_pNormals = new vec3[m_iNumVtx];
 	m_pColors = new vec4[m_iNumVtx];
+	m_pTex = new vec2[m_iNumVtx];
 
 	// 此處改成正面為面向正 Z 方向 
 	m_pPoints[0] = vec4(-0.5f, -0.5f, 0.0f, 1.0f);
@@ -23,6 +25,13 @@ Sprite::Sprite()
 	m_pNormals[3] = vec3(0, 0, 1.0f);
 	m_pNormals[4] = vec3(0, 0, 1.0f);
 	m_pNormals[5] = vec3(0, 0, 1.0f);
+
+	m_pTex[0] = vec2(0.0f, 0.0f);
+	m_pTex[1] = vec2(1.0f, 0.0f);
+	m_pTex[2] = vec2(1.0f, 1.0f);
+	m_pTex[3] = vec2(0.0f, 0.0f);
+	m_pTex[4] = vec2(1.0f, 1.0f);
+	m_pTex[5] = vec2(0.0f, 1.0f);
 
 	// Set shader's name
 	SetShaderName("vsVtxColor.glsl", "fsVtxColor.glsl");

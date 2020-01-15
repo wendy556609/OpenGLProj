@@ -211,7 +211,7 @@ void Room5::Fly(float delta) {
 
 	butterfly[0]->SetPosition(_pos[0]);
 
-	_pos[1] += _direct *delta*5.0f;
+	_pos[1] += _direct *delta*10.0f;
 	butterfly[1]->SetPosition(_pos[1]);
 }
 

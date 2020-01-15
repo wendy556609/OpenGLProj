@@ -73,6 +73,7 @@ void Room1::Create() {
 	teacher->SetTextureLayer(DIFFUSE_MAP);
 	teacher->SetTiling(1, 1);
 	teacher->SetTurn(90);
+	teacher->SetNormal(RotateZ(90));
 
 	desk[0] = new Model(modelNum->desk);
 	desk[0]->SetTextureLayer(DIFFUSE_MAP);
@@ -160,7 +161,54 @@ void Room1::Update(LightSource *light, float delta) {
 		desk[i]->Update(light, delta);
 	}
 
+	test();
+
 	DetectCollider();
+}
+
+void Room1::test() {
+	auto camera = Camera::getInstance();
+	//bool view;
+	mat4 mat;
+	mat4 rotate;
+	float angleCosine;
+	vec4 vec = normalize(camera->_pos - teacher->_pos);
+	vec4 lookAt = vec4(-1, 0, 0, 1);
+	vec4 upAux = cross4(lookAt, vec);
+	//mat4 mat = camera->getViewMatrix(view);
+	//mat4 mat = LookAt(teacher->_pos, camera->getViewPosition(), vec4(0, 1.0f, 0, 1.0f));
+	angleCosine = vec.x*lookAt.x + 0*lookAt.y + vec.z*lookAt.z;
+	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)){
+		if (camera->_pos.z <= teacher->_pos.z) {
+			rotate = RotateY(360.0f-acos(angleCosine) * 180 / 3.14);
+		}
+		else {
+			rotate = RotateY(acos(angleCosine) * 180 / 3.14);// * 180 / 3.14
+		}
+
+	}
+
+	teacher->SetTRSMatrix(Translate(vec4(30.0f, 10.0f, 15, 1))*Translate(roomPos)*Scale(15, 20, 15)*rotate*Translate(vec4(0, 0, 0, 1))*RotateZ(90));//
+	//if ((angleCosine < 0.99990) && (angleCosine > -0.9999))
+	//	glRotatef(, upAux[0], upAux[1], upAux[2]);
+	//}
+	//PdotC = vec.x * 0 + 0 * 1 + vec.z * 0;
+	//vec4 n = normalize(camera->getViewPosition() - teacher->_pos);
+	//vec4 u = normalize(cross4(vec4(0, 1.0f, 0, 1.0f),n));
+	//vec4 v = normalize(cross4(n, u));
+	//vec4 t = vec4(0.0, 0.0, 0.0, 1.0);
+	//mat = mat4(u, v, n, t);
+	//rotate[1][1] = mat[1][1];
+	//rotate[2][1] = mat[2][1];
+	//rotate[1][2] = mat[1][2];
+	//rotate[2][2] = mat[2][2];
+	//rotate[1][1] = PdotC;
+	//rotate[2][1] = powf((1-PdotC*PdotC),0.5);
+	//rotate[1][2] = -rotate[2][1];
+	//rotate[2][2] = PdotC;
+	//rotateX[3] = vec4(0, 0, 0, 1);
+
+	
 }
 
 void Room1::DetectCollider() {
