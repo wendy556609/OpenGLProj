@@ -17,6 +17,8 @@ public:
 	Room2(vec4 pos = vec4(0, 0, 0, 1));
 	~Room2();
 
+	bool isSolve[4];
+
 	void Create();
 
 	void SetProjectionMatrix(mat4 &mpx);
@@ -24,6 +26,7 @@ public:
 	void Update(LightSource *light, float delta);
 	void Draw();
 	void AlphaDraw() {};
+	void SetSolve(bool solve);
 
 	void DetectCollider();
 };

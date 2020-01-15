@@ -73,23 +73,23 @@ void Room2::Create() {
 	printer->SetTextureLayer(DIFFUSE_MAP);
 	printer->SetTiling(1, 1);
 
-	file[0] = new Flat('F', vec3(5, 10, 1), vec4(7.5, 15.0f, 5, 1), -90, roomPos);
+	file[0] = new Flat('F', vec3(10, 5, 2), vec4(7.5, 12.5f, 5, 1), -90, roomPos);
 	file[0]->SetMirror(true, true);
 	file[0]->SetTextureLayer(DIFFUSE_MAP);
 	file[0]->SetTiling(1, 1);
 
-	file[1] = new Flat('R', vec3(1, 15, 10), vec4(30, 7.5, -10, 1), 90, roomPos);
+	file[1] = new Flat('R', vec3(2, 10, 15), vec4(30, 5.0f, -10, 1), 90, roomPos);
 	file[1]->SetTextureLayer(DIFFUSE_MAP);
 	file[1]->SetTiling(1, 1);
 	file[1]->SetTurn(90);
 
-	file[2] = new Flat('L', vec3(1, 15, 10), vec4(-25, 7.5, -20, 1), -90, roomPos);
+	file[2] = new Flat('L', vec3(2, 10, 15), vec4(-25, 5.0f, -20, 1), -90, roomPos);
 	file[2]->SetTextureLayer(DIFFUSE_MAP);
 	file[2]->SetTiling(1, 1);
 	file[2]->SetTurn(-90);
 
-	file[3] = new Flat('F', vec3(10, 15, 1), vec4(25, 7.5f, 40, 1), -90, roomPos);
-	file[3]->SetMirror(true, false);
+	file[3] = new Flat('F', vec3(15, 10, 2), vec4(25, 5.0f, 40, 1), -90, roomPos);
+	file[3]->SetMirror(true, true);
 	file[3]->SetTextureLayer(DIFFUSE_MAP);
 	file[3]->SetTiling(1, 1);
 
@@ -97,6 +97,12 @@ void Room2::Create() {
 	workDesk->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Translate(roomPos)*RotateY(-90)*Scale(25.0f, 25.0f, 25.0f));
 	workDesk->SetMaterials(vec4(0.95f, 0.95f, 0.95f, 1), vec4(0.85f, 0.85f, 0.85f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	workDesk->SetKaKdKsShini(0, 0.8f, 0.5f, 1);
+
+	for (int i = 0; i < 4; i++)
+	{
+		isSolve[i] = false;
+	}
+	
 }
 void Room2::SetProjectionMatrix(mat4 &mpx)
 {
@@ -164,7 +170,48 @@ void Room2::Update(LightSource *light, float delta) {
 	_door[1]->Update(light, delta);
 	_door[2]->Update(light, delta);
 
+	if (isSolve[0]) {
+		file[0]->SetTRSMatrix(Translate(vec4(7.5, 15.0f, 5, 1)+roomPos)*Scale(5, 10, 2)*RotateX(-90));
+	}
+	else {
+		file[0]->SetTRSMatrix(Translate(vec4(7.5, 12.5f, 5, 1)+roomPos)*Scale(10, 5, 2)*RotateX(-90));
+	}
+	if (isSolve[1]) {
+		file[1]->SetTRSMatrix(Translate(vec4(30, 7.5f, -10, 1)+roomPos)*Scale(2, 15, 10)*RotateZ(90));
+	}
+	else {
+		file[1]->SetTRSMatrix(Translate(vec4(30, 5.0f, -10, 1)+roomPos)*Scale(2, 10, 15)*RotateZ(90));
+	}
+	if (isSolve[2]) {
+		file[2]->SetTRSMatrix(Translate(vec4(-25, 7.5f, -20, 1)+roomPos)*Scale(2, 15, 10)*RotateZ(-90));
+	}
+	else {
+		file[2]->SetTRSMatrix(Translate(vec4(-25, 5.0f, -20, 1)+roomPos)*Scale(2, 10, 15)*RotateZ(-90));
+	}
+	if (isSolve[3]) {
+		file[3]->SetTRSMatrix(Translate(vec4(25, 7.5f, 40, 1) + roomPos)*Scale(10, 15, 2)*RotateX(-90));
+	}
+	else {
+		file[3]->SetTRSMatrix(Translate(vec4(25, 5.0f, 40, 1) + roomPos)*Scale(15, 10, 2)*RotateX(-90));
+	}
+
 	DetectCollider();
+}
+
+void  Room2::SetSolve(bool solve) {
+	auto camera = Camera::getInstance();
+	if (CheckCollider(camera->GetCollider(), file[0]->GetCollider())) {
+		isSolve[0] = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), file[1]->GetCollider())) {
+		isSolve[1] = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), file[2]->GetCollider())) {
+		isSolve[2] = true;
+	}
+	else if (CheckCollider(camera->GetCollider(), file[3]->GetCollider())) {
+		isSolve[3] = true;
+	}
 }
 
 void Room2::DetectCollider() {
@@ -236,12 +283,47 @@ void Room2::Draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->printer);
 	printer->Draw();	
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->file);		
-	file[2]->Draw();
-	file[3]->Draw();
-	file[0]->Draw();
-	file[1]->Draw();
+	if (isSolve[2]) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->file);
+		file[2]->Draw();
+	}
+	else {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->breakfile);
+		file[2]->Draw();
+	}
+	if (isSolve[3]) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->file);
+		file[3]->Draw();
+	}
+	else {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->breakfile);
+		file[3]->Draw();
+	}	
+	if (isSolve[0]) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->file);
+		file[0]->Draw();
+	}
+	else {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->breakfile);
+		file[0]->Draw();
+	}
+
+	if (isSolve[1]) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->file);
+		file[1]->Draw();
+	}
+	else {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->breakfile);
+		file[1]->Draw();
+	}
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->computer);
 	computer->Draw();
