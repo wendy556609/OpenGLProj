@@ -23,7 +23,7 @@ public:
 	GLuint board, stand, desk, window, clock, teacher, zero, one, two;
 	GLuint workWall, workBook, printer, computer, file, breakfile;
 	GLuint weddingChair, weddingFW, weddingWall, weddingDoor, weddingFloor, churchStand, mushi, husband;
-	GLuint heart, hospitalCarbine, hospitalChair, hospitalDoor, hospitalWindow, diandi, medcine, metal;
+	GLuint heart, hospitalCarbine, CarbineNormalMap, hospitalChair, hospitalDoor, hospitalWindow, diandi, medcine, metal;
 	GLuint grassland, Sunny_NZ, ladder, RIP, butterfly, flower;
 
 	static Texture* create();		// 建立 TexturePool 的實體
@@ -85,6 +85,7 @@ public:
 		flower = texturepool->AddTexture("texture/flower.png");
 		WhiteLight = texturepool->AddTexture("texture/WhiteLight.png");
 		gun = texturepool->AddTexture("texture/gun.png");
+		CarbineNormalMap = texturepool->AddTexture("texture/CarbineNormalMap.png");
 
 		g_uiSphereCubeMap = CubeMap_load_SOIL("texture/Sunny_PX.png", "texture/Sunny_NX.png", "texture/Sunny_NY.png", "texture/Sunny_PY.png", "texture/Sunny_PZ.png", "texture/Sunny_NZ.png");
 	}

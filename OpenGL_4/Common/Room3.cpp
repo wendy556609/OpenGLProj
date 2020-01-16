@@ -217,6 +217,7 @@ void Room3::DetectCollider() {
 
 	if (CheckCollider(camera->GetCollider(), _door[0]->GetCollider())) {
 		if (_door[0]->GetTrigger())camera->Room4isTouch = false;
+		if (gameManager->room3Clear)gameManager->room4Enter = true;
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room4isTouch = false;

@@ -24,7 +24,9 @@ public:
 	bool room5Clear;
 	bool room6Clear;
 
+	bool room1Enter;
 	bool room2Enter;
+	bool room4Enter;
 	bool room6Enter;
 
 	bool allClear;

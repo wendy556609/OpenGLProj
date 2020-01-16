@@ -13,7 +13,7 @@ GameManager::GameManager() {
 }
 
 void GameManager::Init(){
-	initPos = vec4(0.0f, 10.0f, -20.0f, 1.0f);
+	initPos = vec4(0.0f, 5.0f, -20.0f, 1.0f);
 	room1Clear = false;
 	room2Clear = false;
 	room3Clear = false;
@@ -21,7 +21,9 @@ void GameManager::Init(){
 	room5Clear = false;
 	room6Clear = false;
 
+	room1Enter = true;
 	room2Enter = false;
+	room4Enter = false;
 	room6Enter = false;
 
 	allClear = true;

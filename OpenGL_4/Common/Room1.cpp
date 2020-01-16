@@ -220,7 +220,10 @@ void Room1::DetectCollider() {
 
 	if (CheckCollider(camera->GetCollider(), _door[0]->GetCollider())) {
 		if (_door[0]->GetTrigger())camera->Room2isTouch = false;
-		if(gameManager->room1Clear)gameManager->room2Enter = true;
+		if (gameManager->room1Clear) {
+			gameManager->room1Enter = false;
+			gameManager->room2Enter = true;
+		}
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room2isTouch = false;

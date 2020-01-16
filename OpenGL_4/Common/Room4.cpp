@@ -74,7 +74,7 @@ void Room4::Create() {
 	heart->SetMirror(false, true);
 
 	hospitalCarbine = new Flat('L', vec3(1, 20, 15), vec4(-35, 10, 0, 1), -90, roomPos);
-	hospitalCarbine->SetTextureLayer(DIFFUSE_MAP);
+	hospitalCarbine->SetTextureLayer(DIFFUSE_MAP | NORMAL_MAP);
 	hospitalCarbine->SetTurn(-90);
 
 	hospitalChair = new Flat('L', vec3(1, 20, 20), vec4(-25, 5, 25, 1), -90, roomPos);
@@ -209,6 +209,7 @@ void Room4::DetectCollider() {
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room5isTouch = false;
+		if (gameManager->room4Clear)gameManager->room4Enter = false;
 	}
 	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
 		gameManager->room5Clear = true;
@@ -273,6 +274,8 @@ void Room4::AlphaDraw() {
 	heart->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->hospitalCarbine);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texture->CarbineNormalMap);
 	hospitalCarbine->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 

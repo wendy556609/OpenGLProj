@@ -518,7 +518,7 @@ void init(void)
 	// 產生所需之 Model View 與 Projection Matrix
 	auto gameManager = GameManager::create();
 
-	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 5.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -704,10 +704,12 @@ void onFrameMove(float delta)
 void Move(float delta) {
 	if (isMove) {
 		auto camera = Camera::getInstance();
+		auto gameManager = GameManager::create();
 		front = normalize(at - eye);
 		right = normalize(cross(front, g_vUp));
 		camera->_front = front;
 		if (!camera->Room1isTouch && !camera->Room2isTouch && !camera->Room3isTouch && !camera->Room4isTouch && !camera->Room5isTouch && !camera->Room6isTouch)camera->prePos = eye;
+
 		switch (_state)
 		{
 		case Front:			
@@ -717,10 +719,10 @@ void Move(float delta) {
 			eye -= point4(front.x, front.y, front.z, 0.0f)* 150.0f* delta;
 			break;
 		case Left:
-			eye -= point4(right.x, right.y, right.z, 0.0f)* 150.0f* delta;
+			eye -= point4(right.x, 0, right.z, 0.0f)* 150.0f* delta;
 			break;
 		case Right:
-			eye += point4(right.x, right.y, right.z, 0.0f)* 150.0f* delta;
+			eye += point4(right.x, 0, right.z, 0.0f)* 150.0f* delta;
 			break;
 		case Stop:
 			break;
@@ -729,6 +731,8 @@ void Move(float delta) {
 		}
 		if (camera->Room1isTouch || camera->Room2isTouch || camera->Room3isTouch || camera->Room4isTouch || camera->Room5isTouch || camera->Room6isTouch)eye = camera->prePos;
 		at += point4(front.x, 0.0f, front.z, 0.0f);
+		if (gameManager->room1Enter)eye.y = 5.0f;
+		else if(gameManager->room4Enter)eye.y = 15.0f;
 		camera->_pos = eye;
 		camera->updateViewLookAt(eye, at);
 	}
@@ -746,8 +750,28 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		break;
 		//----------------------------------------------------------------------------
 		// Part 2 : for single light source
-	case 65: // A key
-	case 97: // a key
+	case 'W': // W key
+	case 'w': // w key
+		_state = Front;
+		isMove = true;
+		break;
+	case 'S': // S key
+	case 's': // s key
+		_state = Back;
+		isMove = true;
+		break;
+	case 'A': // A key
+	case 'a': // a key
+		_state = Left;
+		isMove = true;
+		break;
+	case 'D': // D key
+	case 'd': // d key
+		_state = Right;
+		isMove = true;
+		break;
+	case 'Z': // Z key
+	case 'z': // z key
 		room3->SetSolve();
 		room6->SetTake();
 		room1->SetTake();
@@ -808,12 +832,8 @@ void Win_Mouse(int button, int state, int x, int y) {
 			pt.y = 2.0f*(float)(SCREEN_SIZE - y) / SCREEN_SIZE - 1.0f;
 			if (gameManager->room2Enter) {
 				if (g_p2DBtn[0]->OnTouches(pt)) {
-					//if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
-					//else g_bAutoRotating = false;
 				}
 				else if (g_p2DBtn[1]->OnTouches(pt)) {
-					//if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
-					//else g_Light1[1].isLighting = true;
 				}
 				else if (g_p2DBtn[2]->OnTouches(pt)) {
 					gameManager->room2Clear = true;
