@@ -108,6 +108,9 @@
     <ClInclude Include="Common\Model.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\GameManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\CLineSegment.cpp">
@@ -183,6 +186,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Common\Model.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\GameManager.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>

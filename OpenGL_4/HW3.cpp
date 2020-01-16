@@ -62,7 +62,7 @@ float g_fLightB = 0.95f;
 
 float roomY = 0;
 
-vec4 roomPos1=vec4(0, roomY, 0, 1);
+vec4 roomPos1 = vec4(0, roomY, 0, 1);
 vec4 roomPos2 = vec4(100.25f, roomY, 0, 1);
 vec4 roomPos3 = vec4(100.25f, roomY, 100.25f, 1);
 vec4 roomPos4 = vec4(0, roomY, 100.25f, 1);
@@ -516,8 +516,9 @@ void init(void)
 	auto modelNum = ModelNum::create();
 	modelNum->SetModel();
 	// 產生所需之 Model View 與 Projection Matrix
+	auto gameManager = GameManager::create();
 
-	eye = point4(0.0f + roomPos6.x, 10.0f + roomPos6.y, -20.0f + roomPos6.z, 1.0f);
+	eye = point4(0.0f + roomPos1.x, 10.0f + roomPos1.y, -20.0f + roomPos1.z, 1.0f);
 	at = point4(g_fRadius*sin(g_fTheta)*sin(g_fPhi), g_fRadius*cos(g_fTheta), g_fRadius*sin(g_fTheta)*cos(g_fPhi), 1.0f);
 	auto camera = Camera::create();
 	camera->updateViewLookAt(eye, at);
@@ -526,22 +527,14 @@ void init(void)
 	camera->_front = front;
 	camera->_pos = eye;
 
+	gameManager->initPos = eye;
+
 	room1 = new Room(roomPos1);
 	room2 = new Room1(roomPos2);
 	room3 = new Room2(roomPos3);
 	room4 = new Room3(roomPos4);
 	room5 = new Room4(roomPos5);
 	room6 = new Room5(roomPos6);
-
-	//for (int i = 0; i < LightCount; i++)
-	//{
-	//	g_Light1[i].UpdateDirection();
-	//	g_Light2[i].UpdateDirection();
-	//	g_Light3[i].UpdateDirection();
-	//	g_Light4[i].UpdateDirection();
-	//	g_Light5[i].UpdateDirection();
-	//	g_Light6[i].UpdateDirection();
-	//}
 
 	SetBtn();
 
@@ -594,7 +587,7 @@ void GL_Display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the window
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	auto gameManager = GameManager::create();
 	room1->Draw();
 	room2->Draw();
 	room3->Draw();
@@ -602,24 +595,34 @@ void GL_Display(void)
 	room5->Draw();
 	room6->Draw();
 
-	glDepthMask(GL_FALSE);
-	room6->AlphaDraw();
-	room5->AlphaDraw();	
-	glDepthMask(GL_TRUE);
-	glDisable(GL_DEPTH_TEST);
-	auto texture = Texture::getInstance();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->zero);
-	g_p2DBtn[0]->Draw();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->one);
-	g_p2DBtn[1]->Draw();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->two);
-	g_p2DBtn[2]->Draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glEnable(GL_DEPTH_TEST);
+	if (!gameManager->room6Enter) {
+		glDepthMask(GL_FALSE);
+		room6->AlphaDraw();
+		room5->AlphaDraw();
+		glDepthMask(GL_TRUE);
+	}
+	else {
+		glDepthMask(GL_FALSE);
+		room5->AlphaDraw();
+		room6->AlphaDraw();		
+		glDepthMask(GL_TRUE);
+	}
 
+	if (gameManager->room2Enter) {
+		auto texture = Texture::getInstance();
+		glDisable(GL_DEPTH_TEST);		
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->zero);
+		g_p2DBtn[0]->Draw();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->one);
+		g_p2DBtn[1]->Draw();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->two);
+		g_p2DBtn[2]->Draw();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glEnable(GL_DEPTH_TEST);
+	}
 	glDisable(GL_BLEND);
 
 	glutSwapBuffers();	// 交換 Frame Buffer
@@ -657,8 +660,9 @@ void onFrameMove(float delta)
 		room5->SetViewMatrix(mvx);
 		room6->SetViewMatrix(mvx);
 	}
+	auto gameManager = GameManager::create();
 
-	if (room5->isTurn) { // Part 2 : 重新計算 Light 的位置
+	if (gameManager->room5Clear) { // Part 2 : 重新計算 Light 的位置
 		UpdateLightPosition(delta);
 	}
 	// 如果需要重新計算時，在這邊計算每一個物件的顏色
@@ -669,6 +673,21 @@ void onFrameMove(float delta)
 	room4->Update(g_Light4, delta);
 	room5->Update(g_Light5, delta);
 	room6->Update(g_Light6, delta);
+
+	if (gameManager->allClear) {
+		gameManager->Init();
+		eye = gameManager->initPos;
+		room1->Init();
+		room2->Init();
+		room3->Init();
+		room4->Init();
+		room5->Init();
+		room6->Init();
+		g_p2DBtn[0]->Init();
+		g_p2DBtn[1]->Init();
+		g_p2DBtn[2]->Init();
+		gameManager->allClear = false;
+	}
 
 	Move(delta);
 
@@ -730,6 +749,8 @@ void Win_Keyboard(unsigned char key, int x, int y)
 	case 65: // A key
 	case 97: // a key
 		room3->SetSolve();
+		room6->SetTake();
+		room1->SetTake();
 		break;
 	case 82: // R key
 		if (g_fLightR <= 0.95f) g_fLightR += 0.05f;
@@ -765,6 +786,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 		delete room5;
 		delete room6;
 		for (int i = 0; i < 3; i++) delete g_p2DBtn[i];
+		GameManager::getInstance()->destroyInstance();
 		Camera::getInstance()->destroyInstance();
 		TexturePool::getInstance()->destroyInstance();
 		Texture::getInstance()->destroyInstance();
@@ -777,25 +799,27 @@ void Win_Keyboard(unsigned char key, int x, int y)
 
 //----------------------------------------------------------------------------
 void Win_Mouse(int button, int state, int x, int y) {
+	auto gameManager = GameManager::create();
 	vec2 pt;
 	switch (button) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN) {
 			pt.x = 2.0f*(float)x / SCREEN_SIZE - 1.0f;
 			pt.y = 2.0f*(float)(SCREEN_SIZE - y) / SCREEN_SIZE - 1.0f;
-			if (g_p2DBtn[0]->OnTouches(pt)) {
-				//if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
-				//else g_bAutoRotating = false;
+			if (gameManager->room2Enter) {
+				if (g_p2DBtn[0]->OnTouches(pt)) {
+					//if (g_p2DBtn[0]->getButtonStatus())g_bAutoRotating = true;
+					//else g_bAutoRotating = false;
+				}
+				else if (g_p2DBtn[1]->OnTouches(pt)) {
+					//if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
+					//else g_Light1[1].isLighting = true;
+				}
+				else if (g_p2DBtn[2]->OnTouches(pt)) {
+					gameManager->room2Clear = true;
+				}
 			}
-			else if (g_p2DBtn[1]->OnTouches(pt)) {
-				//if (g_p2DBtn[1]->getButtonStatus())g_Light1[1].isLighting = false;
-				//else g_Light1[1].isLighting = true;
-			}
-			else if (g_p2DBtn[2]->OnTouches(pt)) {
-				//if (g_p2DBtn[2]->getButtonStatus())g_Light1[2].isLighting = false;
-				//else g_Light1[2].isLighting = true;
-			}
-			else {
+			else if (room1->isTake) {
 				isShoot = true;
 			}
 		}

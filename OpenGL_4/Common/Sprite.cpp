@@ -54,6 +54,11 @@ Sprite::Sprite()
 
 }
 
+void Sprite::Init() {
+	m_bPushed = false;
+	SetColor(m_DefaultColor);
+}
+
 Sprite::~Sprite()
 {
 

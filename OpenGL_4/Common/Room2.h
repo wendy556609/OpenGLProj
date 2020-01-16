@@ -2,13 +2,13 @@
 #define ROOM2_H
 #include "RoomController.h"
 
-#define DoorCount 3
+#define Room2DoorCount 2
 
 class Room2 : public RoomController
 {
 private:
 	int iSize = 100;
-	Flat *_door[DoorCount];
+	Flat *_door[Room2DoorCount];
 
 	Model *workDesk;
 	Flat *computer, *printer;
@@ -27,6 +27,8 @@ public:
 	void Draw();
 	void AlphaDraw() {};
 	void SetSolve();
+
+	void Init();
 
 	void DetectCollider();
 };

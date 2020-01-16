@@ -34,7 +34,7 @@ void Room4::Create() {
 	_RightWall->SetTextureLayer(DIFFUSE_MAP);	
 	_RightWall->SetTurn(90);
 	_RightWall->SetTiling(3, 1);
-	_RightWall->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 0.5f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	_RightWall->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	vT.x = 0.0f; vT.y = 25.0f; vT.z = 50.0f;
 	_FrontWall = new Flat('F', vec3(100, 50, 1), vT, -90, roomPos);
@@ -51,11 +51,11 @@ void Room4::Create() {
 	_BackWall->SetTiling(1, 1);
 
 	vT.x = 49.5f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('R', vec3(3, 20, 10), vT, 90, roomPos);
-	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[0]->SetTrigger(true);
+	_door[0] = new Flat('R', vec3(2, 20, 10), vT, 90, roomPos);
+	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[0]->SetTrigger(false);
 	vT.x = 0.0f; vT.z = -49.5f;
-	_door[1] = new Flat('B', vec3(10, 20, 3), vT, 90, roomPos);
+	_door[1] = new Flat('B', vec3(10, 20, 2), vT, 90, roomPos);
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
 
@@ -63,7 +63,7 @@ void Room4::Create() {
 	////Model	
 	hospitalBed = new Model(modelNum->hospitalBed);
 	hospitalBed->SetTRSMatrix(Translate(vec4(0, 0, 35, 1))*Translate(roomPos)*RotateY(-90)*Scale(10.0f, 10.0f, 10.0f));
-	hospitalBed->SetTextureLayer(DIFFUSE_MAP);
+	hospitalBed->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 
 	diandi = new Flat('F', vec3(10, 20, 1), vec4(15, 10, 35, 1), -90, roomPos);
 	diandi->SetTextureLayer(DIFFUSE_MAP);
@@ -146,6 +146,9 @@ void Room4::SetViewMatrix(mat4 &mvx) {
 }
 
 void Room4::Update(LightSource *light, float delta) {
+	auto gameManager = GameManager::create();
+	if (gameManager->room5Clear)light[0].diffuse = vec4(0.8f, 0.5f, 0.5f, 1.0f);
+	else light[0].diffuse = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	_pFloor->Update(light, delta);
 	_pTop->Update(light, delta);
 	_LeftWall->Update(light, delta);
@@ -173,6 +176,7 @@ void Room4::Update(LightSource *light, float delta) {
 
 void Room4::DetectCollider() {
 	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::create();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{
 		if (!_LeftWall->GetTrigger())camera->Room5isTouch = true;
@@ -201,14 +205,27 @@ void Room4::DetectCollider() {
 
 	if (CheckCollider(camera->GetCollider(), _door[0]->GetCollider())) {
 		if (_door[0]->GetTrigger())camera->Room5isTouch = false;
+		gameManager->room6Enter = false;
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room5isTouch = false;
 	}
 	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
-		isTurn = true;
+		gameManager->room5Clear = true;
+	}
+
+	if (gameManager->room5Clear) {
+		_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		_door[0]->SetTrigger(true);
+		_RightWall->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 0.5f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
+
+void Room4::Init() {
+	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[0]->SetTrigger(false);
+	_RightWall->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+};
 
 void Room4::Draw()
 {
@@ -229,15 +246,15 @@ void Room4::Draw()
 	_BackWall->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	_door[0]->Draw();
 	_door[1]->Draw();
-
 
 	//Model
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->metal);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
 	hospitalBed->Draw();
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Room4::AlphaDraw() {
@@ -257,6 +274,10 @@ void Room4::AlphaDraw() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->hospitalCarbine);
 	hospitalCarbine->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	_door[0]->Draw();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->medcine);
 	medcine[1]->Draw();

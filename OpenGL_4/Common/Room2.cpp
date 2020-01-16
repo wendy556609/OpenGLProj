@@ -49,17 +49,13 @@ void Room2::Create() {
 	_BackWall->SetTiling(2, 1);
 
 	vT.x = -49.5f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
-	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[0]->SetTrigger(true);
+	_door[0] = new Flat('L', vec3(2, 20, 10), vT, -90, roomPos);
+	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[0]->SetTrigger(false);
 	vT.x = 0.0f; vT.z = -49.5f;
-	_door[1] = new Flat('B', vec3(10, 20, 3), vT, 90, roomPos);
+	_door[1] = new Flat('B', vec3(10, 20, 2), vT, 90, roomPos);
 	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[1]->SetTrigger(true);
-	vT.x = 0.0f; vT.z = 49.5f;
-	_door[2] = new Flat('F', vec3(10, 20, 3), vT, -90, roomPos);
-	_door[2]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[2]->SetTrigger(true);
 
 	auto modelNum = ModelNum::getInstance();
 	////Model
@@ -75,22 +71,22 @@ void Room2::Create() {
 
 	file[0] = new Flat('F', vec3(10, 5, 2), vec4(7.5, 12.5f, 5, 1), -90, roomPos);
 	file[0]->SetMirror(true, true);
-	file[0]->SetTextureLayer(DIFFUSE_MAP);
+	file[0]->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 	file[0]->SetTiling(1, 1);
 
 	file[1] = new Flat('R', vec3(2, 10, 15), vec4(30, 5.0f, -10, 1), 90, roomPos);
-	file[1]->SetTextureLayer(DIFFUSE_MAP);
+	file[1]->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 	file[1]->SetTiling(1, 1);
 	file[1]->SetTurn(90);
 
 	file[2] = new Flat('L', vec3(2, 10, 15), vec4(-25, 5.0f, -20, 1), -90, roomPos);
-	file[2]->SetTextureLayer(DIFFUSE_MAP);
+	file[2]->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 	file[2]->SetTiling(1, 1);
 	file[2]->SetTurn(-90);
 
 	file[3] = new Flat('F', vec3(15, 10, 2), vec4(25, 5.0f, 40, 1), -90, roomPos);
 	file[3]->SetMirror(true, true);
-	file[3]->SetTextureLayer(DIFFUSE_MAP);
+	file[3]->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 	file[3]->SetTiling(1, 1);
 
 	workDesk = new Model(modelNum->workDesk);
@@ -124,7 +120,6 @@ void Room2::SetProjectionMatrix(mat4 &mpx)
 
 	_door[0]->SetProjectionMatrix(mpx);
 	_door[1]->SetProjectionMatrix(mpx);
-	_door[2]->SetProjectionMatrix(mpx);
 }
 
 void Room2::SetViewMatrix(mat4 &mvx) {
@@ -146,10 +141,10 @@ void Room2::SetViewMatrix(mat4 &mvx) {
 
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
-	_door[2]->SetViewMatrix(mvx);
 }
 
 void Room2::Update(LightSource *light, float delta) {
+	auto gameManager = GameManager::create();
 	_pFloor->Update(light, delta);
 	_pTop->Update(light, delta);
 	_LeftWall->Update(light, delta);
@@ -168,7 +163,6 @@ void Room2::Update(LightSource *light, float delta) {
 
 	_door[0]->Update(light, delta);
 	_door[1]->Update(light, delta);
-	_door[2]->Update(light, delta);
 
 	if (isSolve[0]) {
 		file[0]->SetTRSMatrix(Translate(vec4(7.5, 15.0f, 5, 1)+roomPos)*Scale(5, 10, 2)*RotateX(-90));
@@ -195,6 +189,10 @@ void Room2::Update(LightSource *light, float delta) {
 		file[3]->SetTRSMatrix(Translate(vec4(25, 5.0f, 40, 1) + roomPos)*Scale(15, 10, 2)*RotateX(-90));
 	}
 
+	if (isSolve[0] && isSolve[1] && isSolve[2] && isSolve[3]) {
+		gameManager->room3Clear = true;
+	}
+
 	DetectCollider();
 }
 
@@ -216,6 +214,7 @@ void  Room2::SetSolve() {
 
 void Room2::DetectCollider() {
 	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::create();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{
 		if (!_LeftWall->GetTrigger())camera->Room3isTouch = true;
@@ -247,11 +246,24 @@ void Room2::DetectCollider() {
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room3isTouch = false;
+		if (gameManager->room2Clear)gameManager->room2Enter = false;
 	}
-	else if (CheckCollider(camera->GetCollider(), _door[2]->GetCollider())) {
-		if (_door[2]->GetTrigger())camera->Room3isTouch = false;
+
+	if (gameManager->room3Clear) {
+		_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		_door[0]->SetTrigger(true);
 	}
 }
+
+void Room2::Init() {
+	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[0]->SetTrigger(false);
+
+	for (int i = 0; i < 4; i++)
+	{
+		isSolve[i] = false;
+	}
+};
 
 void Room2::Draw()
 {
@@ -275,7 +287,6 @@ void Room2::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
-	_door[2]->Draw();
 	//Model
 	workDesk->Draw();
 
@@ -283,6 +294,8 @@ void Room2::Draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->printer);
 	printer->Draw();	
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
 	if (isSolve[2]) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture->file);
@@ -324,6 +337,7 @@ void Room2::Draw()
 		glBindTexture(GL_TEXTURE_2D, texture->breakfile);
 		file[1]->Draw();
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->computer);
 	computer->Draw();
@@ -335,7 +349,6 @@ void Room2::Draw()
 Room2::~Room2() {
 	if (_door[0] != NULL)delete _door[0];
 	if (_door[1] != NULL)delete _door[1];
-	if (_door[2] != NULL)delete _door[2];
 
 	if (computer != NULL)delete computer;
 	if (printer != NULL)delete printer;

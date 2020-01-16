@@ -47,19 +47,20 @@ void Room5::Create() {
 	_BackWall->SetTextureLayer(DIFFUSE_MAP);
 
 	vT.x = -49.5f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
+	_door[0] = new Flat('L', vec3(2, 20, 10), vT, -90, roomPos);
 	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[0]->SetTrigger(true);
-	vT.x = 0.0f; vT.z = -49.5f;
-	_door[1] = new Flat('B', vec3(10, 20, 3), vT, 90, roomPos);
-	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[1]->SetTrigger(true);
+	vT.x = 49.5f; vT.z = 30.0f;
+	_door[1] = new Flat('R', vec3(2, 15, 20), vT, 90, roomPos);
+	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[1]->SetTrigger(false);
 
 	auto modelNum = ModelNum::getInstance();
 	////Model
 	RIP = new Model(modelNum->RIP);
 	RIP->SetTRSMatrix(Translate(vec4(30, 0, 0, 1))*Translate(roomPos)*RotateY(-90)*Scale(1.0f, 1.0f, 1.0f));
 	RIP->SetTextureLayer(DIFFUSE_MAP);
+	RIP->_collider.Init(5, 10, 5, vec4(30, 0, 0, 1)+roomPos);
 
 	auto camera = Camera::getInstance();
 	cube[0] = new Model(modelNum->cube);
@@ -78,13 +79,13 @@ void Room5::Create() {
 	cube[1]->SetTRSMatrix(Translate(vec4(52, -0.5f, -10, 1))*Translate(roomPos)*Scale(1, 20.0f, 20.0f));
 	cube[1]->SetTextureLayer(DIFFUSE_MAP);
 
-	vT.x = 30.0f; vT.y = 25; vT.z = 0;
-	butterfly[0] = new Flat('R', vec3(1, 5, 5), vT, 90, roomPos);
+	vT.x = -25.0f; vT.y = 15; vT.z = 30;
+	butterfly[0] = new Flat('F', vec3(5, 5, 5), vT, -90, roomPos);
 	butterfly[0]->SetTrigger(false);
 	butterfly[0]->SetTextureLayer(DIFFUSE_MAP);
-	butterfly[0]->SetTurn(90);
-	butterfly[0]->SetMirror(true, false);
-	_pos[0] = vec4(30, 25, 0, 1);
+	butterfly[0]->SetMirror(true, true);
+	_pos[0] = vec4(-25.0f, 15, 30, 1);
+	initPos = vec4(-25.0f, 15, 30, 1);
 
 	vT.x = 35.0f; vT.y = 25; vT.z = 0;
 	butterfly[1] = new Flat('R', vec3(1, 5, 5), vT, 90, roomPos);
@@ -95,7 +96,25 @@ void Room5::Create() {
 	butterfly[1]->SetTrigger(true);
 	_pos[1] = vec4(30, 25, 0, 1);
 	_direct = vec4(0, 1, -1, 1);
+
+	vT.x = -25; vT.y = 5; vT.z = 30;
+	flower = new Flat('F', vec3(5, 10, 5), vT, -90, roomPos);
+	flower->SetTrigger(true);
+	flower->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
+	flower->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	flower->SetMirror(true, true);
+	flower->SetTurn(-90);
 }
+
+void Room5::Init() {
+	bool isTake = false;
+	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[1]->SetTrigger(false);
+	flower->SetTRSMatrix(Translate(vec4(-25, 5, 30, 1))*Translate(roomPos)*Scale(5, 10, 5)*RotateX(-90));
+	flower->SetTrigger(true);
+	flower->SetTurn(90);
+};
+
 void Room5::SetProjectionMatrix(mat4 &mpx)
 {
 	_pFloor->SetProjectionMatrix(mpx);
@@ -115,6 +134,7 @@ void Room5::SetProjectionMatrix(mat4 &mpx)
 
 	butterfly[0]->SetProjectionMatrix(mpx);
 	butterfly[1]->SetProjectionMatrix(mpx);
+	flower->SetProjectionMatrix(mpx);
 }
 
 void Room5::SetViewMatrix(mat4 &mvx) {
@@ -138,12 +158,14 @@ void Room5::SetViewMatrix(mat4 &mvx) {
 
 	butterfly[0]->SetViewMatrix(mvx);
 	butterfly[1]->SetViewMatrix(mvx);
+	flower->SetViewMatrix(mvx);
 	//auto camera = Camera::getInstance();
 	//Test->SetViewPosition(camera->getViewPosition());
 	//Test->SetViewMatrix(mvx);
 }
 
 void Room5::Update(LightSource *light, float delta) {
+	auto camera = Camera::getInstance();
 	_pFloor->Update(light, delta);
 	_pTop->Update(light, delta);
 	_LeftWall->Update(light, delta);
@@ -162,53 +184,99 @@ void Room5::Update(LightSource *light, float delta) {
 	butterfly[0]->Update(light, delta);
 	butterfly[1]->Update(light, delta);
 
+	flower->Update(light, delta);
+
+	if (isTake) {
+		billboard();
+	}
+
 	DetectCollider();
 
 	Fly(delta);
+}
 
+void Room5::billboard() {
+	auto camera = Camera::getInstance();
+
+	mat4 rotate;
+	float angleCosine;
+
+	vec4 vec = normalize(camera->_front);
+	vec4 lookAt = vec4(0, 0, -1, 1);
+
+	angleCosine = -(vec.x*lookAt.x + 0 * lookAt.y + vec.z*lookAt.z);
+	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
+		if (camera->_front.x <= 0) {
+			rotate = RotateY(360.0f - acos(angleCosine) * 180 / 3.14);
+		}
+		else {
+			rotate = RotateY(acos(angleCosine) * 180 / 3.14);// * 180 / 3.14
+		}
+
+	}
+	
+	flower->SetTRSMatrix(Translate(camera->getViewPosition())*Scale(5, 10, 5)*rotate*Translate(vec4(0, 0, 1, 1))*RotateX(-90));
+}
+
+void Room5::SetTake() {
+	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::getInstance();
+	if (CheckCollider(camera->GetCollider(), flower->GetCollider()) && !isTake) {
+		if(flower->GetTrigger())isTake = true;
+		flower->SetTrigger(false);
+	}
+	else if (CheckCollider(camera->GetCollider(), RIP->GetCollider()) && isTake) {
+		isTake = false;
+		gameManager->room6Clear = true;
+		_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		_door[1]->SetTrigger(true);
+		flower->SetTRSMatrix(Translate(vec4(25, 0.5f, 0, 1))*Translate(roomPos)*RotateX(0)*Scale(10, 5, 5));
+		flower->SetTurn(-90);
+	}
 }
 
 void Room5::Fly(float delta) {
+	float speed = 10.0f;
 	switch (turn)
 	{
 	case 1:
-		_pos[0].z -= 10.0f *delta;
-		if (_pos[0].z <= -10.0f) {
-			_pos[0].z = -10.0f;
+		_pos[0].x -= speed *delta;
+		if (_pos[0].x <= -35) {
+			_pos[0].x = -35;
 			turn = 2;
 			butterfly[0]->SetMirror(true, false);
 		}
-		_pos[0].y = 25.0f + (-3.0f / 25.0f)*(_pos[0].z + 5.0f)*(_pos[0].z + 5.0f) + 3.0f;
+		_pos[0].y = 15.0f + (-3.0f / 25.0f)*(_pos[0].x + 30.0f)*(_pos[0].x + 30.0f) + 3.0f;
+		//Print(_pos[0]);
 		break;
 	case 2:
-		_pos[0].z += 10.0f *delta;
-		if (_pos[0].z >= 0.0f) {
-			_pos[0].z = 0.0f;
+		_pos[0].x += speed *delta;
+		if (_pos[0].x >= -25) {
+			_pos[0].x = -25;
 			turn = 3;			
 		}
-		_pos[0].y = 25.0f + (3.0f / 25.0f)*(_pos[0].z + 5.0f)*(_pos[0].z + 5.0f) - 3.0f;
+		_pos[0].y = 15.0f + (3.0f / 25.0f)*(_pos[0].x + 30.0f)*(_pos[0].x + 30.0f) - 3.0f;
 		break;
 	case 3:
-		_pos[0].z += 10.0f*delta;
-		if (_pos[0].z >= 10.0f) {
-			_pos[0].z = 10.0f;
+		_pos[0].x += speed *delta;
+		if (_pos[0].x >= -15) {
+			_pos[0].x = -15;
 			turn = 4;			
 			butterfly[0]->SetMirror(true, false);
 		}
-		_pos[0].y = 25.0f + (-3.0f / 25.0f)*(_pos[0].z - 5.0f)*(_pos[0].z - 5.0f) + 3.0f;
+		_pos[0].y = 15.0f + (-3.0f / 25.0f)*(_pos[0].x + 20.0f)*(_pos[0].x + 20.0f) + 3.0f;
 		break;
 	case 4:
-		_pos[0].z -= 10.0f*delta;
-		if (_pos[0].z <= 0.0f) {
-			_pos[0].z = 0.0f;
+		_pos[0].x -= speed *delta;
+		if (_pos[0].x <= -25) {
+			_pos[0].x = -25;
 			turn = 1;			
 		}
-		_pos[0].y = 25.0f + (3.0f / 25.0f)*(_pos[0].z - 5.0f)*(_pos[0].z - 5.0f) - 3.0f;
+		_pos[0].y = 15.0f + (3.0f / 25.0f)*(_pos[0].x + 20.0f)*(_pos[0].x + 20.0f) - 3.0f;
 		break;
 	default:
 		break;
 	}
-
 	butterfly[0]->SetPosition(_pos[0]);
 
 	_pos[1] += _direct *delta*10.0f;
@@ -217,6 +285,7 @@ void Room5::Fly(float delta) {
 
 void Room5::DetectCollider() {
 	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::getInstance();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{
 		if (!_LeftWall->GetTrigger())camera->Room6isTouch = true;
@@ -245,9 +314,14 @@ void Room5::DetectCollider() {
 
 	if (CheckCollider(camera->GetCollider(), _door[0]->GetCollider())) {
 		if (_door[0]->GetTrigger())camera->Room6isTouch = false;
+		gameManager->room6Enter = true;
 	}
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
-		if (_door[1]->GetTrigger())camera->Room6isTouch = false;
+		if (_door[1]->GetTrigger()) {
+			camera->Room6isTouch = false;
+			gameManager->room6Enter = false;
+			gameManager->allClear = true;
+		}
 	}
 
 
@@ -284,6 +358,7 @@ void Room5::DetectCollider() {
 
 void Room5::Draw()
 {
+	auto gameManager = GameManager::getInstance();
 	auto texture = Texture::getInstance();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->grassland);
@@ -297,13 +372,12 @@ void Room5::Draw()
 	_BackWall->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_door[0]->Draw();
-	_door[1]->Draw();
+
 	//Model
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->metal);
 	RIP->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE0);
 
 	glActiveTexture(GL_TEXTURE0); // select active texture 0
 	glBindTexture(GL_TEXTURE_2D, texture->metal); // 與 Diffuse Map 結合
@@ -313,19 +387,18 @@ void Room5::Draw()
 	cube[1]->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glDepthMask(GL_FALSE);
+	if (gameManager->room6Clear)_door[1]->Draw();
+
+	glDepthMask(GL_FALSE);	
+	if(!gameManager->room6Clear)_door[1]->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->ladder);
 	_RightWall->Draw();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->RIP);
 	_FrontWall->Draw();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture->butterfly);
-	butterfly[1]->Draw();
-	butterfly[0]->Draw();
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glDepthMask(GL_TRUE);
+	glBindTexture(GL_TEXTURE_2D, 0);
 		//glActiveTexture(GL_TEXTURE0); // select active texture 0
 		//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[6]); // 與 Diffuse Map 結合
 		//glActiveTexture(GL_TEXTURE1); // select active texture 1
@@ -336,8 +409,20 @@ void Room5::Draw()
 
 void Room5::AlphaDraw() {
 	//glDepthMask(GL_FALSE);
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);	
+	auto texture = Texture::getInstance();
 	_LeftWall->Draw();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->butterfly);
+	butterfly[1]->Draw();
+	butterfly[0]->Draw();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->flower);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
+	flower->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	//glDepthMask(GL_TRUE);
 }
 
@@ -351,4 +436,6 @@ Room5::~Room5() {
 
 	if (butterfly[0] != NULL)delete butterfly[0];
 	if (butterfly[1] != NULL)delete butterfly[1];
+
+	if (flower != NULL)delete flower;
 }

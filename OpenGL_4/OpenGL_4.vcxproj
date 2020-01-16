@@ -86,6 +86,7 @@
     <ClInclude Include="Common\CShape.h" />
     <ClInclude Include="Common\Cube.h" />
     <ClInclude Include="Common\Flat.h" />
+    <ClInclude Include="Common\GameManager.h" />
     <ClInclude Include="Common\Model.h" />
     <ClInclude Include="Common\ModelPool.h" />
     <ClInclude Include="Common\Room.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Common\CShape.cpp" />
     <ClCompile Include="Common\Cube.cpp" />
     <ClCompile Include="Common\Flat.cpp" />
+    <ClCompile Include="Common\GameManager.cpp" />
     <ClCompile Include="Common\Model.cpp" />
     <ClCompile Include="Common\ModelPool.cpp" />
     <ClCompile Include="Common\Room.cpp" />

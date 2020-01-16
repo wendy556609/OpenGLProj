@@ -2,13 +2,13 @@
 #define ROOM4_H
 #include "RoomController.h"
 
-#define DoorCount 2
+#define Room4DoorCount 2
 
 class Room4 : public RoomController
 {
 private:
 	int iSize = 100;
-	Flat *_door[DoorCount];
+	Flat *_door[Room4DoorCount];
 
 	Flat *diandi, *hospitalChair, *heart, *hospitalCarbine;
 	Flat *medcine[3];
@@ -28,6 +28,8 @@ public:
 	void Update(LightSource *light, float delta);
 	void Draw();
 	void AlphaDraw();
+
+	void Init();
 
 	void DetectCollider();
 };

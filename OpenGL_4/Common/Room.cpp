@@ -7,31 +7,6 @@ Room::Room(vec4 pos)
 	// 產生物件的實體
 
 	Create();
-
-	//auto camera = Camera::getInstance();
-	//vT.x = 0.0f; vT.y = 10.0f; vT.z = -10;
-	//Test = new ModelPool("Model/Sphere.obj", Type_3DMax);
-	//Test->SetCubeMapTexName(1);
-	//Test->SetViewPosition(camera->getViewPosition());
-	//Test->SetShaderName("vsCubeMapping.glsl", "fsCubeMapping.glsl");
-	//Test->SetShader();
-	//Test->SetTRSMatrix(Translate(vT)*Translate(roomPos)*Scale(1.0f, 1.0f, 1.0f));
-	//Test->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.85f, 0.85f, 0.85f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	//Test->SetKaKdKsShini(0, 0.8f, 0.5f, 1);
-	//Test->SetColor(vec4(0.9f, 0.9f, 0.9f, 1.0f));
-	//Test->SetTextureLayer(DIFFUSE_MAP);
-
-	//vT.x = 0.0f; vT.y = 10.0f; vT.z = 2;
-	//Aimal = new Flat('B', vec3(2, 2, 2), vT, 90, roomPos);;
-	////Aimal->SetShaderName("vsPerPixelLighting.glsl", "fsPerPixelLighting.glsl");
-	//Aimal->SetShader();
-	////Aimal->SetTRSMatrix(Translate(0, 10.0f, 2.0f) * RotateX(90) *Scale(2, 2, 2));
-	//Aimal->SetShadingMode(GOURAUD_SHADING);
-	//// 設定貼圖
-	//Aimal->SetMaterials(vec4(0,0,0,1), vec4(0.85f, 0.85f, 0.85f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	//Aimal->SetKaKdKsShini(0, 0.8f, 0.5f, 1);
-	//Aimal->SetTextureLayer(DIFFUSE_MAP);
-	////Aimal->isTurn = true;
 }
 
 void Room::Create() {
@@ -76,13 +51,9 @@ void Room::Create() {
 	
 
 	vT.x = 49.75f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
-	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[0]->SetTrigger(true);
-	vT.x = 0; vT.z = 49.75f;
-	_door[1] = new Flat('F', vec3(10, 20, 3), vT, -90, roomPos);
-	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[1]->SetTrigger(true);
+	_door = new Flat('L', vec3(2, 20, 10), vT, -90, roomPos);
+	_door->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door->SetTrigger(false);
 
 	auto modelNum = ModelNum::getInstance();
 	//Model
@@ -98,8 +69,6 @@ void Room::Create() {
 	drawer[0]->SetMaterials(vec4(1.0f), vec4(0.75f, 0.75f, 0.75f, 1), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	drawer[0]->SetKaKdKsShini(0.15f, 0.8f, 0.2f, 2);
 	drawer[0]->SetTextureLayer(DIFFUSE_MAP);
-	//Print(drawer[0]->m_iNumVtx);
-	//drawer[0]->SetTiling(1, 1);
 
 	drawer[1] = new Model(modelNum->drawer);
 	drawer[1]->SetTRSMatrix(Translate(vec4(35, 0, -40.0f, 1))*Translate(roomPos)*Scale(30.0f, 30.0f, 30.0f));
@@ -117,8 +86,7 @@ void Room::Create() {
 
 	parant = new Flat('F', vec3(10, 20, 3), vec4(0, 10, 40.0f, 1), -90, roomPos);
 	parant->SetMirror(true, true);
-	parant->SetTextureLayer(DIFFUSE_MAP);
-	parant->SetTiling(1, 1);
+	parant->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
 
 	babyUse[0] = new Flat('R', vec3(1, 10, 10), vec4(30, 5, -20.0f, 1), 90, roomPos);
 	babyUse[0]->SetTextureLayer(DIFFUSE_MAP);
@@ -143,10 +111,24 @@ void Room::Create() {
 	bullet->SetTextureLayer(DIFFUSE_MAP);
 	bullet->SetShader();
 	bullet->SetMaterials(vec4(1.0f, 1.0f, 1.0f, 1.0f), vec4(0.5f, 0.5f, 0.5f, 1.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	//bullet->SetTRSMatrix(Translate(vec4(0, 0, 0, 1))*Scale(vec3(1, 1, 1)));
+	bullet->SetTRSMatrix(Translate(vec4(0, -5, 0, 1)));
 	bullet->_collider.Init(0.5f, 0.5f, 0.5f);
 	bulletPos = vec4(0, 0, 0, 1);
+
+	gun = new Flat('F', vec3(10, 5, 3), vec4(25, 2.5f, 45.0f, 1), -90, roomPos);
+	gun->SetMirror(false, true);
+	gun->SetTextureLayer(DIFFUSE_MAP | LIGHT_MAP);
+	gun->SetTrigger(true);
 }
+
+void Room::Init() {
+	_door->SetTrigger(false);
+	_door->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	bullet->SetTRSMatrix(Translate(vec4(0, -5, 0, 1)));
+	gun->SetTRSMatrix(Translate(vec4(25, 2.5f, 45.0f, 1))*Translate(roomPos)*Scale(10, 5, 3)*RotateX(-90));
+	gun->SetTrigger(true);
+	isTake = false;
+};
 
 void Room::SetProjectionMatrix(mat4 &mpx)
 {
@@ -157,8 +139,7 @@ void Room::SetProjectionMatrix(mat4 &mpx)
 	_FrontWall->SetProjectionMatrix(mpx);
 	_BackWall->SetProjectionMatrix(mpx);
 
-	_door[0]->SetProjectionMatrix(mpx);
-	_door[1]->SetProjectionMatrix(mpx);
+	_door->SetProjectionMatrix(mpx);
 	//Model
 	babyCot->SetProjectionMatrix(mpx);
 	drawer[0]->SetProjectionMatrix(mpx);
@@ -166,6 +147,8 @@ void Room::SetProjectionMatrix(mat4 &mpx)
 	drawer[2]->SetProjectionMatrix(mpx);
 
 	parant->SetProjectionMatrix(mpx);
+
+	gun->SetProjectionMatrix(mpx);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -183,8 +166,7 @@ void Room::SetViewMatrix(mat4 &mvx) {
 	_FrontWall->SetViewMatrix(mvx);
 	_BackWall->SetViewMatrix(mvx);
 
-	_door[0]->SetViewMatrix(mvx);
-	_door[1]->SetViewMatrix(mvx);
+	_door->SetViewMatrix(mvx);
 	//Model
 	babyCot->SetViewMatrix(mvx);
 	drawer[0]->SetViewMatrix(mvx);
@@ -193,20 +175,18 @@ void Room::SetViewMatrix(mat4 &mvx) {
 
 	parant->SetViewMatrix(mvx);
 
+	gun->SetViewMatrix(mvx);
+
 	for (int i = 0; i < 4; i++)
 	{
 		babyUse[i]->SetViewMatrix(mvx);
 	}
 
 	bullet->SetViewMatrix(mvx);
-	//auto camera = Camera::getInstance();
-	//Test->SetViewPosition(camera->getViewPosition());
-	//Test->SetViewMatrix(mvx);
-
-	//Aimal->SetViewMatrix(mvx);
 }
 
 void Room::Update(LightSource *light, float delta) {
+	auto gameManager = GameManager::create();
 	_pFloor->Update(light, delta);
 	_pTop->Update(light, delta);
 	_LeftWall->Update(light, delta);
@@ -214,8 +194,7 @@ void Room::Update(LightSource *light, float delta) {
 	_FrontWall->Update(light, delta);
 	_BackWall->Update(light, delta);
 
-	_door[0]->Update(light, delta);
-	_door[1]->Update(light, delta);
+	_door->Update(light, delta);
 	//Model
 	babyCot->Update(light, delta);
 	drawer[0]->Update(light, delta);
@@ -223,6 +202,17 @@ void Room::Update(LightSource *light, float delta) {
 	drawer[2]->Update(light, delta);
 
 	parant->Update(light, delta);
+
+	if(gameManager->room2Enter){
+		gun->SetTRSMatrix(Translate(vec4(25, 2.5f, 45.0f, 1))*Translate(roomPos)*Scale(10, 5, 3)*RotateX(-90));
+		gun->SetTrigger(true);
+		isTake = false;
+	}
+	else if (isTake) {
+		billboard();
+	}
+
+	gun->Update(light, delta);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -236,6 +226,7 @@ void Room::Update(LightSource *light, float delta) {
 
 void Room::DetectCollider() {
 	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::create();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{
 		if(!_LeftWall->GetTrigger())camera->Room1isTouch = true;
@@ -262,11 +253,46 @@ void Room::DetectCollider() {
 	}
 	else camera->Room1isTouch = false;
 
-	if (CheckCollider(camera->GetCollider(), _door[0]->GetCollider())) {
-		if (_door[0]->GetTrigger())camera->Room1isTouch = false;
+	if (CheckCollider(camera->GetCollider(), _door->GetCollider())) {
+		if (_door->GetTrigger())camera->Room1isTouch = false;
+		gameManager->room2Enter = false;
 	}
-	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
-		if (_door[1]->GetTrigger())camera->Room1isTouch = false;
+	else if (CheckCollider(camera->GetCollider(), parant->GetCollider())) {
+		gameManager->room1Clear = true;
+		_door->SetTrigger(true);
+		_door->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+}
+
+void Room::billboard() {
+	auto camera = Camera::getInstance();
+
+	mat4 rotate;
+	float angleCosine;
+
+	vec4 vec = normalize(camera->_front);
+	vec4 lookAt = vec4(0, 0, -1, 1);
+
+	angleCosine = -(vec.x*lookAt.x + 0 * lookAt.y + vec.z*lookAt.z);
+	if ((angleCosine < 0.99990) && (angleCosine > -0.9999)) {
+		if (camera->_front.x <= 0) {
+			rotate = RotateY(360.0f - acos(angleCosine) * 180 / 3.14);
+		}
+		else {
+			rotate = RotateY(acos(angleCosine) * 180 / 3.14);// * 180 / 3.14
+		}
+
+	}
+
+	gun->SetTRSMatrix(Translate(camera->getViewPosition())*Scale(10, 5, 5)*rotate*Translate(vec4(-1, 0, 1, 1))*RotateX(-90));
+}
+
+void Room::SetTake() {
+	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::getInstance();
+	if (CheckCollider(camera->GetCollider(), gun->GetCollider()) && !isTake) {
+		if (gun->GetTrigger())isTake = true;
+		gun->SetTrigger(false);
 	}
 }
 
@@ -274,7 +300,6 @@ void Room::Shoot(vec4 front) {
 	mat4 mat;
 	bulletPos = front * 100.5f;
 	bulletPos.w = 1;
-	Print(bulletPos);
 	if (bulletPos.x <= -50) {
 		bulletPos.x = -49.8f;
 		mat = RotateZ(-90);
@@ -299,7 +324,6 @@ void Room::Shoot(vec4 front) {
 		bulletPos.y = 0.2f;
 		mat = RotateX(0);
 	}
-	Print(bulletPos);
 	bullet->SetTRSMatrix(Translate(bulletPos) * Translate(vec4(0, 0, 0, 1))*Scale(1, 1, 1) * mat);
 }
 
@@ -319,8 +343,6 @@ void Room::Draw()
 	_BackWall->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	_door[0]->Draw();
-	_door[1]->Draw();
 	//Model
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->Wood);	
@@ -328,6 +350,11 @@ void Room::Draw()
 	drawer[0]->Draw();
 	drawer[1]->Draw();
 	drawer[2]->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDepthMask(GL_FALSE);
+
+	_door->Draw();
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->bullet);
@@ -335,7 +362,10 @@ void Room::Draw()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->parant);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
 	parant->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->babyUse[0]);
@@ -353,21 +383,19 @@ void Room::Draw()
 	glBindTexture(GL_TEXTURE_2D, texture->babyUse[3]);
 	babyUse[3]->Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glActiveTexture(GL_TEXTURE0); // select active texture 0
-	//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[4]); // 與 Diffuse Map 結合
-	//Aimal->Draw();
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	//glActiveTexture(GL_TEXTURE0); // select active texture 0
-	//glBindTexture(GL_TEXTURE_2D, texture->g_uiFTexID[6]); // 與 Diffuse Map 結合
-	//glActiveTexture(GL_TEXTURE1); // select active texture 1
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, texture->g_uiSphereCubeMap);
-	//Test->Draw();
-	//glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->gun);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
+	gun->Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDepthMask(GL_TRUE);
 }
 
 Room::~Room() {	
-	if (_door[0] != NULL)delete _door[0];
-	if (_door[1] != NULL)delete _door[1];
+	if (_door != NULL)delete _door;
 
 	if (babyCot != NULL)delete babyCot;
 	if(drawer[0] != NULL)delete drawer[0];
@@ -375,6 +403,8 @@ Room::~Room() {
 	if (drawer[2] != NULL)delete drawer[2];
 
 	if (parant != NULL)delete parant;
+
+	if(gun != NULL)delete gun;
 
 	for (int i = 0; i < 4; i++)
 	{

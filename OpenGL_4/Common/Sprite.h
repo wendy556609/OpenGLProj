@@ -29,6 +29,8 @@ public:
 
 	void Draw();
 	void DrawW();
+
+	void Init();
 };
 
 

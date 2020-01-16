@@ -8,6 +8,7 @@
 #include "Sphere.h"
 #include "Model.h"
 #include "Texture.h"
+#include "GameManager.h"
 
 class RoomController
 {
@@ -39,6 +40,7 @@ public:
 	virtual void Update(LightSource *light, float delta) = 0;
 	virtual void Draw() = 0;
 	virtual void AlphaDraw() = 0;
+	virtual void Init() = 0;
 };
 
 #endif

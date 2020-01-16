@@ -50,17 +50,13 @@ void Room3::Create() {
 	_BackWall->SetTiling(3, 1);
 
 	vT.x = 49.5f; vT.y = 10.0f; vT.z = 0;
-	_door[0] = new Flat('L', vec3(3, 20, 10), vT, -90, roomPos);
+	_door[0] = new Flat('L', vec3(2, 20, 10), vT, -90, roomPos);
 	_door[0]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	_door[0]->SetTrigger(true);
-	vT.x = 0.0f; vT.z = -49.5f;
-	_door[1] = new Flat('B', vec3(10, 20, 3), vT, 90, roomPos);
-	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[1]->SetTrigger(true);
 	vT.x = 0.0f; vT.z = 49.5f;
-	_door[2] = new Flat('F', vec3(10, 20, 3), vT, -90, roomPos);
-	_door[2]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	_door[2]->SetTrigger(true);
+	_door[1] = new Flat('F', vec3(10, 20, 2), vT, -90, roomPos);
+	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[1]->SetTrigger(false);
 
 	////Model
 	churchStand = new Flat('L', vec3(3, 15, 10), vec4(-30.0f, 7.5f, 0.0f, 1), -90, roomPos);
@@ -96,7 +92,7 @@ void Room3::Create() {
 	mushi->SetTurn(-90);
 
 	husband = new Flat('F', vec3(3, 20, 10), vec4(-20.0f, 10.0f, 5, 1), -90, roomPos);//Light=vec4(-20.0f, 10.0f, -5, 1)
-	husband->SetTextureLayer(DIFFUSE_MAP);
+	husband->SetTextureLayer(DIFFUSE_MAP|LIGHT_MAP);
 	husband->SetMirror(true, true);
 
 	collider = new Flat('F', vec3(4, 25, 2), vec4(-20.0f, 12.5f, -5, 1), -90, roomPos);
@@ -113,7 +109,6 @@ void Room3::SetProjectionMatrix(mat4 &mpx)
 
 	_door[0]->SetProjectionMatrix(mpx);
 	_door[1]->SetProjectionMatrix(mpx);
-	_door[2]->SetProjectionMatrix(mpx);
 	//Model
 	churchStand->SetProjectionMatrix(mpx);
 
@@ -139,7 +134,6 @@ void Room3::SetViewMatrix(mat4 &mvx) {
 
 	_door[0]->SetViewMatrix(mvx);
 	_door[1]->SetViewMatrix(mvx);
-	_door[2]->SetViewMatrix(mvx);
 	//Model
 	churchStand->SetViewMatrix(mvx);
 
@@ -155,12 +149,15 @@ void Room3::SetViewMatrix(mat4 &mvx) {
 
 void Room3::Update(LightSource *light, float delta) {
 	auto camera = Camera::getInstance();
-	if (isClear) {
+	auto gameManager = GameManager::create();
+	if (gameManager->room4Clear) {
 		light[0].isLighting = 1;
 		light[1].isLighting = 0;
 	}
 	else {
 		vec4 direct;
+		light[0].isLighting = 0;
+		light[1].isLighting = 1;
 		direct = vec4(camera->_pos.x, 0, camera->_pos.z, 1) - light[1].position;
 		light[1].spotDirection = vec3(direct.x, direct.y, direct.z);
 	}
@@ -174,7 +171,6 @@ void Room3::Update(LightSource *light, float delta) {
 
 	_door[0]->Update(light, delta);
 	_door[1]->Update(light, delta);
-	_door[2]->Update(light, delta);
 	//Model
 	churchStand->Update(light, delta);
 
@@ -192,6 +188,7 @@ void Room3::Update(LightSource *light, float delta) {
 
 void Room3::DetectCollider() {
 	auto camera = Camera::getInstance();
+	auto gameManager = GameManager::create();
 	if (CheckCollider(camera->GetCollider(), _LeftWall->GetCollider()))
 	{
 		if (!_LeftWall->GetTrigger())camera->Room4isTouch = true;
@@ -224,17 +221,25 @@ void Room3::DetectCollider() {
 	else if (CheckCollider(camera->GetCollider(), _door[1]->GetCollider())) {
 		if (_door[1]->GetTrigger())camera->Room4isTouch = false;
 	}
-	else if (CheckCollider(camera->GetCollider(), _door[2]->GetCollider())) {
-		if (_door[2]->GetTrigger())camera->Room4isTouch = false;
-	}
 	else if (CheckCollider(camera->GetCollider(), collider->GetCollider())) {
-		isClear = true;
+		gameManager->room4Clear = true;
+	}
+
+	if (gameManager->room4Clear) {
+		_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 1), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		_door[1]->SetTrigger(true);
 	}
 }
+
+void Room3::Init() {
+	_door[1]->SetMaterials(vec4(0.0f, 0.0f, 0.0f, 1.0f), vec4(0.0f, 0.0f, 0.0f, 0.0f), vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	_door[1]->SetTrigger(false);
+};
 
 void Room3::Draw()
 {
 	auto texture = Texture::getInstance();
+	auto gameManager = GameManager::create();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->weddingFloor);
 	glActiveTexture(GL_TEXTURE1);
@@ -256,7 +261,6 @@ void Room3::Draw()
 
 	_door[0]->Draw();
 	_door[1]->Draw();
-	_door[2]->Draw();
 	//Model
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->mushi);
@@ -268,6 +272,9 @@ void Room3::Draw()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->husband);
+	glActiveTexture(GL_TEXTURE1);
+	if(gameManager->room4Clear) glBindTexture(GL_TEXTURE_2D, texture->WhiteLight);
+	else glBindTexture(GL_TEXTURE_2D, 0);
 	husband->Draw();
 
 	glActiveTexture(GL_TEXTURE0);
@@ -285,7 +292,6 @@ void Room3::Draw()
 Room3::~Room3() {
 	if (_door[0] != NULL)delete _door[0];
 	if (_door[1] != NULL)delete _door[1];
-	if (_door[2] != NULL)delete _door[2];
 
 	if(churchStand != NULL)delete churchStand;
 
